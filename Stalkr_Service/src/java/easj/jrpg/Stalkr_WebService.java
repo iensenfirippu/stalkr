@@ -21,5 +21,6 @@ public class Stalkr_WebService {
     @WebMethod(operationName = "hello")
     public String hello(@WebParam(name = "name") String txt) {
         return "Hello " + txt + " !";
+		// Philip added and committed this comment as a test 07/03/13
     }
 }
