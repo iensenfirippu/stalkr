@@ -19,4 +19,5 @@ public class Stalkr_WebService {
         return "Hello " + txt + " !";
 		// Philip added and committed this comment as a test 07/03/13
     }
+    
 }

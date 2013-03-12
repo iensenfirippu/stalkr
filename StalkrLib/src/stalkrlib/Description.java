@@ -43,4 +43,23 @@ public class Description {
         this.area = area;
     }
     
+    public double comparePreference(Description stranger){        
+        int searchParams = 3;
+        int matches = 0;
+        
+        if(this.gender == stranger.getGender()){
+            matches++;
+        }
+        
+        if(this.area == stranger.getArea()){
+            matches++;
+        }
+        
+        if(this.age == stranger.getAge()){
+            matches++;
+        }
+        
+        return (matches / searchParams) * 100;
+    }
+    
 }
