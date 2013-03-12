@@ -38,6 +38,7 @@ public class UserMapper {
     }
     
     public static User[] getMatches(String username){
+        //NYI
         double threshold = 0;
         
         User user1 = new User("Sommer", "Hjort11", "Rasmus Sommer", new Date(), "sommerawesome@gmail.com");
@@ -54,7 +55,6 @@ public class UserMapper {
             }
         }
         
-        //NYI
-        return null;
+        return matches;
     }
 }
