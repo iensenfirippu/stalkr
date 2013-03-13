@@ -4,6 +4,10 @@
  */
 package easj.jrpg.mappers;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.Date;
 import stalkrlib.User;
 
@@ -12,32 +16,99 @@ import stalkrlib.User;
  * @author Sommer
  */
 public class UserMapper {
-    private static final String IP_ADDRESS = "localhost";
-    private static final int IP_PORT = 8123;
+    private final String DRIVER = "com.mysql.jdbc.Driver";
+    private final String IP_ADDRESS = "localhost";
+    private final int IP_PORT = 8123;
+    private Connection con;
+    private Statement sta;
     
-    public static void connect(){
+    private void connect(){
+        try{
+            Class.forName(DRIVER);
+            con = DriverManager.getConnection("jdbc:mysql://" + IP_ADDRESS + ":" + IP_PORT);
+            sta = con.createStatement();
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+    
+    private void disconnect(){
+        try{
+            sta.close();
+            sta = null;
+            con.close();
+            con = null;
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+    
+    //Alternatively use getUser and check if null.
+    public boolean userExists(String username){
+        boolean a = true;
+        
+        try{
+            connect();
+            ResultSet rs = sta.executeQuery("SELECT * FROM user WHERE username='" + username + "'");
+            if(rs.first() == false){
+                a = false;
+            }
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        finally{
+            disconnect();
+        }
+        
+        return a;
+    }
+    
+    public void updateUser(int userID, String name){
         //NYI
     }
     
-    public static void disconnect(){
-        //NYI
+    public User getUserByUsername(String username){
+        try{
+            connect();
+            ResultSet rs = sta.executeQuery("SELECT * FROM user WHERE username='" + username + "'");
+            
+            if(rs.first() == true){
+                //User exists, extract data from ResultSet and create User Object
+            }
+            
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        finally{
+            disconnect();
+            return null;
+        }
     }
     
-    public static void updateUser(int userID, String name){
-        //NYI
+    public User getUserByID(int ID){
+        try{
+            connect();
+            ResultSet rs = sta.executeQuery("SELECT * FROM user WHERE id=" + ID);
+            
+            if(rs.first() == true){
+                //User exists, extract data from ResultSet and create User Object
+            }
+            
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        finally{
+            disconnect();
+            return null;
+        }
     }
     
-    public static User getUserByUsername(String username){
-        //NYI
-        return null;
-    }
-    
-    public static User getUserByID(int ID){
-        //NYI
-        return null;
-    }
-    
-    public static User[] getMatches(String username){
+    public User[] getMatches(String username){
         //NYI
         double threshold = 0;
         
