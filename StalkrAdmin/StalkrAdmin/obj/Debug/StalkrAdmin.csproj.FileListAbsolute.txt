@@ -1,0 +1,10 @@
+c:\users\jonaz\documents\visual studio 2012\Projects\StalkrAdmin\StalkrAdmin\bin\Debug\StalkrAdmin.exe.config
+C:\Users\Jonaz\Documents\Visual Studio 2012\Projects\StalkrAdmin\StalkrAdmin\bin\Debug\StalkrAdmin.exe
+C:\Users\Jonaz\Documents\Visual Studio 2012\Projects\StalkrAdmin\StalkrAdmin\bin\Debug\StalkrAdmin.pdb
+C:\Users\Jonaz\Documents\Visual Studio 2012\Projects\StalkrAdmin\StalkrAdmin\bin\Debug\MySql.Data.dll
+C:\Users\Jonaz\Documents\Visual Studio 2012\Projects\StalkrAdmin\StalkrAdmin\obj\Debug\StalkrAdmin.csprojResolveAssemblyReference.cache
+C:\Users\Jonaz\Documents\Visual Studio 2012\Projects\StalkrAdmin\StalkrAdmin\obj\Debug\StalkrAdmin.Form1.resources
+C:\Users\Jonaz\Documents\Visual Studio 2012\Projects\StalkrAdmin\StalkrAdmin\obj\Debug\StalkrAdmin.Properties.Resources.resources
+C:\Users\Jonaz\Documents\Visual Studio 2012\Projects\StalkrAdmin\StalkrAdmin\obj\Debug\StalkrAdmin.csproj.GenerateResource.Cache
+C:\Users\Jonaz\Documents\Visual Studio 2012\Projects\StalkrAdmin\StalkrAdmin\obj\Debug\StalkrAdmin.exe
+C:\Users\Jonaz\Documents\Visual Studio 2012\Projects\StalkrAdmin\StalkrAdmin\obj\Debug\StalkrAdmin.pdb
