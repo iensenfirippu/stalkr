@@ -1,0 +1,10 @@
+C:\Users\Philip\Documents\GitHub\stalkr\Visual Studio\StalkrAdminTool\StalkrAdminTool\bin\Debug\StalkrAdminTool.exe.config
+C:\Users\Philip\Documents\GitHub\stalkr\Visual Studio\StalkrAdminTool\StalkrAdminTool\obj\Debug\StalkrAdminTool.csprojResolveAssemblyReference.cache
+C:\Users\Philip\Documents\GitHub\stalkr\Visual Studio\StalkrAdminTool\StalkrAdminTool\obj\Debug\StalkrAdminTool.Form1.resources
+C:\Users\Philip\Documents\GitHub\stalkr\Visual Studio\StalkrAdminTool\StalkrAdminTool\obj\Debug\StalkrAdminTool.Properties.Resources.resources
+C:\Users\Philip\Documents\GitHub\stalkr\Visual Studio\StalkrAdminTool\StalkrAdminTool\obj\Debug\StalkrAdminTool.csproj.GenerateResource.Cache
+C:\Users\Philip\Documents\GitHub\stalkr\Visual Studio\StalkrAdminTool\StalkrAdminTool\bin\Debug\StalkrAdminTool.exe
+C:\Users\Philip\Documents\GitHub\stalkr\Visual Studio\StalkrAdminTool\StalkrAdminTool\bin\Debug\StalkrAdminTool.pdb
+C:\Users\Philip\Documents\GitHub\stalkr\Visual Studio\StalkrAdminTool\StalkrAdminTool\bin\Debug\MySql.Data.dll
+C:\Users\Philip\Documents\GitHub\stalkr\Visual Studio\StalkrAdminTool\StalkrAdminTool\obj\Debug\StalkrAdminTool.exe
+C:\Users\Philip\Documents\GitHub\stalkr\Visual Studio\StalkrAdminTool\StalkrAdminTool\obj\Debug\StalkrAdminTool.pdb
