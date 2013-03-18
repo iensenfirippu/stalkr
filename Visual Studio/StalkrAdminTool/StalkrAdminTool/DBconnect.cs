@@ -106,22 +106,6 @@ namespace StalkrAdminTool
 		public void InsertUser(User user)
 		{
 			StringBuilder sb = new StringBuilder();
-			sb.Append("INSERT INTO user (username, password, firstname, birthday, location_latitude, location_longitude, location_timestamp) VALUES ('");
-			sb.Append(user.Name.UserName); sb.Append("''");
-			sb.Append(user.Password); sb.Append("''");
-			sb.Append(user.Name.FirstName); sb.Append("''");
-			sb.Append(StalkrToolBelt.DTtoTS(user.Birthdate)); sb.Append("''");
-			sb.Append(user.LastLocation.Latitude); sb.Append("''");
-			sb.Append(user.LastLocation.Longitude); sb.Append("''");
-			sb.Append(StalkrToolBelt.DTtoTS(user.LastLocation.TimeStamp)); sb.Append("');");
-			sb.Append("INSERT INTO description (region, age, gender) VALUES ('");
-			sb.Append(user.Description.Area); sb.Append("''");
-			sb.Append(user.Description.Age); sb.Append("''");
-			sb.Append(user.Description.Gender); sb.Append("');");
-			sb.Append("INSERT INTO description (region, age, gender) VALUES ('");
-			sb.Append(user.Preferences.Area); sb.Append("''");
-			sb.Append(user.Preferences.Age); sb.Append("''");
-			sb.Append(user.Preferences.Gender); sb.Append("');");
 
 			//open connection
 			if (this.OpenConnection() == true)
@@ -139,21 +123,6 @@ namespace StalkrAdminTool
 		public void UpdateUser(User user)
 		{
 			StringBuilder sb = new StringBuilder();
-			sb.Append("UPDATE user SET password='"); sb.Append(user.Password);
-			sb.Append("' firstname='"); sb.Append(user.Name.FirstName);
-			sb.Append("' birthday='"); sb.Append(StalkrToolBelt.DTtoTS(user.Birthdate));
-			sb.Append("' location_latitude='"); sb.Append(user.LastLocation.Latitude);
-			sb.Append("' location_longitude='"); sb.Append(user.LastLocation.Longitude);
-			sb.Append("' location_timestamp='"); sb.Append(StalkrToolBelt.DTtoTS(user.LastLocation.TimeStamp));
-			sb.Append("' WHERE username='"); sb.Append(user.Name.UserName); sb.Append("';");
-			sb.Append("UPDATE description SET region='"); sb.Append(user.Description.Area);
-			sb.Append("' age='"); sb.Append(user.Description.Age);
-			sb.Append("' gender='"); sb.Append(user.Description.Gender);
-			sb.Append("' WHERE id='"); sb.Append(user.Description.Index); sb.Append("';");
-			sb.Append("UPDATE description SET region='"); sb.Append(user.Preferences.Area);
-			sb.Append("' age='"); sb.Append(user.Preferences.Age);
-			sb.Append("' gender='"); sb.Append(user.Preferences.Gender);
-			sb.Append("' WHERE id='"); sb.Append(user.Preferences.Index); sb.Append("';");
 
 			//Open connection
 			if (this.OpenConnection() == true)
@@ -176,7 +145,7 @@ namespace StalkrAdminTool
 		//Delete statement
 		public void Delete()
 		{
-			string query = "DELETE FROM tableinfo WHERE name='John Smith'";
+			StringBuilder sb = new StringBuilder();
 
 			if (this.OpenConnection() == true)
 			{
@@ -189,7 +158,7 @@ namespace StalkrAdminTool
 		//Select statement
 		public List<User> SelectAllUsers()
 		{
-			string query = "SELECT * FROM user";
+			string query = "SELECT user.*, dscr.*, pref.* FROM user AS usr INNER JOIN description AS dscr ON usr.info_description = dscr.guid INNER JOIN description AS pref ON usr.pref_description = pref.guid";
 
 			//Create a list to store the result
 			List<User> list = new List<User>();
@@ -206,6 +175,7 @@ namespace StalkrAdminTool
 				while (dataReader.Read())
 				{
 					User u = new User(
+						new Guid(dataReader["guid"].ToString()),
 						new Names(
 							dataReader["username"].ToString(),
 							dataReader["displayname"].ToString(),
@@ -219,7 +189,14 @@ namespace StalkrAdminTool
 							Convert.ToSingle(dataReader["location_latitude"]),
 							Convert.ToSingle(dataReader["location_longitude"]),
 							StalkrToolBelt.TStoDT(Convert.ToDouble(dataReader["location_timestamp"]))
-						)
+						),
+						new Description(
+							new Guid(dataReader["guid"].ToString()),
+							(Description.GenderType) Convert.ToInt32(dataReader["gender"].ToString()),
+							Convert.ToInt32(dataReader["age"].ToString()),
+							(Description.AreaType) Convert.ToInt32(dataReader["region"].ToString())
+						),
+						new Description()
 					);
 					list.Add(u);
 				}

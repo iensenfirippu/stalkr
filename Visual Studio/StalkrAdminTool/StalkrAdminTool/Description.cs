@@ -11,31 +11,25 @@ namespace StalkrAdminTool
 		public enum GenderType { MALE, FEMALE, BOTH, NONE }
 		public enum AreaType { JYLLAND, FYN, SJAELLAND, BORNHOLM }
 
-		private int _index;
-
+		private Guid _uniqueid;
 		private GenderType _gender;
 		private int _age;
 		private AreaType _area;
 
 		public Description() : this(GenderType.MALE, -1, AreaType.JYLLAND) { }
-		public Description(GenderType gender, int age, AreaType area) : this(-1, gender, age, area) { }
-		public Description(int index, GenderType gender, int age, AreaType area)
+		public Description(GenderType gender, int age, AreaType area) : this(Guid.NewGuid(), gender, age, area) { }
+		public Description(Guid guid, GenderType gender, int age, AreaType area)
 		{
-			_index = index;
+			_uniqueid = guid;
 			_gender = gender;
 			_age = age;
 			_area = area;
 		}
 
-		//public static Description Empty
-		//{
-		//	get { return new Description(); }
-		//}
-
-		public int Index
+		public Guid UniqueID
 		{
-			get { return _index; }
-			set { _index = value; }
+			get { return _uniqueid; }
+			set { _uniqueid = value; }
 		}
 		public GenderType Gender
 		{
