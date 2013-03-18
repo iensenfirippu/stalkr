@@ -6,16 +6,22 @@ using System.Threading.Tasks;
 
 namespace StalkrAdminTool
 {
+	/// <summary>
+	/// Class describing Description objects 
+	/// </summary>
 	public class Description
 	{
+		// Enum types
 		public enum GenderType { MALE, FEMALE, BOTH, NONE }
 		public enum AreaType { JYLLAND, FYN, SJAELLAND, BORNHOLM }
 
+		// Class global variables
 		private Guid _uniqueid;
 		private GenderType _gender;
 		private int _age;
 		private AreaType _area;
 
+		// Constructors
 		public Description() : this(GenderType.MALE, -1, AreaType.JYLLAND) { }
 		public Description(GenderType gender, int age, AreaType area) : this(Guid.NewGuid(), gender, age, area) { }
 		public Description(Guid guid, GenderType gender, int age, AreaType area)
@@ -26,6 +32,7 @@ namespace StalkrAdminTool
 			_area = area;
 		}
 
+		// Properties
 		public Guid UniqueID
 		{
 			get { return _uniqueid; }
@@ -47,6 +54,11 @@ namespace StalkrAdminTool
 			set { _area = value; }
 		}
 
+		/// <summary>
+		/// Compares the description object to another description object
+		/// </summary>
+		/// <param name="stranger">The description object to compare with</param>
+		/// <returns>percentage of match between the descriptions</returns>
 		public double comparePreference(Description stranger)
 		{
 			int searchParams = 3;

@@ -6,13 +6,18 @@ using System.Threading.Tasks;
 
 namespace StalkrAdminTool
 {
+	/// <summary>
+	/// Class container for name related variables of the User class
+	/// </summary>
 	public class Names
 	{
+		// Class global variables
 		private String _username;
 		private String _displayname;
 		private String _firstname;
 		private String _lastname;
 
+		// Constructors
 		public Names() : this("", "", "", "") { }
 		public Names(String username) : this(username, "", "", "") { }
 		public Names(String username, String firstname, String lastname) : this(username, firstname, firstname, lastname) { }
@@ -24,6 +29,7 @@ namespace StalkrAdminTool
 			_lastname = lastname;
 		}
 
+		// Properties
 		public String UserName
 		{
 			get { return _username; }
@@ -50,8 +56,12 @@ namespace StalkrAdminTool
 		}
 	}
 
+	/// <summary>
+	/// Class describing User objects
+	/// </summary>
 	public class User
 	{
+		// Class global variables
 		private Guid _uniqueid;
 		private Names _name;
 		private String _password;
@@ -59,10 +69,10 @@ namespace StalkrAdminTool
 		private String _email;
 		private Description _description;
 		private Description _preference;
-
 		private GeoLocation _location;
 
-		public User() { }
+		// Constructors
+		public User() : this(new Names(), "", DateTime.Now, "", new GeoLocation()) { }
 		public User(Names name, String password, DateTime birthdate, String email, GeoLocation location)
 			: this(name, password, birthdate, email, location, new Description(), new Description()) { }
 		public User(Names name, String password, DateTime birthdate, String email, GeoLocation location, Description description, Description preference)
@@ -79,6 +89,7 @@ namespace StalkrAdminTool
 			_location = location;
 		}
 
+		// Properties
 		public Guid UniqueID
 		{
 			get { return _uniqueid; }

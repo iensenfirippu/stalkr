@@ -6,12 +6,17 @@ using System.Threading.Tasks;
 
 namespace StalkrAdminTool
 {
+	/// <summary>
+	/// Class describing a physical GPS point
+	/// </summary>
 	public class GeoLocation
 	{
+		// Class global variables
 		private float _latitude;
 		private float _longitude;
 		private DateTime _timestamp;
 
+		// Constructors
 		public GeoLocation() : this(0, 0, DateTime.Now) {}
 		public GeoLocation(float lat, float lon) : this(lat, lon, DateTime.Now) {}
 		public GeoLocation(float lat, float lon, DateTime time)
@@ -21,11 +26,7 @@ namespace StalkrAdminTool
 			_timestamp = time;
 		}
 
-		//public static GeoLocation Empty
-		//{
-		//	get { return new GeoLocation(); }
-		//}
-
+		// Properties
 		public float Latitude
 		{
 			get { return _latitude; }

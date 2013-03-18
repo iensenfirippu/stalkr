@@ -7,6 +7,9 @@ using MySql.Data.MySqlClient;
 
 namespace StalkrAdminTool
 {
+	/// <summary>
+	/// Class with commonly used static functions (Put in their's own class so they are easy to move if needed)
+	/// </summary>
 	class StalkrToolBelt
 	{
 		/// <summary>
@@ -31,21 +34,25 @@ namespace StalkrAdminTool
 		}
 	}
 
+	/// <summary>
+	/// Class for connecting to the database (should be replaced with the java web service at some point) 
+	/// </summary>
 	class DBConnect
 	{
+		// Class global variables
 		private MySqlConnection connection;
 		private string server;
 		private string database;
 		private string uid;
 		private string password;
 
-		//Constructor
+		// Constructor
 		public DBConnect()
 		{
 			Initialize();
 		}
 
-		//Initialize values
+		// Initialize values
 		private void Initialize()
 		{
 			server = "localhost";
@@ -59,7 +66,7 @@ namespace StalkrAdminTool
 			connection = new MySqlConnection(connectionString);
 		}
 
-		//open connection to database
+		// open connection to database
 		private bool OpenConnection()
 		{
 			try
@@ -87,7 +94,7 @@ namespace StalkrAdminTool
 			}
 		}
 
-		//Close connection
+		// Close connection
 		private bool CloseConnection()
 		{
 			try
@@ -102,63 +109,10 @@ namespace StalkrAdminTool
 			}
 		}
 
-		//Insert statement
-		public void InsertUser(User user)
-		{
-			StringBuilder sb = new StringBuilder();
-
-			//open connection
-			if (this.OpenConnection() == true)
-			{
-				//create command and assign the query and connection from the constructor
-				MySqlCommand cmd = new MySqlCommand(sb.ToString(), connection);
-				//Execute command
-				cmd.ExecuteNonQuery();
-				//close connection
-				this.CloseConnection();
-			}
-		}
-
-		//Update statement
-		public void UpdateUser(User user)
-		{
-			StringBuilder sb = new StringBuilder();
-
-			//Open connection
-			if (this.OpenConnection() == true)
-			{
-				//create mysql command
-				MySqlCommand cmd = new MySqlCommand();
-				//Assign the query using CommandText
-				cmd.CommandText = sb.ToString();
-				//Assign the connection using Connection
-				cmd.Connection = connection;
-
-				//Execute query
-				cmd.ExecuteNonQuery();
-
-				//close connection
-				this.CloseConnection();
-			}
-		}
-
-		//Delete statement
-		public void Delete()
-		{
-			StringBuilder sb = new StringBuilder();
-
-			if (this.OpenConnection() == true)
-			{
-				MySqlCommand cmd = new MySqlCommand(query, connection);
-				cmd.ExecuteNonQuery();
-				this.CloseConnection();
-			}
-		}
-
-		//Select statement
+		// Select all users from the database
 		public List<User> SelectAllUsers()
 		{
-			string query = "SELECT user.*, dscr.*, pref.* FROM user AS usr INNER JOIN description AS dscr ON usr.info_description = dscr.guid INNER JOIN description AS pref ON usr.pref_description = pref.guid";
+			string query = "SELECT * FROM user AS usr INNER JOIN description AS dscr ON usr.info_description = dscr.guid INNER JOIN description AS pref ON usr.pref_description = pref.guid";
 
 			//Create a list to store the result
 			List<User> list = new List<User>();
@@ -213,32 +167,6 @@ namespace StalkrAdminTool
 			else
 			{
 				return list;
-			}
-		}
-
-		//Count statement
-		public int Count()
-		{
-			string query = "SELECT Count(*) FROM tableinfo";
-			int Count = -1;
-
-			//Open Connection
-			if (this.OpenConnection() == true)
-			{
-				//Create Mysql Command
-				MySqlCommand cmd = new MySqlCommand(query, connection);
-
-				//ExecuteScalar will return one value
-				Count = int.Parse(cmd.ExecuteScalar() + "");
-
-				//close Connection
-				this.CloseConnection();
-
-				return Count;
-			}
-			else
-			{
-				return Count;
 			}
 		}
 	}
