@@ -7,5 +7,26 @@
     <string name="username">DemonKillar369</string>
     <string name="profilepicture"/>
     <string name="type">Username:</string>
+    <string name="first_name">Glenn</string>
+    <string name="last_name">Brodersen</string>
+    <string name="birthday">08-10-1991</string>
+    <string name="country">Denmark</string>
+    <string name="region">Western Sealand</string>
+    <string name="city">Korsør</string>
+    <string name="gender">Male</string>
+    <string name="smoking">No</string>
+    <string name="drinking">Yes</string>
+    <string name="orientation">Heterosexual</string>
+    <string name="age">21</string>
+    <string-array name="region_array">
+        <item>Nothern Jutland</item>
+        <item>Central Jutland</item>
+        <item>Southern Jutland</item>
+        <item>Funen</item>
+        <item>Western Sealand</item>
+        <item>Nothern Sealand</item>
+        <item>Southern Sealand</item>
+        <item>Capital Area</item>
+    </string-array>
 
 </resources>
