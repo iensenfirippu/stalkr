@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace StalkrAdminTool
 {
-	public partial class Form1 : Form
+	public partial class MainForm : Form
 	{
 		// Class local variables
 		List<User> userlist;
@@ -19,7 +19,7 @@ namespace StalkrAdminTool
 		private static string CLOSETITLE = "You are about to close...";
 
 		// Constructor
-		public Form1()
+		public MainForm()
 		{
 			InitializeComponent();
 
@@ -49,6 +49,7 @@ namespace StalkrAdminTool
 
 			// Create new table columns
 			dataGridView1.Columns.Add("guid", "Guid");
+			dataGridView1.Columns[0].Visible = false;
 			dataGridView1.Columns.Add("username", "Username");
 			dataGridView1.Columns.Add("displayname", "Displayed name");
 			dataGridView1.Columns.Add("fullname", "Full name");
@@ -57,7 +58,8 @@ namespace StalkrAdminTool
 			// Fill out the table rows
 			foreach (User u in userlist)
 			{
-				dataGridView1.Rows.Add(u.UniqueID.ToString(), u.Name.UserName, u.Name.DisplayName, u.Name.FullName, u.Birthdate.ToShortDateString());
+				dataGridView1.Rows.Add(null, u.Name.UserName, u.Name.DisplayName, u.Name.FullName, u.Birthdate.ToShortDateString());
+				dataGridView1.Rows[dataGridView1.Rows.Count - 1].Cells[0].Value = u.UniqueID;
 			}
 		}
 
@@ -81,15 +83,19 @@ namespace StalkrAdminTool
 		// Event fired when the "Create User" option is pressed
 		private void createNewUserToolStripMenuItem_MouseUp(object sender, MouseEventArgs e)
 		{
-			// TODO: Start the "Edit User" form with an empty user object
 			userlist.Add(new User());
 			DrawUserTable();
+			dataGridView1.Rows[dataGridView1.Rows.Count - 1].Selected = true;
+			StartEditUserForm();
 		}
 
 		// Event fired when the "Delete User" option is pressed
 		private void deleteThisUserToolStripMenuItem_MouseUp(object sender, MouseEventArgs e)
 		{
-			// TODO: delete the selected user
+			// Deletes the selected user from the userlist and reloads the gridview
+			User user = GetSelectedUserObject();
+			userlist.Remove(user);
+			DrawUserTable();
 		}
 
 		// Event fired when the "Edit User" option is pressed
@@ -101,15 +107,34 @@ namespace StalkrAdminTool
 		// Self-explanatory...
 		private void StartEditUserForm()
 		{
-			// TODO: if the table has been sorted the id's no longer match, propose to disable sorting, or use Guid field (possibly hidden)
+			User user = GetSelectedUserObject();
+			if (user != null)
+			{
+				// Open the "Edit User" form with the corresponding user object in the list
+				UserForm userform = new UserForm(user);
+				userform.ShowDialog();
+				DrawUserTable();
+			}
+		}
 
-			// Finds the selected index from the gridview
-			int selectedindex = dataGridView1.SelectedRows[0].Index;
-			User user = userlist[selectedindex];
-
-			// Open the "Edit User" form with the corresponding user object in the list
-			UserForm userform = new UserForm(user);
-			userform.ShowDialog();
+		/// <summary>
+		/// Fetches the User object that is selected in the DataGridView
+		/// </summary>
+		/// <returns>A user object</returns>
+		private User GetSelectedUserObject()
+		{
+			// Finds the desired user object from the selected index in the gridview
+			Guid userid = (Guid)dataGridView1.SelectedRows[0].Cells[0].Value;
+			User user = null;
+			for (int i = 0; i < userlist.Count; i++)
+			{
+				if (userlist[i].UniqueID == userid)
+				{
+					user = userlist[i];
+					i = userlist.Count;
+				}
+			}
+			return user;
 		}
 
 		// Event fired when the "Exit" option is pressed
@@ -129,7 +154,7 @@ namespace StalkrAdminTool
 		private void Form1_FormClosing(object sender, FormClosingEventArgs e)
 		{
 			// Ask the user to acknowledge the shutdown
-			DialogResult dr = System.Windows.Forms.MessageBox.Show(Form1.CLOSEWARNING, Form1.CLOSETITLE, MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
+			DialogResult dr = System.Windows.Forms.MessageBox.Show(MainForm.CLOSEWARNING, MainForm.CLOSETITLE, MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
 
 			if (dr != DialogResult.OK)
 			{

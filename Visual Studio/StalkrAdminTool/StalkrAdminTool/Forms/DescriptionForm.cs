@@ -10,68 +10,42 @@ using System.Windows.Forms;
 
 namespace StalkrAdminTool
 {
-	public partial class UserForm : Form
+	public partial class DescriptionForm : Form
 	{
 		// Class global variables
-		private User _user;
+		private Description _description;
 		private bool[] _altered;
 
 		// Contructor
-		public UserForm(User user)
+		public DescriptionForm(Description description)
 		{
 			InitializeComponent();
-			_user = user;
+			_description = description;
 			_altered = new bool[] { false, false, false, false, false, false, false, false, false, false, false };
 
-			txt_guid.Text = user.UniqueID.ToString().ToUpper();
-			txt_email.Text = user.Email;
-			txt_user.Text = user.Name.UserName;
-			txt_pass.Text = user.Password;
-			txt_firstname.Text = user.Name.FirstName;
-			txt_lastname.Text = user.Name.LastName;
-			txt_display.Text = user.Name.DisplayName;
-			date_birth.Value = user.Birthdate;
-
-			if (user.Location != null)
+			txt_guid.Text = _description.UniqueID.ToString().ToUpper();
+			//txt_timestamp.Text = _description.Timestamp;
+			num_age.Value = _description.Age;
+			num_agemax.Value = _description.Age.Max;
+			foreach (GenderType e in Enum.GetValues(typeof(GenderType)))
 			{
-				txt_lat.Text = user.Location.Latitude.ToString();
-				txt_lon.Text = user.Location.Longitude.ToString();
-				date_location.Value = user.Location.TimeStamp;
+				if (_description.Gender.Contains(e)) { chk_gender.Items.Add(e, true); }
+				else { chk_gender.Items.Add(e, false); }
 			}
-
-			if (user.Description != null)
+			//orientation
+			foreach (AreaType e in Enum.GetValues(typeof(AreaType)))
 			{
-				txt_description.Text = user.Description.UniqueID.ToString().ToUpper();
-				btn_desc_add.Enabled = false;
-				btn_desc_del.Enabled = false;
-				btn_desc_edit.Enabled = true;
+				if (_description.Area.Contains(e)) { chk_region.Items.Add(e, true); }
+				else { chk_region.Items.Add(e, false); }
 			}
-			else
-			{
-				btn_desc_add.Enabled = true;
-				btn_desc_del.Enabled = false;
-				btn_desc_edit.Enabled = false;
-			}
-
-			if (user.Preferences != null)
-			{
-				txt_preference.Text = user.Preferences.UniqueID.ToString().ToUpper();
-				btn_pref_add.Enabled = false;
-				btn_pref_del.Enabled = false;
-				btn_pref_edit.Enabled = true;
-			}
-			else
-			{
-				btn_pref_add.Enabled = true;
-				btn_pref_del.Enabled = false;
-				btn_pref_edit.Enabled = false;
-			}
+			//smoking
+			//drinking
 		}
 
 		// Properties
-		public User ReturnValue
+		public Description ReturnValue
 		{
-			get { return _user; }
+			get { return _description; }
 		}
 
 		// Methods
@@ -143,14 +117,14 @@ namespace StalkrAdminTool
 		#region Form buttons
 		private void button_cancel_Click(object sender, EventArgs e)
 		{
-			_user = null;
+			//_user = null;
 			this.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.Close();
 		}
 		private void button_save_Click(object sender, EventArgs e)
 		{
 			//if (_altered[0] == true) { _user.UniqueID = new Guid(txt_guid.Text); }
-			if (_altered[1] == true) { _user.Email = txt_email.Text; }
+			/*if (_altered[1] == true) { _user.Email = txt_email.Text; }
 			if (_altered[2] == true) { _user.Name.UserName = txt_user.Text; }
 			if (_altered[3] == true) { _user.Password = txt_pass.Text; }
 			if (_altered[4] == true) {
@@ -160,7 +134,7 @@ namespace StalkrAdminTool
 			if (_altered[5] == true) { _user.Name.DisplayName = txt_display.Text; }
 			if (_altered[6] == true) { _user.Birthdate = date_birth.Value; }
 			if (_altered[7] == true) { _user.Location = new GeoLocation(Convert.ToSingle(txt_lat.Text), Convert.ToSingle(txt_lon.Text), date_location.Value);  }
-			//if (_altered[8] == true) { _user.Description = _user.Description; }
+			//if (_altered[8] == true) { _user.Description = _user.Description; }*/
 			//if (_altered[8] == true) { _user.Preferences = _user.Preferences; }
 
 			this.DialogResult = System.Windows.Forms.DialogResult.Cancel;

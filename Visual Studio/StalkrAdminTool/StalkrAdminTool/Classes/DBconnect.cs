@@ -145,12 +145,23 @@ namespace StalkrAdminTool
 							StalkrToolBelt.TStoDT(Convert.ToDouble(dataReader["location_timestamp"]))
 						),
 						new Description(
-							new Guid(dataReader["guid"].ToString()),
-							(Description.GenderType) Convert.ToInt32(dataReader["gender"].ToString()),
-							Convert.ToInt32(dataReader["age"].ToString()),
-							(Description.AreaType) Convert.ToInt32(dataReader["region"].ToString())
+							new Guid(dataReader[13].ToString()),
+							(GenderType) Convert.ToInt32(dataReader[20].ToString()),
+							new AgeRange(
+								Convert.ToInt32(dataReader[18].ToString()),
+								Convert.ToInt32(dataReader[19].ToString())
+							),
+							(AreaType) Convert.ToInt32(dataReader[16].ToString())
 						),
-						new Description()
+						new Description(
+							new Guid(dataReader[24].ToString()),
+							(GenderType)Convert.ToInt32(dataReader[31].ToString()),
+							new AgeRange(
+								Convert.ToInt32(dataReader[29].ToString()),
+								Convert.ToInt32(dataReader[30].ToString())
+							),
+							(AreaType)Convert.ToInt32(dataReader[27].ToString())
+						)
 					);
 					list.Add(u);
 				}

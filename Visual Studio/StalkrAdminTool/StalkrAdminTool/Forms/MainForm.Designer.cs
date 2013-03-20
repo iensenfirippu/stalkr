@@ -1,6 +1,6 @@
 ﻿namespace StalkrAdminTool
 {
-	partial class Form1
+	partial class MainForm
 	{
 		/// <summary>
 		/// Required designer variable.
@@ -29,7 +29,7 @@
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
 			this.menuStrip1 = new System.Windows.Forms.MenuStrip();
 			this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -136,6 +136,7 @@
 			// 
 			// createNewUserToolStripMenuItem
 			// 
+			this.createNewUserToolStripMenuItem.Image = global::StalkrAdminTool.Properties.Resources.add2;
 			this.createNewUserToolStripMenuItem.Name = "createNewUserToolStripMenuItem";
 			this.createNewUserToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
 			this.createNewUserToolStripMenuItem.Text = "Create new user";
@@ -143,6 +144,7 @@
 			// 
 			// deleteThisUserToolStripMenuItem
 			// 
+			this.deleteThisUserToolStripMenuItem.Image = global::StalkrAdminTool.Properties.Resources.delete2;
 			this.deleteThisUserToolStripMenuItem.Name = "deleteThisUserToolStripMenuItem";
 			this.deleteThisUserToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
 			this.deleteThisUserToolStripMenuItem.Text = "Delete this user";
@@ -150,12 +152,13 @@
 			// 
 			// editThisUserToolStripMenuItem
 			// 
+			this.editThisUserToolStripMenuItem.Image = global::StalkrAdminTool.Properties.Resources.edit;
 			this.editThisUserToolStripMenuItem.Name = "editThisUserToolStripMenuItem";
 			this.editThisUserToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
 			this.editThisUserToolStripMenuItem.Text = "Edit this user";
 			this.editThisUserToolStripMenuItem.MouseUp += new System.Windows.Forms.MouseEventHandler(this.editThisUserToolStripMenuItem_MouseUp);
 			// 
-			// Form1
+			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -165,7 +168,7 @@
 			this.Controls.Add(this.menuStrip1);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MainMenuStrip = this.menuStrip1;
-			this.Name = "Form1";
+			this.Name = "MainForm";
 			this.Text = "Stalkr Admin Tool - Main window";
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
 			this.menuStrip1.ResumeLayout(false);

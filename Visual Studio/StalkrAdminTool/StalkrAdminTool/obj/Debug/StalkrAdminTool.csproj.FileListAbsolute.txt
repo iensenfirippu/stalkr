@@ -1,6 +1,5 @@
 C:\Users\Philip\Documents\GitHub\stalkr\Visual Studio\StalkrAdminTool\StalkrAdminTool\bin\Debug\StalkrAdminTool.exe.config
 C:\Users\Philip\Documents\GitHub\stalkr\Visual Studio\StalkrAdminTool\StalkrAdminTool\obj\Debug\StalkrAdminTool.csprojResolveAssemblyReference.cache
-C:\Users\Philip\Documents\GitHub\stalkr\Visual Studio\StalkrAdminTool\StalkrAdminTool\obj\Debug\StalkrAdminTool.Form1.resources
 C:\Users\Philip\Documents\GitHub\stalkr\Visual Studio\StalkrAdminTool\StalkrAdminTool\obj\Debug\StalkrAdminTool.Properties.Resources.resources
 C:\Users\Philip\Documents\GitHub\stalkr\Visual Studio\StalkrAdminTool\StalkrAdminTool\obj\Debug\StalkrAdminTool.csproj.GenerateResource.Cache
 C:\Users\Philip\Documents\GitHub\stalkr\Visual Studio\StalkrAdminTool\StalkrAdminTool\bin\Debug\StalkrAdminTool.exe
@@ -9,3 +8,5 @@ C:\Users\Philip\Documents\GitHub\stalkr\Visual Studio\StalkrAdminTool\StalkrAdmi
 C:\Users\Philip\Documents\GitHub\stalkr\Visual Studio\StalkrAdminTool\StalkrAdminTool\obj\Debug\StalkrAdminTool.exe
 C:\Users\Philip\Documents\GitHub\stalkr\Visual Studio\StalkrAdminTool\StalkrAdminTool\obj\Debug\StalkrAdminTool.pdb
 C:\Users\Philip\Documents\GitHub\stalkr\Visual Studio\StalkrAdminTool\StalkrAdminTool\obj\Debug\StalkrAdminTool.UserForm.resources
+C:\Users\Philip\Documents\GitHub\stalkr\Visual Studio\StalkrAdminTool\StalkrAdminTool\obj\Debug\StalkrAdminTool.DescriptionForm.resources
+C:\Users\Philip\Documents\GitHub\stalkr\Visual Studio\StalkrAdminTool\StalkrAdminTool\obj\Debug\StalkrAdminTool.MainForm.resources
