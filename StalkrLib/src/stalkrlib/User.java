@@ -1,6 +1,7 @@
 package stalkrlib;
 
 import java.util.Date;
+import java.util.UUID;
 
 /**
  *
@@ -10,6 +11,7 @@ public class User {
     private String username;
     private String password;
     
+    private UUID id;
     private String name;
     private Date birthdate;
     private String email;
@@ -28,6 +30,7 @@ public class User {
      * @param email 
      */
     public User(String username, String password, String name, Date birthdate, String email) {
+        this.id = UUID.randomUUID();
         this.username = username;
         this.password = password;
         this.name = name;
@@ -47,7 +50,8 @@ public class User {
      * @param preference
      * @param lastLocation 
      */
-    public User(String username, String password, String name, Date birthdate, String email, Description description, Description preference, Location lastLocation) {
+    public User(UUID id, String username, String password, String name, Date birthdate, String email, Description description, Description preference, Location lastLocation) {
+        this.id = id;
         this.username = username;
         this.password = password;
         this.name = name;
@@ -56,6 +60,10 @@ public class User {
         this.description = description;
         this.preference = preference;
         this.lastLocation = lastLocation;
+    }
+
+    public UUID getId() {
+        return id;
     }
 
     public String getUsername() {

@@ -1,61 +1,67 @@
 package stalkrlib;
 
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author Rasmus 'Sommer' Larsen
  */
 public class Description {
     
-    public enum Gender{ MALE, FEMALE, BOTH, NONE }
-    public enum Area{ JYLLAND, FYN, SJÆLLAND, BORNHOLM }
+    public enum Gender{ OTHER, MALE, FEMALE, HERMAPHRODITE, TRANSGENDER }
+    public enum Area{ NOTSPECIFIED, JYLLAND, FYN, SJAELLAND, BORNHOLM }
+    public enum Smoking{ NO, YES, OCCASIONALLY }
+    public enum Drinking{ NO, YES }
+    public enum Sexuality{ ASEXUAL, HETERO, HOMO, BISEXUAL }
     
     private Gender gender;
-    private int age;
+    private Range age;
     private Area area;
+    private Smoking smoking;
+    private Drinking drinking;
+    private Sexuality sexuality;
 
-    public Description(Gender gender, int age, Area area) {
+    public Description(Gender gender, Range age, Area area, Smoking smoking, Drinking drinking, Sexuality sexuality) {
         this.gender = gender;
         this.age = age;
         this.area = area;
-    }
-
-    public Gender getGender() {
-        return gender;
-    }
-
-    public void setGender(Gender gender) {
-        this.gender = gender;
-    }
-
-    public int getAge() {
-        return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
-    }
-
-    public Area getArea() {
-        return area;
-    }
-
-    public void setArea(Area area) {
-        this.area = area;
+        this.smoking = smoking;
+        this.drinking = drinking;
+        this.sexuality = sexuality;
     }
     
     public double comparePreference(Description stranger){        
-        int searchParams = 3;
+        int searchParams = 6;
         int matches = 0;
         
-        if(this.gender == stranger.getGender()){
+        try {
+            if(age.isWithinRange(stranger.age.getMin())){
+                matches++;
+            }
+        } 
+        catch (MaxIsMinException ex) {
+            return 0;
+        }
+        
+        if(gender == stranger.gender){
             matches++;
         }
         
-        if(this.area == stranger.getArea()){
+        if(area == stranger.area){
             matches++;
         }
         
-        if(this.age == stranger.getAge()){
+        if(smoking == stranger.smoking){
+            matches++;
+        }
+        
+        if(drinking == stranger.drinking){
+            matches++;
+        }
+        
+        if(sexuality == stranger.sexuality){
             matches++;
         }
         
