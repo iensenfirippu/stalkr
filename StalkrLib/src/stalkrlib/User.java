@@ -11,7 +11,7 @@ public class User {
     private String username;
     private String password;
     
-    private UUID id;
+    private String id;
     private String name;
     private Date birthdate;
     private String email;
@@ -30,7 +30,7 @@ public class User {
      * @param email 
      */
     public User(String username, String password, String name, Date birthdate, String email) {
-        this.id = UUID.randomUUID();
+        this.id = UUID.randomUUID().toString();
         this.username = username;
         this.password = password;
         this.name = name;
@@ -50,7 +50,7 @@ public class User {
      * @param preference
      * @param lastLocation 
      */
-    public User(UUID id, String username, String password, String name, Date birthdate, String email, Description description, Description preference, Location lastLocation) {
+    public User(String id, String username, String password, String name, Date birthdate, String email, Description description, Description preference, Location lastLocation) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -62,7 +62,7 @@ public class User {
         this.lastLocation = lastLocation;
     }
 
-    public UUID getId() {
+    public String getId() {
         return id;
     }
 
