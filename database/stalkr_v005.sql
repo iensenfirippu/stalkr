@@ -137,7 +137,7 @@ INSERT INTO `description` (
 	'0','0'
 );
 
-INSERT INTO ´description´ (
+INSERT INTO `description` (
 	`guid`,`timestamp`,`country`,
 	`region`,`city`,`age`,
 	`age_max`,`gender`,`smoking`,
@@ -149,7 +149,7 @@ INSERT INTO ´description´ (
 	'0','1'
 );	
 
-	INSERT INTO ´description´ (
+	INSERT INTO `description` (
 	`guid`,`timestamp`,`country`,
 	`region`,`city`,`age`,
 	`age_max`,`gender`,`smoking`,
@@ -161,7 +161,7 @@ INSERT INTO ´description´ (
 	'1','2'
 );	
 
-	INSERT INTO ´description´ (
+	INSERT INTO `description` (
 	`guid`,`timestamp`,`country`,
 	`region`,`city`,`age`,
 	`age_max`,`gender`,`smoking`,
@@ -171,9 +171,9 @@ INSERT INTO ´description´ (
 	'4','3','45',
 	'60','1','0',
 	'0','2'
-;)
+);
 
-	INSERT INTO ´description´ (
+	INSERT INTO `description` (
 	`guid`,`timestamp`,`country`,
 	`region`,`city`,`age`,
 	`age_max`,`gender`,`smoking`,
@@ -183,9 +183,9 @@ INSERT INTO ´description´ (
 	'3','3','22',
 	'33','1','1',
 	'1','1'
-;)
+);
 
-	INSERT INTO ´description´ (
+	INSERT INTO `description` (
 	`guid`,`timestamp`,`country`,
 	`region`,`city`,`age`,
 	`age_max`,`gender`,`smoking`,
@@ -195,9 +195,9 @@ INSERT INTO ´description´ (
 	'4','2','47',
 	'69','1','1',
 	'1','3'
-;)
+);
 
-	INSERT INTO ´description´ (
+	INSERT INTO `description` (
 	`guid`,`timestamp`,`country`,
 	`region`,`city`,`age`,
 	`age_max`,`gender`,`smoking`,
@@ -207,9 +207,9 @@ INSERT INTO ´description´ (
 	'2','1','22',
 	'45','1','0',
 	'1','2'
-;)
+);
 
-	INSERT INTO ´description´ (
+	INSERT INTO `description` (
 	`guid`,`timestamp`,`country`,
 	`region`,`city`,`age`,
 	`age_max`,`gender`,`smoking`,
@@ -219,9 +219,9 @@ INSERT INTO ´description´ (
 	'2','5','43',
 	'55','1','1',
 	'1','2'
-;)
+);
 
-	INSERT INTO ´description´ (
+	INSERT INTO `description` (
 	`guid`,`timestamp`,`country`,
 	`region`,`city`,`age`,
 	`age_max`,`gender`,`smoking`,
@@ -231,7 +231,7 @@ INSERT INTO ´description´ (
 	'4','3','77',
 	'98','0','0',
 	'0','2'
-;)
+);
 
 
 INSERT INTO `report` (
