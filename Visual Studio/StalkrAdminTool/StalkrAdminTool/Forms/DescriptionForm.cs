@@ -21,25 +21,51 @@ namespace StalkrAdminTool
 		{
 			InitializeComponent();
 			_description = description;
-			_altered = new bool[] { false, false, false, false, false, false, false, false, false, false, false };
+			_altered = new bool[] { false, false, false, false, false, false, false, false };
 
 			txt_guid.Text = _description.UniqueID.ToString().ToUpper();
-			//txt_timestamp.Text = _description.Timestamp;
+			txt_timestamp.Text = _description.TimeStamp.ToLongTimeString();
 			num_age.Value = _description.Age;
 			num_agemax.Value = _description.Age.Max;
+			object[] temp = { null, null, null, null, null, null };
+			int index = 0;
 			foreach (GenderType e in Enum.GetValues(typeof(GenderType)))
 			{
-				if (_description.Gender.Contains(e)) { chk_gender.Items.Add(e, true); }
-				else { chk_gender.Items.Add(e, false); }
+				if (_description.Gender.Contains(e)) { temp[index] = true; } else { temp[index] = false; }
+				temp[index + 1] = e;
+				index += 2;
+
+				if (temp[5] != null)
+				{
+					_description.Age
+					dataGridView1.Rows.Add(temp[0], temp[1], temp[2], temp[3], temp[4], temp[5]);
+					for (int i = 0; i < 6; i++) { temp[i] = null; }
+					index = 0;
+				}
 			}
-			//orientation
+			dataGridView1.Rows.Add(temp[0], temp[1], temp[2], temp[3], temp[4], temp[5]);
+			for (int i = 0; i < 6; i++) { temp[i] = null; }
+			index = 0;
+			foreach (SexualityType e in Enum.GetValues(typeof(SexualityType)))
+			{
+				if (_description.Sexuality.Contains(e)) { chk_orientation.Items.Add(e, true); }
+				else { chk_orientation.Items.Add(e, false); }
+			}
 			foreach (AreaType e in Enum.GetValues(typeof(AreaType)))
 			{
 				if (_description.Area.Contains(e)) { chk_region.Items.Add(e, true); }
 				else { chk_region.Items.Add(e, false); }
 			}
-			//smoking
-			//drinking
+			foreach (SmokingType e in Enum.GetValues(typeof(SmokingType)))
+			{
+				if (_description.Smoking.Contains(e)) { chk_smoking.Items.Add(e, true); }
+				else { chk_smoking.Items.Add(e, false); }
+			}
+			foreach (DrinkingType e in Enum.GetValues(typeof(DrinkingType)))
+			{
+				if (_description.Drinking.Contains(e)) { chk_drinking.Items.Add(e, true); }
+				else { chk_drinking.Items.Add(e, false); }
+			}
 		}
 
 		// Properties

@@ -128,41 +128,31 @@ namespace StalkrAdminTool
 				//Read the data and store them in the list
 				while (dataReader.Read())
 				{
-					User u = new User(
-						new Guid(dataReader["guid"].ToString()),
-						new Names(
-							dataReader["username"].ToString(),
-							dataReader["displayname"].ToString(),
-							dataReader["firstname"].ToString(),
-							dataReader["lastname"].ToString()
-						),
-						dataReader["password"].ToString(),
-						StalkrToolBelt.TStoDT(Convert.ToDouble(dataReader["birthday"])),
-						dataReader["email"].ToString(),
-						new GeoLocation(
-							Convert.ToSingle(dataReader["location_latitude"]),
-							Convert.ToSingle(dataReader["location_longitude"]),
-							StalkrToolBelt.TStoDT(Convert.ToDouble(dataReader["location_timestamp"]))
-						),
-						new Description(
-							new Guid(dataReader[13].ToString()),
-							(GenderType) Convert.ToInt32(dataReader[20].ToString()),
-							new AgeRange(
-								Convert.ToInt32(dataReader[18].ToString()),
-								Convert.ToInt32(dataReader[19].ToString())
-							),
-							(AreaType) Convert.ToInt32(dataReader[16].ToString())
-						),
-						new Description(
-							new Guid(dataReader[24].ToString()),
-							(GenderType)Convert.ToInt32(dataReader[31].ToString()),
-							new AgeRange(
-								Convert.ToInt32(dataReader[29].ToString()),
-								Convert.ToInt32(dataReader[30].ToString())
-							),
-							(AreaType)Convert.ToInt32(dataReader[27].ToString())
-						)
-					);
+					User u = new User(new Guid(dataReader["guid"].ToString()));
+					u.Name = new Names(dataReader["username"].ToString(), dataReader["displayname"].ToString(), dataReader["firstname"].ToString(), dataReader["lastname"].ToString());
+					u.Password = dataReader["password"].ToString();
+					u.Birthdate = StalkrToolBelt.TStoDT(Convert.ToDouble(dataReader["birthday"]));
+					u.Email = dataReader["email"].ToString();
+					u.Location = new GeoLocation(Convert.ToSingle(dataReader["location_latitude"]), Convert.ToSingle(dataReader["location_longitude"]), StalkrToolBelt.TStoDT(Convert.ToDouble(dataReader["location_timestamp"])));
+
+					u.Description = new Description(new Guid(dataReader[13].ToString()));
+					u.Description.TimeStamp = StalkrToolBelt.TStoDT(Convert.ToDouble(dataReader[14]));
+					u.Description.Gender = (GenderType) Convert.ToInt32(dataReader[20].ToString());
+					u.Description.Sexuality = (SexualityType) Convert.ToInt32(dataReader[23].ToString());
+					u.Description.Age = new AgeRange(Convert.ToInt32(dataReader[18].ToString()), Convert.ToInt32(dataReader[19].ToString()));
+					u.Description.Area = (AreaType) Convert.ToInt32(dataReader[16].ToString());
+					u.Description.Smoking = (SmokingType) Convert.ToInt32(dataReader[21].ToString());
+					u.Description.Drinking = (DrinkingType) Convert.ToInt32(dataReader[22].ToString());
+
+					u.Preferences = new Description(new Guid(dataReader[24].ToString()));
+					u.Description.TimeStamp = StalkrToolBelt.TStoDT(Convert.ToDouble(dataReader[25]));
+					u.Description.Gender = (GenderType) Convert.ToInt32(dataReader[31].ToString());
+					u.Description.Sexuality = (SexualityType) Convert.ToInt32(dataReader[34].ToString());
+					u.Description.Age = new AgeRange(Convert.ToInt32(dataReader[29].ToString()), Convert.ToInt32(dataReader[30].ToString()));
+					u.Description.Area = (AreaType) Convert.ToInt32(dataReader[27].ToString());
+					u.Description.Smoking = (SmokingType) Convert.ToInt32(dataReader[32].ToString());
+					u.Description.Drinking = (DrinkingType) Convert.ToInt32(dataReader[33].ToString());
+
 					list.Add(u);
 				}
 

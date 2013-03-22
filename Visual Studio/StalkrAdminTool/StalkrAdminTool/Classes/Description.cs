@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace StalkrAdminTool
 {
-	// Enum types
-	public enum GenderType { MALE, FEMALE, BOTH, NONE }
-	public enum AreaType { JYLLAND, FYN, SJAELLAND, BORNHOLM }
-
+	#region Collection Types
+	#region Age collection type
 	/// <summary>
 	/// Class describing the age of a user or preference
 	/// </summary>
@@ -50,7 +48,8 @@ namespace StalkrAdminTool
 			return new AgeRange(i);
 		}
 	}
-
+	#endregion
+	#region Gender collection type
 	/// <summary>
 	/// Class describing the Gender(s) of a user or preference
 	/// </summary>
@@ -93,7 +92,52 @@ namespace StalkrAdminTool
 			return new GenderList(t);
 		}
 	}
+	#endregion
+	#region Sexuality collection type
+	/// <summary>
+	/// Class describing the Gender(s) of a user or preference
+	/// </summary>
+	public class SexualityList
+	{
+		// Class global variables
+		private List<SexualityType> _innerlist;
 
+		// Constructors
+		public SexualityList(SexualityType single)
+		{
+			_innerlist = new List<SexualityType>();
+			_innerlist.Add(single);
+		}
+		public SexualityList(List<SexualityType> plural)
+		{
+			_innerlist = plural;
+		}
+
+		// Properties
+		public List<SexualityType> List
+		{
+			get { return _innerlist; }
+			set { _innerlist = value; }
+		}
+
+		// Methods
+		public bool Contains(SexualityType t)
+		{
+			return _innerlist.Contains(t);
+		}
+
+		// implicit converters
+		public static implicit operator SexualityType(SexualityList t)
+		{
+			return t.List[0];
+		}
+		public static implicit operator SexualityList(SexualityType t)
+		{
+			return new SexualityList(t);
+		}
+	}
+	#endregion
+	#region Area collection type
 	/// <summary>
 	/// Class describing the Area(s) of a user or preference
 	/// </summary>
@@ -103,14 +147,14 @@ namespace StalkrAdminTool
 		private List<AreaType> _innerlist;
 
 		// Constructors
-		public AreaList(AreaType singlearea)
+		public AreaList(AreaType single)
 		{
 			_innerlist = new List<AreaType>();
-			_innerlist.Add(singlearea);
+			_innerlist.Add(single);
 		}
-		public AreaList(List<AreaType> severalareas)
+		public AreaList(List<AreaType> plural)
 		{
-			_innerlist = severalareas;
+			_innerlist = plural;
 		}
 
 		// Properties
@@ -136,6 +180,96 @@ namespace StalkrAdminTool
 			return new AreaList(t);
 		}
 	}
+	#endregion
+	#region Smoking collection type
+	/// <summary>
+	/// Class describing the Area(s) of a user or preference
+	/// </summary>
+	public class SmokingList
+	{
+		// Class global variables
+		private List<SmokingType> _innerlist;
+
+		// Constructors
+		public SmokingList(SmokingType single)
+		{
+			_innerlist = new List<SmokingType>();
+			_innerlist.Add(single);
+		}
+		public SmokingList(List<SmokingType> plural)
+		{
+			_innerlist = plural;
+		}
+
+		// Properties
+		public List<SmokingType> List
+		{
+			get { return _innerlist; }
+			set { _innerlist = value; }
+		}
+
+		// Methods
+		public bool Contains(SmokingType t)
+		{
+			return _innerlist.Contains(t);
+		}
+
+		// implicit converters
+		public static implicit operator SmokingType(SmokingList t)
+		{
+			return t.List[0];
+		}
+		public static implicit operator SmokingList(SmokingType t)
+		{
+			return new SmokingList(t);
+		}
+	}
+	#endregion
+	#region Drinking collection type
+	/// <summary>
+	/// Class describing the Area(s) of a user or preference
+	/// </summary>
+	public class DrinkingList
+	{
+		// Class global variables
+		private List<DrinkingType> _innerlist;
+
+		// Constructors
+		public DrinkingList(DrinkingType single)
+		{
+			_innerlist = new List<DrinkingType>();
+			_innerlist.Add(single);
+		}
+		public DrinkingList(List<DrinkingType> plural)
+		{
+			_innerlist = plural;
+		}
+
+		// Properties
+		public List<DrinkingType> List
+		{
+			get { return _innerlist; }
+			set { _innerlist = value; }
+		}
+
+		// Methods
+		public bool Contains(DrinkingType t)
+		{
+			return _innerlist.Contains(t);
+		}
+
+		// implicit converters
+		public static implicit operator DrinkingType(DrinkingList t)
+		{
+			return t.List[0];
+		}
+		public static implicit operator DrinkingList(DrinkingType t)
+		{
+			return new DrinkingList(t);
+		}
+	}
+	#endregion
+	#endregion
 
 	/// <summary>
 	/// Class describing Description objects 
@@ -144,31 +278,51 @@ namespace StalkrAdminTool
 	{
 		// Class global variables
 		private Guid _uniqueid;
-		private GenderList _genders;
+		private DateTime _timestamp;
+		private GenderList _gender;
+		private SexualityList _sexuality;
 		private AgeRange _age;
-		private AreaList _areas;
+		private AreaList _area;
+		private SmokingList _smoking;
+		private DrinkingList _drinking;
 
 		// Constructors
-		public Description() : this(GenderType.MALE, -1, AreaType.JYLLAND) { }
-		public Description(GenderList gender, AgeRange age, AreaList area) : this(Guid.NewGuid(), gender, age, area) { }
-		public Description(Guid guid, GenderList gender, AgeRange age, AreaList area)
+		public Description() : this(Guid.NewGuid()) { }
+		public Description(Guid guid)
 		{
 			_uniqueid = guid;
-			_genders = gender;
-			_age = age;
-			_areas = area;
 		}
+		//public Description() : this(GenderType.MALE, -1, AreaType.JYLLAND) { }
+		//public Description(GenderList gender, AgeRange age, AreaList area) : this(Guid.NewGuid(), gender, age, area) { }
+		//public Description(Guid guid, GenderList gender, AgeRange age, AreaList area)
+		//{
+		//	_uniqueid = guid;
+		//	_genders = gender;
+		//	_age = age;
+		//	_areas = area;
+		//}
 
 		// Properties
+
 		public Guid UniqueID
 		{
 			get { return _uniqueid; }
-			set { _uniqueid = value; }
+			//set { _uniqueid = value; }
+		}
+		public DateTime TimeStamp
+		{
+			get { return _timestamp; }
+			set { _timestamp = value; }
 		}
 		public GenderList Gender
 		{
-			get { return _genders; }
-			set { _genders = value; }
+			get { return _gender; }
+			set { _gender = value; }
+		}
+		public SexualityList Sexuality
+		{
+			get { return _sexuality; }
+			set { _sexuality = value; }
 		}
 		public AgeRange Age
 		{
@@ -177,8 +331,18 @@ namespace StalkrAdminTool
 		}
 		public AreaList Area
 		{
-			get { return _areas; }
-			set { _areas = value; }
+			get { return _area; }
+			set { _area = value; }
+		}
+		public SmokingList Smoking
+		{
+			get { return _smoking; }
+			set { _smoking = value; }
+		}
+		public DrinkingList Drinking
+		{
+			get { return _drinking; }
+			set { _drinking = value; }
 		}
 	}
 }

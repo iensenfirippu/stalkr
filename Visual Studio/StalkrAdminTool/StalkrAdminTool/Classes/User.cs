@@ -72,28 +72,33 @@ namespace StalkrAdminTool
 		private GeoLocation _location;
 
 		// Constructors
-		public User() : this(new Names(), "", DateTime.Now, "", new GeoLocation()) { }
-		public User(Names name, String password, DateTime birthdate, String email, GeoLocation location)
-			: this(name, password, birthdate, email, location, new Description(), new Description()) { }
-		public User(Names name, String password, DateTime birthdate, String email, GeoLocation location, Description description, Description preference)
-			: this(Guid.NewGuid(), name, password, birthdate, email, location, description, preference) { }
-		public User(Guid guid, Names name, String password, DateTime birthdate, String email, GeoLocation location, Description description, Description preference)
+		public User() : this(Guid.NewGuid()) { }
+		public User(Guid guid)
 		{
 			_uniqueid = guid;
-			_name = name;
-			_password = password;
-			_birthdate = birthdate;
-			_email = email;
-			_description = description;
-			_preference = preference;
-			_location = location;
 		}
+		//public User() : this(new Names(), "", DateTime.Now, "", new GeoLocation()) { }
+		//public User(Names name, String password, DateTime birthdate, String email, GeoLocation location)
+		//	: this(name, password, birthdate, email, location, new Description(), new Description()) { }
+		//public User(Names name, String password, DateTime birthdate, String email, GeoLocation location, Description description, Description preference)
+		//	: this(Guid.NewGuid(), name, password, birthdate, email, location, description, preference) { }
+		//public User(Guid guid, Names name, String password, DateTime birthdate, String email, GeoLocation location, Description description, Description preference)
+		//{
+		//	_uniqueid = guid;
+		//	_name = name;
+		//	_password = password;
+		//	_birthdate = birthdate;
+		//	_email = email;
+		//	_description = description;
+		//	_preference = preference;
+		//	_location = location;
+		//}
 
 		// Properties
 		public Guid UniqueID
 		{
 			get { return _uniqueid; }
-			set { _uniqueid = value; }
+			//set { _uniqueid = value; }
 		}
 		public Names Name
 		{

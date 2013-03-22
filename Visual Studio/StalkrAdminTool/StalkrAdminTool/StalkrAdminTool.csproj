@@ -47,6 +47,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\Enumerators.cs" />
+    <Compile Include="Controls\EnumSelector.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Forms\DescriptionForm.cs">
       <SubType>Form</SubType>
     </Compile>
