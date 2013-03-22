@@ -57,6 +57,62 @@ INSERT INTO `user` (
 	'57008f04-b8e3-464b-8253-1fa44fcea113'
 );
 
+INSERT INTO `user` (
+	`guid`,`username`,`displayname`,
+	`firstname`,`lastname`,`password`,
+	`birthday`,`location_latitude`,`location_longitude`,
+	`location_timestamp`,`email`,`info_description`,
+	`pref_description`
+) VALUES (
+	'1A6747B2-931C-11E2-AE68-D7146188709B','Jonazzy','Jonaz',
+	'Jonaz','van der Zee','9876',
+	'716016155','3.12','7.14',
+	'1363372404','phandazee@gmail.com','57008f04-b8e3-464b-8253-1fa44fcea113',
+	'8b9e9d44-4411-434f-b5cc-5b803a3dc4f6'
+);
+
+INSERT INTO `user` (
+	`guid`,`username`,`displayname`,
+	`firstname`,`lastname`,`password`,
+	`birthday`,`location_latitude`,`location_longitude`,
+	`location_timestamp`,`email`,`info_description`,
+	`pref_description`
+) VALUES (
+	'23CD373A-931C-11E2-9415-DB146188709B','JamesJohnson43','James',
+	'James','Johnson','3456',
+	'378022125','12.4','2.2',
+	'1361366653','jamesjohnson@jubiipost.dk','46A67624-922F-11E2-BCE5-CCDF6088709B',
+	'BC31A932-922E-11E2-8807-10DF6088709B'
+);
+
+INSERT INTO `user` (
+	`guid`,`username`,`displayname`,
+	`firstname`,`lastname`,`password`,
+	`birthday`,`location_latitude`,`location_longitude`,
+	`location_timestamp`,`email`,`info_description`,
+	`pref_description`
+) VALUES (
+	'2AED9276-931C-11E2-9857-DC146188709B','Bertamus','Berta',
+	'Berta','Larsen','4567',
+	'16182966','13.12','14.2',
+	'1362708354','bertamus@jubiipost.dk','BC31A932-922E-11E2-8807-10DF6088709B',
+	'722BFD5E-931B-11E2-9A5C-54146188709B'
+);
+
+INSERT INTO `user` (
+	`guid`,`username`,`displayname`,
+	`firstname`,`lastname`,`password`,
+	`birthday`,`location_latitude`,`location_longitude`,
+	`location_timestamp`,`email`,`info_description`,
+	`pref_description`
+) VALUES (
+	'406A84D8-931C-11E2-9C5D-E0146188709B','Martin6','Martin',
+	'Martin','Hansen','5678',
+	'469465670','42.2','3.4',
+	'1359713436','martinhansen@jubiipost.dk','88D264EE-931B-11E2-9ECD-5E146188709B',
+	'918446D4-931B-11E2-A016-67146188709B'
+);
+
 INSERT INTO `description` (
 	`guid`,`timestamp`,`country`,
 	`region`,`city`,`age`,
@@ -65,7 +121,7 @@ INSERT INTO `description` (
 ) VALUES (
 	'8b9e9d44-4411-434f-b5cc-5b803a3dc4f6','123456789','1',
 	'1','1','25',
-	'30','1','0',
+	'30','0','0',
 	'0','1'
 );
 
@@ -77,8 +133,8 @@ INSERT INTO `description` (
 ) VALUES (
 	'57008f04-b8e3-464b-8253-1fa44fcea113','123456789','1',
 	'1','1','20',
-	'35','1','0',
-	'0','1'
+	'24','1','0',
+	'0','0'
 );
 
 INSERT INTO ´description´ (
@@ -89,9 +145,10 @@ INSERT INTO ´description´ (
 ) VALUES (
     'BC31A932-922E-11E2-8807-10DF6088709B', '123456789', '1',
 	'1','1','20',
-	'30','1','0',
+	'30','0','0',
 	'0','1'
-	
+);	
+
 	INSERT INTO ´description´ (
 	`guid`,`timestamp`,`country`,
 	`region`,`city`,`age`,
@@ -102,7 +159,8 @@ INSERT INTO ´description´ (
 	'2','4','67',
 	'98','1','1',
 	'1','2'
-	
+);	
+
 	INSERT INTO ´description´ (
 	`guid`,`timestamp`,`country`,
 	`region`,`city`,`age`,
@@ -113,6 +171,67 @@ INSERT INTO ´description´ (
 	'4','3','45',
 	'60','1','0',
 	'0','2'
+;)
+
+	INSERT INTO ´description´ (
+	`guid`,`timestamp`,`country`,
+	`region`,`city`,`age`,
+	`age_max`,`gender`,`smoking`,
+	`drinking`,`orientation`
+) VALUES (
+    '722BFD5E-931B-11E2-9A5C-54146188709B', '123456789', '1',
+	'3','3','22',
+	'33','1','1',
+	'1','1'
+;)
+
+	INSERT INTO ´description´ (
+	`guid`,`timestamp`,`country`,
+	`region`,`city`,`age`,
+	`age_max`,`gender`,`smoking`,
+	`drinking`,`orientation`
+) VALUES (
+    '7AC0328C-931B-11E2-B398-56146188709B', '123456789', '1',
+	'4','2','47',
+	'69','1','1',
+	'1','3'
+;)
+
+	INSERT INTO ´description´ (
+	`guid`,`timestamp`,`country`,
+	`region`,`city`,`age`,
+	`age_max`,`gender`,`smoking`,
+	`drinking`,`orientation`
+) VALUES (
+    '839DA2C2-931B-11E2-B015-5D146188709B', '123456789', '1',
+	'2','1','22',
+	'45','1','0',
+	'1','2'
+;)
+
+	INSERT INTO ´description´ (
+	`guid`,`timestamp`,`country`,
+	`region`,`city`,`age`,
+	`age_max`,`gender`,`smoking`,
+	`drinking`,`orientation`
+) VALUES (
+    '88D264EE-931B-11E2-9ECD-5E146188709B', '123456789', '1',
+	'2','5','43',
+	'55','1','1',
+	'1','2'
+;)
+
+	INSERT INTO ´description´ (
+	`guid`,`timestamp`,`country`,
+	`region`,`city`,`age`,
+	`age_max`,`gender`,`smoking`,
+	`drinking`,`orientation`
+) VALUES (
+    '918446D4-931B-11E2-A016-67146188709B', '123456789', '1',
+	'4','3','77',
+	'98','0','0',
+	'0','2'
+;)
 
 
 INSERT INTO `report` (
