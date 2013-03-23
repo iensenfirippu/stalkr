@@ -48,8 +48,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\Enumerators.cs" />
+    <Compile Include="Classes\Toolbelt.cs" />
     <Compile Include="Controls\EnumSelector.cs">
-      <SubType>Component</SubType>
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\EnumSelector.Designer.cs">
+      <DependentUpon>EnumSelector.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\DescriptionForm.cs">
       <SubType>Form</SubType>
@@ -80,6 +84,9 @@
     <Compile Include="Forms\UserForm.Designer.cs">
       <DependentUpon>UserForm.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Controls\EnumSelector.resx">
+      <DependentUpon>EnumSelector.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\DescriptionForm.resx">
       <DependentUpon>DescriptionForm.cs</DependentUpon>
     </EmbeddedResource>

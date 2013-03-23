@@ -46,24 +46,17 @@
 			this.num_age = new System.Windows.Forms.NumericUpDown();
 			this.label_ageto = new System.Windows.Forms.Label();
 			this.num_agemax = new System.Windows.Forms.NumericUpDown();
-			this.chk_orientation = new System.Windows.Forms.CheckedListBox();
-			this.chk_region = new System.Windows.Forms.CheckedListBox();
-			this.chk_smoking = new System.Windows.Forms.CheckedListBox();
 			this.txt_timestamp = new System.Windows.Forms.TextBox();
-			this.chk_drinking = new System.Windows.Forms.CheckedListBox();
-			this.dataGridView1 = new System.Windows.Forms.DataGridView();
-			this.check = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-			this.name = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.check2 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-			this.name2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.check3 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-			this.name3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.enum_gender = new StalkrAdminTool.Controls.EnumSelector();
+			this.enum_sexuality = new StalkrAdminTool.Controls.EnumSelector();
+			this.enum_region = new StalkrAdminTool.Controls.EnumSelector();
+			this.enum_smoking = new StalkrAdminTool.Controls.EnumSelector();
+			this.enum_drinking = new StalkrAdminTool.Controls.EnumSelector();
 			this.table_buttons.SuspendLayout();
 			this.table_main.SuspendLayout();
 			this.table_age.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.num_age)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.num_agemax)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// table_buttons
@@ -183,12 +176,12 @@
 			this.table_main.Controls.Add(this.lbl_smoking, 0, 6);
 			this.table_main.Controls.Add(this.lbl_drinking, 0, 7);
 			this.table_main.Controls.Add(this.table_age, 1, 2);
-			this.table_main.Controls.Add(this.chk_orientation, 3, 4);
-			this.table_main.Controls.Add(this.chk_region, 3, 5);
-			this.table_main.Controls.Add(this.chk_smoking, 3, 6);
 			this.table_main.Controls.Add(this.txt_timestamp, 1, 1);
-			this.table_main.Controls.Add(this.chk_drinking, 3, 7);
-			this.table_main.Controls.Add(this.dataGridView1, 1, 3);
+			this.table_main.Controls.Add(this.enum_gender, 1, 3);
+			this.table_main.Controls.Add(this.enum_sexuality, 1, 4);
+			this.table_main.Controls.Add(this.enum_region, 1, 5);
+			this.table_main.Controls.Add(this.enum_smoking, 1, 6);
+			this.table_main.Controls.Add(this.enum_drinking, 1, 7);
 			this.table_main.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.table_main.Location = new System.Drawing.Point(0, 0);
 			this.table_main.Name = "table_main";
@@ -284,48 +277,6 @@
 			this.num_agemax.Size = new System.Drawing.Size(129, 20);
 			this.num_agemax.TabIndex = 28;
 			// 
-			// chk_orientation
-			// 
-			this.chk_orientation.CheckOnClick = true;
-			this.chk_orientation.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.chk_orientation.FormattingEnabled = true;
-			this.chk_orientation.IntegralHeight = false;
-			this.chk_orientation.Location = new System.Drawing.Point(103, 123);
-			this.chk_orientation.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
-			this.chk_orientation.MultiColumn = true;
-			this.chk_orientation.Name = "chk_orientation";
-			this.chk_orientation.ScrollAlwaysVisible = true;
-			this.chk_orientation.Size = new System.Drawing.Size(288, 45);
-			this.chk_orientation.TabIndex = 30;
-			// 
-			// chk_region
-			// 
-			this.chk_region.CheckOnClick = true;
-			this.chk_region.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.chk_region.FormattingEnabled = true;
-			this.chk_region.IntegralHeight = false;
-			this.chk_region.Location = new System.Drawing.Point(103, 171);
-			this.chk_region.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
-			this.chk_region.MultiColumn = true;
-			this.chk_region.Name = "chk_region";
-			this.chk_region.ScrollAlwaysVisible = true;
-			this.chk_region.Size = new System.Drawing.Size(288, 45);
-			this.chk_region.TabIndex = 31;
-			// 
-			// chk_smoking
-			// 
-			this.chk_smoking.CheckOnClick = true;
-			this.chk_smoking.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.chk_smoking.FormattingEnabled = true;
-			this.chk_smoking.IntegralHeight = false;
-			this.chk_smoking.Location = new System.Drawing.Point(103, 219);
-			this.chk_smoking.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
-			this.chk_smoking.MultiColumn = true;
-			this.chk_smoking.Name = "chk_smoking";
-			this.chk_smoking.ScrollAlwaysVisible = true;
-			this.chk_smoking.Size = new System.Drawing.Size(288, 45);
-			this.chk_smoking.TabIndex = 32;
-			// 
 			// txt_timestamp
 			// 
 			this.txt_timestamp.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -336,81 +287,50 @@
 			this.txt_timestamp.TabIndex = 3;
 			this.txt_timestamp.TextChanged += new System.EventHandler(this.txt_email_TextChanged);
 			// 
-			// chk_drinking
+			// enum_gender
 			// 
-			this.chk_drinking.CheckOnClick = true;
-			this.chk_drinking.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.chk_drinking.FormattingEnabled = true;
-			this.chk_drinking.IntegralHeight = false;
-			this.chk_drinking.Location = new System.Drawing.Point(103, 267);
-			this.chk_drinking.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
-			this.chk_drinking.MultiColumn = true;
-			this.chk_drinking.Name = "chk_drinking";
-			this.chk_drinking.ScrollAlwaysVisible = true;
-			this.chk_drinking.Size = new System.Drawing.Size(288, 45);
-			this.chk_drinking.TabIndex = 33;
+			this.enum_gender.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.enum_gender.Location = new System.Drawing.Point(103, 75);
+			this.enum_gender.Margin = new System.Windows.Forms.Padding(3, 3, 3, 1);
+			this.enum_gender.Name = "enum_gender";
+			this.enum_gender.Size = new System.Drawing.Size(288, 44);
+			this.enum_gender.TabIndex = 34;
 			// 
-			// dataGridView1
+			// enum_sexuality
 			// 
-			this.dataGridView1.BackgroundColor = System.Drawing.SystemColors.ControlLightLight;
-			this.dataGridView1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-			this.dataGridView1.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None;
-			this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-			this.dataGridView1.ColumnHeadersVisible = false;
-			this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.check,
-            this.name,
-            this.check2,
-            this.name2,
-            this.check3,
-            this.name3});
-			this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.dataGridView1.GridColor = System.Drawing.SystemColors.ControlText;
-			this.dataGridView1.Location = new System.Drawing.Point(103, 75);
-			this.dataGridView1.Name = "dataGridView1";
-			this.dataGridView1.RowHeadersVisible = false;
-			this.dataGridView1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.dataGridView1.Size = new System.Drawing.Size(288, 42);
-			this.dataGridView1.TabIndex = 34;
+			this.enum_sexuality.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.enum_sexuality.Location = new System.Drawing.Point(103, 123);
+			this.enum_sexuality.Margin = new System.Windows.Forms.Padding(3, 3, 3, 1);
+			this.enum_sexuality.Name = "enum_sexuality";
+			this.enum_sexuality.Size = new System.Drawing.Size(288, 44);
+			this.enum_sexuality.TabIndex = 35;
 			// 
-			// check
+			// enum_region
 			// 
-			this.check.HeaderText = "Check";
-			this.check.Name = "check";
-			this.check.Width = 18;
+			this.enum_region.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.enum_region.Location = new System.Drawing.Point(103, 171);
+			this.enum_region.Margin = new System.Windows.Forms.Padding(3, 3, 3, 1);
+			this.enum_region.Name = "enum_region";
+			this.enum_region.Size = new System.Drawing.Size(288, 44);
+			this.enum_region.TabIndex = 36;
 			// 
-			// name
+			// enum_smoking
 			// 
-			this.name.HeaderText = "Name";
-			this.name.Name = "name";
-			this.name.ReadOnly = true;
-			this.name.Width = 70;
+			this.enum_smoking.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.enum_smoking.Location = new System.Drawing.Point(103, 219);
+			this.enum_smoking.Margin = new System.Windows.Forms.Padding(3, 3, 3, 1);
+			this.enum_smoking.Name = "enum_smoking";
+			this.enum_smoking.Size = new System.Drawing.Size(288, 44);
+			this.enum_smoking.TabIndex = 37;
 			// 
-			// check2
+			// enum_drinking
 			// 
-			this.check2.HeaderText = "Check";
-			this.check2.Name = "check2";
-			this.check2.Width = 18;
-			// 
-			// name2
-			// 
-			this.name2.HeaderText = "Name";
-			this.name2.Name = "name2";
-			this.name2.ReadOnly = true;
-			this.name2.Width = 70;
-			// 
-			// check3
-			// 
-			this.check3.HeaderText = "Check";
-			this.check3.Name = "check3";
-			this.check3.Width = 18;
-			// 
-			// name3
-			// 
-			this.name3.HeaderText = "Name";
-			this.name3.Name = "name3";
-			this.name3.ReadOnly = true;
-			this.name3.Width = 70;
+			this.enum_drinking.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.enum_drinking.Location = new System.Drawing.Point(103, 267);
+			this.enum_drinking.Margin = new System.Windows.Forms.Padding(3, 3, 3, 1);
+			this.enum_drinking.Name = "enum_drinking";
+			this.enum_drinking.Size = new System.Drawing.Size(288, 44);
+			this.enum_drinking.TabIndex = 38;
 			// 
 			// DescriptionForm
 			// 
@@ -433,7 +353,6 @@
 			this.table_age.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.num_age)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.num_agemax)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
 			this.ResumeLayout(false);
 
 		}
@@ -457,17 +376,11 @@
 		private System.Windows.Forms.NumericUpDown num_age;
 		private System.Windows.Forms.Label label_ageto;
 		private System.Windows.Forms.NumericUpDown num_agemax;
-		private System.Windows.Forms.CheckedListBox chk_orientation;
-		private System.Windows.Forms.CheckedListBox chk_region;
-		private System.Windows.Forms.CheckedListBox chk_smoking;
 		private System.Windows.Forms.TextBox txt_timestamp;
-		private System.Windows.Forms.CheckedListBox chk_drinking;
-		private System.Windows.Forms.DataGridView dataGridView1;
-		private System.Windows.Forms.DataGridViewCheckBoxColumn check;
-		private System.Windows.Forms.DataGridViewTextBoxColumn name;
-		private System.Windows.Forms.DataGridViewCheckBoxColumn check2;
-		private System.Windows.Forms.DataGridViewTextBoxColumn name2;
-		private System.Windows.Forms.DataGridViewCheckBoxColumn check3;
-		private System.Windows.Forms.DataGridViewTextBoxColumn name3;
+		private Controls.EnumSelector enum_gender;
+		private Controls.EnumSelector enum_sexuality;
+		private Controls.EnumSelector enum_region;
+		private Controls.EnumSelector enum_smoking;
+		private Controls.EnumSelector enum_drinking;
 	}
 }

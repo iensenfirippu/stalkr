@@ -10,3 +10,4 @@ C:\Users\Philip\Documents\GitHub\stalkr\Visual Studio\StalkrAdminTool\StalkrAdmi
 C:\Users\Philip\Documents\GitHub\stalkr\Visual Studio\StalkrAdminTool\StalkrAdminTool\obj\Debug\StalkrAdminTool.UserForm.resources
 C:\Users\Philip\Documents\GitHub\stalkr\Visual Studio\StalkrAdminTool\StalkrAdminTool\obj\Debug\StalkrAdminTool.DescriptionForm.resources
 C:\Users\Philip\Documents\GitHub\stalkr\Visual Studio\StalkrAdminTool\StalkrAdminTool\obj\Debug\StalkrAdminTool.MainForm.resources
+C:\Users\Philip\Documents\GitHub\stalkr\Visual Studio\StalkrAdminTool\StalkrAdminTool\obj\Debug\StalkrAdminTool.Controls.EnumSelector.resources

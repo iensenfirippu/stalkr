@@ -8,33 +8,6 @@ using MySql.Data.MySqlClient;
 namespace StalkrAdminTool
 {
 	/// <summary>
-	/// Class with commonly used static functions (Put in their's own class so they are easy to move if needed)
-	/// </summary>
-	class StalkrToolBelt
-	{
-		/// <summary>
-		/// Converts a DateTime object into a Unix Timstamp
-		/// </summary>
-		public static double DTtoTS (DateTime dateTime)
-		{
-			DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0, 0).ToLocalTime();
-			TimeSpan span = (dateTime.ToLocalTime() - epoch);
-			return span.TotalSeconds;
-		}
-
-		/// <summary>
-		/// Converts a Unix Timstamp into a DateTime object
-		/// </summary>
-		public static DateTime TStoDT (double unixTimeStamp)
-		{
-			// Unix timestamp is seconds past epoch
-			System.DateTime dtDateTime = new DateTime(1970,1,1,0,0,0,0);
-			dtDateTime = dtDateTime.AddSeconds( unixTimeStamp ).ToLocalTime();
-			return dtDateTime;
-		}
-	}
-
-	/// <summary>
 	/// Class for connecting to the database (should be replaced with the java web service at some point) 
 	/// </summary>
 	class DBConnect
@@ -131,12 +104,12 @@ namespace StalkrAdminTool
 					User u = new User(new Guid(dataReader["guid"].ToString()));
 					u.Name = new Names(dataReader["username"].ToString(), dataReader["displayname"].ToString(), dataReader["firstname"].ToString(), dataReader["lastname"].ToString());
 					u.Password = dataReader["password"].ToString();
-					u.Birthdate = StalkrToolBelt.TStoDT(Convert.ToDouble(dataReader["birthday"]));
+					u.Birthdate = StalkrToolbelt.TStoDT(Convert.ToDouble(dataReader["birthday"]));
 					u.Email = dataReader["email"].ToString();
-					u.Location = new GeoLocation(Convert.ToSingle(dataReader["location_latitude"]), Convert.ToSingle(dataReader["location_longitude"]), StalkrToolBelt.TStoDT(Convert.ToDouble(dataReader["location_timestamp"])));
+					u.Location = new GeoLocation(Convert.ToSingle(dataReader["location_latitude"]), Convert.ToSingle(dataReader["location_longitude"]), StalkrToolbelt.TStoDT(Convert.ToDouble(dataReader["location_timestamp"])));
 
 					u.Description = new Description(new Guid(dataReader[13].ToString()));
-					u.Description.TimeStamp = StalkrToolBelt.TStoDT(Convert.ToDouble(dataReader[14]));
+					u.Description.TimeStamp = StalkrToolbelt.TStoDT(Convert.ToDouble(dataReader[14]));
 					u.Description.Gender = (GenderType) Convert.ToInt32(dataReader[20].ToString());
 					u.Description.Sexuality = (SexualityType) Convert.ToInt32(dataReader[23].ToString());
 					u.Description.Age = new AgeRange(Convert.ToInt32(dataReader[18].ToString()), Convert.ToInt32(dataReader[19].ToString()));
@@ -145,13 +118,13 @@ namespace StalkrAdminTool
 					u.Description.Drinking = (DrinkingType) Convert.ToInt32(dataReader[22].ToString());
 
 					u.Preferences = new Description(new Guid(dataReader[24].ToString()));
-					u.Description.TimeStamp = StalkrToolBelt.TStoDT(Convert.ToDouble(dataReader[25]));
-					u.Description.Gender = (GenderType) Convert.ToInt32(dataReader[31].ToString());
-					u.Description.Sexuality = (SexualityType) Convert.ToInt32(dataReader[34].ToString());
-					u.Description.Age = new AgeRange(Convert.ToInt32(dataReader[29].ToString()), Convert.ToInt32(dataReader[30].ToString()));
-					u.Description.Area = (AreaType) Convert.ToInt32(dataReader[27].ToString());
-					u.Description.Smoking = (SmokingType) Convert.ToInt32(dataReader[32].ToString());
-					u.Description.Drinking = (DrinkingType) Convert.ToInt32(dataReader[33].ToString());
+					u.Preferences.TimeStamp = StalkrToolbelt.TStoDT(Convert.ToDouble(dataReader[25]));
+					u.Preferences.Gender = (GenderType)Convert.ToInt32(dataReader[31].ToString());
+					u.Preferences.Sexuality = (SexualityType)Convert.ToInt32(dataReader[34].ToString());
+					u.Preferences.Age = new AgeRange(Convert.ToInt32(dataReader[29].ToString()), Convert.ToInt32(dataReader[30].ToString()));
+					u.Preferences.Area = (AreaType)Convert.ToInt32(dataReader[27].ToString());
+					u.Preferences.Smoking = (SmokingType)Convert.ToInt32(dataReader[32].ToString());
+					u.Preferences.Drinking = (DrinkingType)Convert.ToInt32(dataReader[33].ToString());
 
 					list.Add(u);
 				}
