@@ -4,10 +4,7 @@
  */
 package easj.jrpg.mappers;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import com.mysql.jdbc.Connection;
 import java.util.Date;
 import stalkrlib.Description;
 import stalkrlib.Description.Area;
@@ -18,6 +15,9 @@ import stalkrlib.Description.Smoking;
 import stalkrlib.Location;
 import stalkrlib.Range;
 import stalkrlib.User;
+import com.mysql.jdbc.Statement;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
 
 /**
  *
@@ -26,6 +26,8 @@ import stalkrlib.User;
 public class UserMapper {
     private final String DRIVER = "com.mysql.jdbc.Driver";
     private final String IP_ADDRESS = "localhost";
+    private final String USERNAME = "root";
+    private final String PASSWORD = "";
     private final int IP_PORT = 8123;
     private Connection con;
     private Statement sta;
@@ -33,8 +35,8 @@ public class UserMapper {
     private void connect(){
         try{
             Class.forName(DRIVER);
-            con = DriverManager.getConnection("jdbc:mysql://" + IP_ADDRESS + ":" + IP_PORT);
-            sta = con.createStatement();
+            con = (Connection) DriverManager.getConnection("jdbc:mysql://" + IP_ADDRESS + ":" + IP_PORT + "/stalkr_db", USERNAME, PASSWORD);
+            sta = (Statement) con.createStatement();
         }
         catch(Exception e){
             e.printStackTrace();
