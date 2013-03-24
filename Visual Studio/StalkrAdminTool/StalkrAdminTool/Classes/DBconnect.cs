@@ -112,7 +112,7 @@ namespace StalkrAdminTool
 					u.Description.TimeStamp = StalkrToolbelt.TStoDT(Convert.ToDouble(dataReader[14]));
 					u.Description.Gender = (GenderType) Convert.ToInt32(dataReader[20].ToString());
 					u.Description.Sexuality = (SexualityType) Convert.ToInt32(dataReader[23].ToString());
-					u.Description.Age = new AgeRange(Convert.ToInt32(dataReader[18].ToString()), Convert.ToInt32(dataReader[19].ToString()));
+					u.Description.Age = new Range(Convert.ToInt32(dataReader[18].ToString()), Convert.ToInt32(dataReader[19].ToString()));
 					u.Description.Area = (AreaType) Convert.ToInt32(dataReader[16].ToString());
 					u.Description.Smoking = (SmokingType) Convert.ToInt32(dataReader[21].ToString());
 					u.Description.Drinking = (DrinkingType) Convert.ToInt32(dataReader[22].ToString());
@@ -121,7 +121,7 @@ namespace StalkrAdminTool
 					u.Preferences.TimeStamp = StalkrToolbelt.TStoDT(Convert.ToDouble(dataReader[25]));
 					u.Preferences.Gender = (GenderType)Convert.ToInt32(dataReader[31].ToString());
 					u.Preferences.Sexuality = (SexualityType)Convert.ToInt32(dataReader[34].ToString());
-					u.Preferences.Age = new AgeRange(Convert.ToInt32(dataReader[29].ToString()), Convert.ToInt32(dataReader[30].ToString()));
+					u.Preferences.Age = new Range(Convert.ToInt32(dataReader[29].ToString()), Convert.ToInt32(dataReader[30].ToString()));
 					u.Preferences.Area = (AreaType)Convert.ToInt32(dataReader[27].ToString());
 					u.Preferences.Smoking = (SmokingType)Convert.ToInt32(dataReader[32].ToString());
 					u.Preferences.Drinking = (DrinkingType)Convert.ToInt32(dataReader[33].ToString());

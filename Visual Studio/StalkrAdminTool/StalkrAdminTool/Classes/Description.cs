@@ -14,12 +14,12 @@ namespace StalkrAdminTool
 		// Class global variables
 		private Guid _uniqueid;
 		private DateTime _timestamp;
-		private GenderList _gender;
-		private SexualityList _sexuality;
-		private AgeRange _age;
-		private AreaList _area;
-		private SmokingList _smoking;
-		private DrinkingList _drinking;
+		private EnumList<GenderType> _gender;
+		private EnumList<SexualityType> _sexuality;
+		private Range _age;
+		private EnumList<AreaType> _area;
+		private EnumList<SmokingType> _smoking;
+		private EnumList<DrinkingType> _drinking;
 
 		// Constructors
 		public Description() : this(Guid.NewGuid()) { }
@@ -49,32 +49,32 @@ namespace StalkrAdminTool
 			get { return _timestamp; }
 			set { _timestamp = value; }
 		}
-		public GenderList Gender
+		public EnumList<GenderType> Gender
 		{
 			get { return _gender; }
 			set { _gender = value; }
 		}
-		public SexualityList Sexuality
+		public EnumList<SexualityType> Sexuality
 		{
 			get { return _sexuality; }
 			set { _sexuality = value; }
 		}
-		public AgeRange Age
+		public Range Age
 		{
 			get { return _age; }
 			set { _age = value; }
 		}
-		public AreaList Area
+		public EnumList<AreaType> Area
 		{
 			get { return _area; }
 			set { _area = value; }
 		}
-		public SmokingList Smoking
+		public EnumList<SmokingType> Smoking
 		{
 			get { return _smoking; }
 			set { _smoking = value; }
 		}
-		public DrinkingList Drinking
+		public EnumList<DrinkingType> Drinking
 		{
 			get { return _drinking; }
 			set { _drinking = value; }

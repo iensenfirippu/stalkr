@@ -12,50 +12,129 @@ namespace StalkrAdminTool
 	public enum SmokingType { NO, YES, OCCASIONALLY }
 	public enum DrinkingType { NO, YES }
 
-	#region Age Range type
+	#region Range type
 	/// <summary>
-	/// Class describing the age of a user or preference
+	/// Class describing a numeric range
 	/// </summary>
-	public class AgeRange
+	public class Range
 	{
 		// Class global variables
-		private int _age;
-		private int _agemax;
+		private int _intmin;
+		private int _intmax;
 
 		// Constructors
-		public AgeRange() : this(0) { }
-		public AgeRange(int age) : this(age, 0) { }
-		public AgeRange(int age, int age2)
+		public Range() : this(0) { }
+		public Range(int int1) : this(int1, 0) { }
+		public Range(int int1, int int2)
 		{
-			_age = age;
-			_agemax = age2;
+			_intmin = age;
+			_intmax = age2;
 		}
 
 		// Properties
 		public int Min
 		{
-			get { return _age; }
-			set { _age = value; }
+			get { return _intmin; }
+			set { _intmin = value; }
 		}
 		public int Max
 		{
-			get { return _agemax; }
-			set { _agemax = value; }
+			get { return _intmax; }
+			set { _intmax = value; }
 		}
 
 		// implicit converters
-		public static implicit operator int(AgeRange a)
+		public static implicit operator int(Range a)
 		{
-			return a._age;
+			return a._intmin;
 		}
-		public static implicit operator AgeRange(int i)
+		public static implicit operator Range(int i)
 		{
-			return new AgeRange(i);
+			return new Range(i);
 		}
 	}
 	#endregion
 
-	#region Gender collection type
+	#region Generic enum collection type
+	/// <summary>
+	/// Class describing the Gender(s) of a user or preference
+	/// </summary>
+	public class EnumList<T>
+	{
+		// Class global variables
+		private List<T> _innerlist;
+
+		// Constructors
+		public EnumList(T single)
+		{
+			_innerlist = new List<T>();
+			_innerlist.Add(single);
+		}
+		public EnumList(List<T> plural)
+		{
+			_innerlist = plural;
+		}
+
+		// Properties
+		public List<T> List
+		{
+			get { return _innerlist; }
+			set { _innerlist = value; }
+		}
+
+		/// <summary>
+		/// Returns all instances of the enum T, as strings.
+		/// </summary>
+		public List<string> EnumToStringList
+		{
+			get
+			{
+				List<string> value = new List<string>();
+				foreach (T t in Enum.GetValues(typeof(T)))
+				{
+					value.Add(t.ToString());
+				}
+				return value;
+			}
+		}
+
+		// Methods
+		public bool Contains(T t)
+		{
+			return _innerlist.Contains(t);
+		}
+
+		// implicit converters
+		public static implicit operator T(EnumList<T> t)
+		{
+			return t.List[0];
+		}
+		public static implicit operator EnumList<T>(T t)
+		{
+			return new EnumList<T>(t);
+		}
+		public static implicit operator List<string>(EnumList<T> enums)
+		{
+			List<string> value = new List<string>();
+			foreach (T t in enums.List)
+			{
+				value.Add(t.ToString());
+			}
+			return value;
+		}
+		public static implicit operator EnumList<T>(List<string> strings)
+		{
+			List<T> l = new List<T>();
+			foreach (string s in strings)
+			{
+				l.Add((T)Enum.Parse(typeof(T), s, true));
+			}
+			return new EnumList<T>(l);
+		}
+	}
+	#endregion
+
+	/*#region Gender collection type
 	/// <summary>
 	/// Class describing the Gender(s) of a user or preference
 	/// </summary>
@@ -109,6 +188,16 @@ namespace StalkrAdminTool
 		public static implicit operator GenderList(GenderType t)
 		{
 			return new GenderList(t);
+		}
+		public static implicit operator GenderList(List<string> strings)
+		{
+			List<GenderType> l = new List<GenderType>();
+			foreach (string s in strings)
+			{
+				l.Add((GenderType)Enum.Parse(typeof(GenderType), s, true));
+			}
+
+			return new GenderList(l);
 		}
 	}
 	#endregion
@@ -343,5 +432,5 @@ namespace StalkrAdminTool
 			return new DrinkingList(t);
 		}
 	}
-	#endregion
+	#endregion*/
 }

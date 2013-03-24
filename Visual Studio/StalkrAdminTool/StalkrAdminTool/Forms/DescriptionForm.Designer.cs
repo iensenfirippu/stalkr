@@ -271,7 +271,6 @@
 			// num_agemax
 			// 
 			this.num_agemax.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.num_agemax.Enabled = false;
 			this.num_agemax.Location = new System.Drawing.Point(162, 3);
 			this.num_agemax.Name = "num_agemax";
 			this.num_agemax.Size = new System.Drawing.Size(129, 20);
@@ -285,7 +284,6 @@
 			this.txt_timestamp.ReadOnly = true;
 			this.txt_timestamp.Size = new System.Drawing.Size(288, 20);
 			this.txt_timestamp.TabIndex = 3;
-			this.txt_timestamp.TextChanged += new System.EventHandler(this.txt_email_TextChanged);
 			// 
 			// enum_gender
 			// 

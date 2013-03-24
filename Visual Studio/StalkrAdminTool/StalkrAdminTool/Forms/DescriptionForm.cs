@@ -29,11 +29,11 @@ namespace StalkrAdminTool
 			num_age.Value = _description.Age;
 			num_agemax.Value = _description.Age.Max;
 
-			enum_gender.SetValues(StalkrToolbelt.EnumToStrings<GenderType>(), _description.Gender.ListAsStrings);
-			enum_sexuality.SetValues(StalkrToolbelt.EnumToStrings<SexualityType>(), _description.Sexuality.ListAsStrings);
-			enum_region.SetValues(StalkrToolbelt.EnumToStrings<AreaType>(), _description.Area.ListAsStrings);
-			enum_smoking.SetValues(StalkrToolbelt.EnumToStrings<SmokingType>(), _description.Smoking.ListAsStrings);
-			enum_drinking.SetValues(StalkrToolbelt.EnumToStrings<DrinkingType>(), _description.Drinking.ListAsStrings);
+			enum_gender.SetValues(_description.Gender.EnumToStringList, _description.Gender);
+			enum_sexuality.SetValues(_description.Sexuality.EnumToStringList, _description.Sexuality);
+			enum_region.SetValues(_description.Area.EnumToStringList, _description.Area);
+			enum_smoking.SetValues(_description.Smoking.EnumToStringList, _description.Smoking);
+			enum_drinking.SetValues(_description.Drinking.EnumToStringList, _description.Drinking);
 		}
 
 		// Properties
@@ -49,64 +49,14 @@ namespace StalkrAdminTool
 		}
 
 		#region Methods for the inputfields of the form
-		private void txt_email_TextChanged(object sender, EventArgs e)
-		{
-			_altered[1] = true;
-		}
-		private void txt_user_TextChanged(object sender, EventArgs e)
+		private void num_age_ValueChanged(object sender, EventArgs e)
 		{
 			_altered[2] = true;
 		}
-		private void txt_pass_TextChanged(object sender, EventArgs e)
+		/*private void enum_gender_SelectionChanged(object sender, EventArgs e)
 		{
 			_altered[3] = true;
-		}
-		private void txt_name_TextChanged(object sender, EventArgs e)
-		{
-			_altered[4] = true;
-		}
-		private void txt_display_TextChanged(object sender, EventArgs e)
-		{
-			_altered[5] = true;
-		}
-		private void date_birth_ValueChanged(object sender, EventArgs e)
-		{
-			_altered[6] = true;
-		}
-		private void txt_location_TextChanged(object sender, EventArgs e)
-		{
-			_altered[7] = true;
-		}
-		private void date_location_ValueChanged(object sender, EventArgs e)
-		{
-			_altered[7] = true;
-		}
-		#endregion
-		#region Methods for description and preference buttons
-		private void btn_desc_add_Click(object sender, EventArgs e)
-		{
-			_altered[8] = true;
-		}
-		private void btn_desc_del_Click(object sender, EventArgs e)
-		{
-			_altered[8] = true;
-		}
-		private void btn_desc_edit_Click(object sender, EventArgs e)
-		{
-			_altered[8] = true;
-		}
-		private void btn_pref_add_Click(object sender, EventArgs e)
-		{
-			_altered[9] = true;
-		}
-		private void btn_pref_del_Click(object sender, EventArgs e)
-		{
-			_altered[9] = true;
-		}
-		private void btn_pref_edit_Click(object sender, EventArgs e)
-		{
-			_altered[9] = true;
-		}
+		}*/
 		#endregion
 		#region Form buttons
 		private void button_cancel_Click(object sender, EventArgs e)
@@ -117,19 +67,14 @@ namespace StalkrAdminTool
 		}
 		private void button_save_Click(object sender, EventArgs e)
 		{
-			//if (_altered[0] == true) { _user.UniqueID = new Guid(txt_guid.Text); }
-			/*if (_altered[1] == true) { _user.Email = txt_email.Text; }
-			if (_altered[2] == true) { _user.Name.UserName = txt_user.Text; }
-			if (_altered[3] == true) { _user.Password = txt_pass.Text; }
-			if (_altered[4] == true) {
-				_user.Name.FirstName = txt_firstname.Text;
-				_user.Name.LastName = txt_lastname.Text;
-			}
-			if (_altered[5] == true) { _user.Name.DisplayName = txt_display.Text; }
-			if (_altered[6] == true) { _user.Birthdate = date_birth.Value; }
-			if (_altered[7] == true) { _user.Location = new GeoLocation(Convert.ToSingle(txt_lat.Text), Convert.ToSingle(txt_lon.Text), date_location.Value);  }
-			//if (_altered[8] == true) { _user.Description = _user.Description; }*/
-			//if (_altered[8] == true) { _user.Preferences = _user.Preferences; }
+			//if (_altered[0] == true) { _description.UniqueID = new Guid(txt_guid.Text); }
+			//if (_altered[1] == true) { _description.TimeStamp = txt_timestamp.Text; }
+			if (_altered[2] == true) { _description.Age = new Range(Convert.ToInt32(num_age.Value), Convert.ToInt32(num_agemax.Value)); }
+			if (_altered[3] == true) { _description.Gender = enum_gender.Value; }
+			if (_altered[4] == true) { _description.Sexuality = enum_sexuality.Value; }
+			if (_altered[5] == true) { _description.Area = enum_region.Value; }
+			if (_altered[6] == true) { _description.Smoking = enum_smoking.Value; }
+			if (_altered[7] == true) { _description.Drinking = enum_drinking.Value; }
 
 			this.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.Close();

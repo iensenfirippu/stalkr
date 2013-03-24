@@ -32,7 +32,7 @@ namespace StalkrAdminTool
 			return dtDateTime;
 		}
 
-		/// <summary>
+		/*/// <summary>
 		/// Converts an enum type to a list of strings
 		/// </summary>
 		public static List<string> EnumToStrings<T>()
@@ -49,6 +49,6 @@ namespace StalkrAdminTool
 			}
 
 			return value;
-		}
+		}*/
 	}
 }
