@@ -57,7 +57,6 @@ namespace StalkrAdminTool.Controls
 			}
 
 			_checkedvalues = checkedvaluesnew;
-			this.
 		}
 
 		public List<string> Value

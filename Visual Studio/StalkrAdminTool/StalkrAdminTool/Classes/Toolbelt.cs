@@ -31,24 +31,5 @@ namespace StalkrAdminTool
 			dtDateTime = dtDateTime.AddSeconds(unixTimeStamp).ToLocalTime();
 			return dtDateTime;
 		}
-
-		/*/// <summary>
-		/// Converts an enum type to a list of strings
-		/// </summary>
-		public static List<string> EnumToStrings<T>()
-		{
-			List<string> value = null;
-
-			if (typeof(T).IsEnum)
-			{
-				value = new List<string>();
-				foreach (T t in Enum.GetValues(typeof(T)))
-				{
-					value.Add(t.ToString());
-				}
-			}
-
-			return value;
-		}*/
 	}
 }
