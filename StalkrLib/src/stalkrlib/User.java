@@ -13,6 +13,7 @@ public class User {
     
     private String id;
     private String name;
+    private String display;
     private Date birthdate;
     private String email;
     private Description description;
@@ -29,9 +30,10 @@ public class User {
      * @param birthdate
      * @param email 
      */
-    public User(String username, String password, String name, Date birthdate, String email) {
+    public User(String username, String display, String password, String name, Date birthdate, String email) {
         this.id = UUID.randomUUID().toString();
         this.username = username;
+        this.display = display;
         this.password = password;
         this.name = name;
         this.birthdate = birthdate;
@@ -50,9 +52,10 @@ public class User {
      * @param preference
      * @param lastLocation 
      */
-    public User(String id, String username, String password, String name, Date birthdate, String email, Description description, Description preference, Location lastLocation) {
-        this.id = id;
+    public User(String username, String display, String password, String name, Date birthdate, String email, Description description, Description preference, Location lastLocation) {
+        this.id = UUID.randomUUID().toString();
         this.username = username;
+        this.display = display;
         this.password = password;
         this.name = name;
         this.birthdate = birthdate;
@@ -60,6 +63,14 @@ public class User {
         this.description = description;
         this.preference = preference;
         this.lastLocation = lastLocation;
+    }
+
+    public String getDisplay() {
+        return display;
+    }
+
+    public void setDisplay(String display) {
+        this.display = display;
     }
 
     public String getId() {
