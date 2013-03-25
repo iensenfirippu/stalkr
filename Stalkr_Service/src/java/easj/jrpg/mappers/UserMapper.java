@@ -7,18 +7,19 @@ package easj.jrpg.mappers;
 import java.sql.Connection;
 import java.util.Date;
 import stalkrlib.Description;
-import stalkrlib.Description.Area;
-import stalkrlib.Description.Drinking;
-import stalkrlib.Description.Gender;
-import stalkrlib.Description.Sexuality;
-import stalkrlib.Description.Smoking;
 import stalkrlib.Location;
 import stalkrlib.Range;
 import stalkrlib.User;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.UUID;
+import stalkrlib.Description.Area;
+import stalkrlib.Description.Drinking;
+import stalkrlib.Description.Gender;
+import stalkrlib.Description.Sexuality;
+import stalkrlib.Description.Smoking;
 
 /**
  *
@@ -130,4 +131,106 @@ public class UserMapper {
             disconnect();
         }
     }
+    
+    public void deleteUser(User user){
+        if(verifyLogin(user.getUsername(), user.getPassword())){
+            StringBuilder sb1 = new StringBuilder();
+            StringBuilder sb2 = new StringBuilder();
+            StringBuilder sb3 = new StringBuilder();
+            
+            sb1.append("DELETE FROM description WHERE ");
+            sb1.append("guid = '").append(user.getDescription().getId()).append("'");
+            sb2.append("DELETE FROM description WHERE ");
+            sb2.append("guid = '").append(user.getPreference().getId()).append("'");
+            sb3.append("DELETE FROM user WHERE ");
+            sb3.append("guid = '").append(user.getId()).append("'");
+            
+            try{
+                connect();
+                sta.executeUpdate(sb1.toString());
+                sta.executeUpdate(sb2.toString());
+                sta.executeUpdate(sb3.toString());
+            }
+            catch(Exception ex){
+                ex.printStackTrace();
+            }
+            finally{
+                disconnect();
+            }
+        }
+    }
+    
+    public ArrayList<User> getOtherUsers(String username){
+        ArrayList<User> users = new ArrayList();
+        StringBuilder sb = new StringBuilder();
+        sb.append("SELECT * FROM user ");
+        sb.append("INNER JOIN description AS descr ON user.info_description = descr.guid ");
+        sb.append("INNER JOIN description AS pref ON user.pref_description = pref.guid ");
+        sb.append("WHERE username <> '").append(username).append("' ");
+        
+        try{
+            connect();
+            ResultSet rs = sta.executeQuery(sb.toString());
+            while(rs.next()){
+                Description desc = new Description(rs.getString(13), 
+                        Gender.values()[rs.getInt(20)], 
+                        new Range(rs.getInt(18), rs.getInt(19)), 
+                        Area.values()[rs.getInt(16)], 
+                        Smoking.values()[rs.getInt(21)], 
+                        Drinking.values()[rs.getInt(22)], 
+                        Sexuality.values()[rs.getInt(23)]);
+                
+                Description pref = new Description(rs.getString(24), 
+                        Gender.values()[rs.getInt(31)], 
+                        new Range(rs.getInt(29), rs.getInt(30)), 
+                        Area.values()[rs.getInt(27)], 
+                        Smoking.values()[rs.getInt(32)], 
+                        Drinking.values()[rs.getInt(33)], 
+                        Sexuality.values()[rs.getInt(34)]);
+                
+                Location loc = new Location(rs.getFloat("location_latitude"), 
+                        rs.getFloat("location_longitude"), 
+                        new Date(rs.getLong("location_timestamp")));
+                
+                users.add(new User(rs.getString("username"), 
+                        rs.getString("displayname"), 
+                        rs.getString("password"), 
+                        rs.getString("firstname"), 
+                        new Date(rs.getInt("birthdate") * 1000), 
+                        rs.getString("email"), 
+                        desc, pref, loc));
+            }
+        }
+        catch(Exception ex){
+            ex.printStackTrace();
+        }
+        finally{
+            disconnect();
+            return users;
+        }
+    }
+    
+    public boolean verifyLogin(String username, String password){
+        boolean passwordMatch = false;
+        
+        StringBuilder sb = new StringBuilder();
+        sb.append("SELECT COUNT (guid) FROM user WHERE ");
+        sb.append("username ='").append(username).append("' AND ");
+        sb.append("password ='").append(password).append("'");
+        
+        try{
+            connect();
+            ResultSet rs = sta.executeQuery(sb.toString());
+            if(rs.getInt(1) == 1){
+                passwordMatch = true;
+            }
+        }
+        catch(Exception ex){
+            ex.printStackTrace();
+        }
+        finally{
+            disconnect();
+            return passwordMatch;
+        }
+     }
 }

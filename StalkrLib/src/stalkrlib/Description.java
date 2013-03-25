@@ -23,7 +23,7 @@ public class Description {
     private Smoking smoking;
     private Drinking drinking;
     private Sexuality sexuality;
-    private UUID id;
+    private String id;
 
     public Description(Gender gender, Range age, Area area, Smoking smoking, Drinking drinking, Sexuality sexuality) {
         this.gender = gender;
@@ -32,7 +32,17 @@ public class Description {
         this.smoking = smoking;
         this.drinking = drinking;
         this.sexuality = sexuality;
-        this.id = UUID.randomUUID();
+        this.id = UUID.randomUUID().toString();
+    }
+    
+    public Description(String id, Gender gender, Range age, Area area, Smoking smoking, Drinking drinking, Sexuality sexuality) {
+        this.gender = gender;
+        this.age = age;
+        this.area = area;
+        this.smoking = smoking;
+        this.drinking = drinking;
+        this.sexuality = sexuality;
+        this.id = id;
     }
     
     public double comparePreference(Description stranger){        
@@ -119,7 +129,7 @@ public class Description {
         this.sexuality = sexuality;
     }
 
-    public UUID getId() {
+    public String getId() {
         return id;
     }
 
