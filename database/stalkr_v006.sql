@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS `description` (
 	`age` INT(11) NULL,
 	`age_max` INT(11) NULL,
 	`gender` VARCHAR(5) NULL DEFAULT '00000',
-	`orientation` VARCHAR(4) NULL DEFAULT '0000',
+	`sexuality` VARCHAR(4) NULL DEFAULT '0000',
 	`country` VARCHAR(1) NULL DEFAULT '0',
 	`region` VARCHAR(5) NULL DEFAULT '00000',
 	`city` VARCHAR(1) NULL DEFAULT '0',
@@ -82,10 +82,10 @@ INSERT INTO `userdescription` (
 INSERT INTO `description` (
 	`d_id`,`timestamp`,`title`,
 	`age`,`age_max`,`gender`,
-	`orientation`,`country`,`region`,
+	`sexuality`,`country`,`region`,
 	`city`,`smoking`,`drinking`
 ) VALUES (
-	'8b9e9d44-4411-434f-b5cc-5b803a3dc4f6',123456789,null
+	'edea3e9a-da70-4a52-b1be-68df86b1afda',123456789,null,
 	25,0,'01000',
 	'0100','0','01000',
 	'0','1','1'
@@ -94,10 +94,10 @@ INSERT INTO `description` (
 INSERT INTO `description` (
 	`d_id`,`timestamp`,`title`,
 	`age`,`age_max`,`gender`,
-	`orientation`,`country`,`region`,
+	`sexuality`,`country`,`region`,
 	`city`,`smoking`,`drinking`
 ) VALUES (
-	'57008f04-b8e3-464b-8253-1fa44fcea113',123456789,"Default"
+	'57008f04-b8e3-464b-8253-1fa44fcea113',123456789,"Default",
 	20,30,'01000',
 	'0100','0','01000',
 	'0','1','1'
@@ -131,9 +131,9 @@ INSERT INTO `description` (
 	`d_id`,`timestamp`,`country`,
 	`region`,`city`,`age`,
 	`age_max`,`gender`,`smoking`,
-	`drinking`,`orientation`,`title`
+	`drinking`,`sexuality`,`title`
 ) VALUES (
-	'23CD373A-931C-11E2-9415-DB146188709B',123456789,'0',
+	'1A6747B2-931C-11E2-AE68-D7146188709B',123456789,'0',
 	'00100','0',67,
 	98,'01000','010',
 	'01','0010',null
@@ -143,9 +143,9 @@ INSERT INTO `description` (
 	`d_id`,`timestamp`,`country`,
 	`region`,`city`,`age`,
 	`age_max`,`gender`,`smoking`,
-	`drinking`,`orientation`,`title`
+	`drinking`,`sexuality`,`title`
 ) VALUES (
-	'7B8A365A-922F-11E2-817C-F5DF6088709B',123456789,'0',
+	'8b9e9d44-4411-434f-b5cc-5b803a3dc4f6',123456789,'0',
 	'00001','0',45,
 	60,'01000','000',
 	'00','0010',"TEST"
@@ -161,7 +161,7 @@ INSERT INTO `user` (
 	`firstname`,`lastname`,`birthday`,
 	`loc_lat`,`loc_lon`,`loc_tim`
 ) VALUES (
-	'23CD373A-931C-11E2-9415-DB146188709B',
+	'2AED9276-931C-11E2-9857-DC146188709B',
 	'jamesjohnson@jubiipost.dk','JamesJohnson43','3456',
 	'James','Johnson',378022125,
 	12.4,2.2,1361366653
@@ -179,7 +179,7 @@ INSERT INTO `description` (
 	`d_id`,`timestamp`,`country`,
 	`region`,`city`,`age`,
 	`age_max`,`gender`,`smoking`,
-	`drinking`,`orientation`,`title`
+	`drinking`,`sexuality`,`title`
 ) VALUES (
     	'2AED9276-931C-11E2-9857-DC146188709B',123456789,'0',
 	'01000','0',20,
@@ -191,7 +191,7 @@ INSERT INTO `description` (
 	`d_id`,`timestamp`,`country`,
 	`region`,`city`,`age`,
 	`age_max`,`gender`,`smoking`,
-	`drinking`,`orientation`,`title`
+	`drinking`,`sexuality`,`title`
 ) VALUES (
 	'722BFD5E-931B-11E2-9A5C-54146188709B',123456789,'0',
 	'00010','0',22,
@@ -227,9 +227,9 @@ INSERT INTO `description` (
 	`d_id`,`timestamp`,`country`,
 	`region`,`city`,`age`,
 	`age_max`,`gender`,`smoking`,
-	`drinking`,`orientation`,`title`
+	`drinking`,`sexuality`,`title`
 ) VALUES (
-	'7AC0328C-931B-11E2-B398-56146188709B',123456789,'0',
+	'406A84D8-931C-11E2-9C5D-E0146188709B',123456789,'0',
 	'00001','0',47,
 	69,'01000','010',
 	'01','0001',null
@@ -239,9 +239,9 @@ INSERT INTO `description` (
 	`d_id`,`timestamp`,`country`,
 	`region`,`city`,`age`,
 	`age_max`,`gender`,`smoking`,
-	`drinking`,`orientation`,`title`
+	`drinking`,`sexuality`,`title`
 ) VALUES (
-	'839DA2C2-931B-11E2-B015-5D146188709B',123456789,'0',
+	'918446D4-931B-11E2-A016-67146188709B',123456789,'0',
 	'00100','0',22,
 	45,'01000','000',
 	'01','0010','A title'
@@ -275,7 +275,7 @@ INSERT INTO `description` (
 	`d_id`,`timestamp`,`country`,
 	`region`,`city`,`age`,
 	`age_max`,`gender`,`smoking`,
-	`drinking`,`orientation`
+	`drinking`,`sexuality`
 ) VALUES (
 	'453B6888-9597-11E2-8012-90CA6088709B',123456789,'0',
 	'00100','0',43,
@@ -287,7 +287,7 @@ INSERT INTO `description` (
 	`d_id`,`timestamp`,`country`,
 	`region`,`city`,`age`,
 	`age_max`,`gender`,`smoking`,
-	`drinking`,`orientation`
+	`drinking`,`sexuality`
 ) VALUES (
 	'538A40BC-9597-11E2-81CD-96CA6088709B',123456789,'0',
 	'00001','0',77,
