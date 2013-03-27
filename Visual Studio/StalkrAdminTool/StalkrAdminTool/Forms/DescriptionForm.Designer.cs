@@ -52,6 +52,8 @@
 			this.enum_region = new StalkrAdminTool.Controls.EnumSelector();
 			this.enum_smoking = new StalkrAdminTool.Controls.EnumSelector();
 			this.enum_drinking = new StalkrAdminTool.Controls.EnumSelector();
+			this.lbl_title = new System.Windows.Forms.Label();
+			this.txt_title = new System.Windows.Forms.TextBox();
 			this.table_buttons.SuspendLayout();
 			this.table_main.SuspendLayout();
 			this.table_age.SuspendLayout();
@@ -68,7 +70,7 @@
 			this.table_buttons.Controls.Add(this.button_save, 1, 0);
 			this.table_buttons.Controls.Add(this.button_cancel, 2, 0);
 			this.table_buttons.Dock = System.Windows.Forms.DockStyle.Bottom;
-			this.table_buttons.Location = new System.Drawing.Point(0, 312);
+			this.table_buttons.Location = new System.Drawing.Point(0, 342);
 			this.table_buttons.Name = "table_buttons";
 			this.table_buttons.RowCount = 1;
 			this.table_buttons.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -81,7 +83,7 @@
 			this.button_save.Location = new System.Drawing.Point(103, 3);
 			this.button_save.Name = "button_save";
 			this.button_save.Size = new System.Drawing.Size(141, 27);
-			this.button_save.TabIndex = 0;
+			this.button_save.TabIndex = 99;
 			this.button_save.Text = "Save";
 			this.button_save.UseVisualStyleBackColor = true;
 			this.button_save.Click += new System.EventHandler(this.button_save_Click);
@@ -92,7 +94,7 @@
 			this.button_cancel.Location = new System.Drawing.Point(250, 3);
 			this.button_cancel.Name = "button_cancel";
 			this.button_cancel.Size = new System.Drawing.Size(141, 27);
-			this.button_cancel.TabIndex = 1;
+			this.button_cancel.TabIndex = 100;
 			this.button_cancel.Text = "Cancel";
 			this.button_cancel.UseVisualStyleBackColor = true;
 			this.button_cancel.Click += new System.EventHandler(this.button_cancel_Click);
@@ -101,7 +103,7 @@
 			// 
 			this.lbl_region.AutoSize = true;
 			this.lbl_region.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.lbl_region.Location = new System.Drawing.Point(3, 168);
+			this.lbl_region.Location = new System.Drawing.Point(3, 192);
 			this.lbl_region.Name = "lbl_region";
 			this.lbl_region.Padding = new System.Windows.Forms.Padding(0, 7, 0, 0);
 			this.lbl_region.Size = new System.Drawing.Size(94, 48);
@@ -112,7 +114,7 @@
 			// 
 			this.lbl_orientation.AutoSize = true;
 			this.lbl_orientation.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.lbl_orientation.Location = new System.Drawing.Point(3, 120);
+			this.lbl_orientation.Location = new System.Drawing.Point(3, 144);
 			this.lbl_orientation.Name = "lbl_orientation";
 			this.lbl_orientation.Padding = new System.Windows.Forms.Padding(0, 7, 0, 0);
 			this.lbl_orientation.Size = new System.Drawing.Size(94, 48);
@@ -123,7 +125,7 @@
 			// 
 			this.lbl_gender.AutoSize = true;
 			this.lbl_gender.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.lbl_gender.Location = new System.Drawing.Point(3, 72);
+			this.lbl_gender.Location = new System.Drawing.Point(3, 96);
 			this.lbl_gender.Name = "lbl_gender";
 			this.lbl_gender.Padding = new System.Windows.Forms.Padding(0, 7, 0, 0);
 			this.lbl_gender.Size = new System.Drawing.Size(94, 48);
@@ -170,32 +172,35 @@
 			this.table_main.Controls.Add(this.lbl_guid, 0, 0);
 			this.table_main.Controls.Add(this.txt_guid, 1, 0);
 			this.table_main.Controls.Add(this.lbl_age, 0, 2);
-			this.table_main.Controls.Add(this.lbl_gender, 0, 3);
-			this.table_main.Controls.Add(this.lbl_orientation, 0, 4);
-			this.table_main.Controls.Add(this.lbl_region, 0, 5);
-			this.table_main.Controls.Add(this.lbl_smoking, 0, 6);
-			this.table_main.Controls.Add(this.lbl_drinking, 0, 7);
+			this.table_main.Controls.Add(this.lbl_gender, 0, 4);
+			this.table_main.Controls.Add(this.lbl_orientation, 0, 5);
+			this.table_main.Controls.Add(this.lbl_region, 0, 6);
+			this.table_main.Controls.Add(this.lbl_smoking, 0, 7);
+			this.table_main.Controls.Add(this.lbl_drinking, 0, 8);
 			this.table_main.Controls.Add(this.table_age, 1, 2);
 			this.table_main.Controls.Add(this.txt_timestamp, 1, 1);
-			this.table_main.Controls.Add(this.enum_gender, 1, 3);
-			this.table_main.Controls.Add(this.enum_sexuality, 1, 4);
-			this.table_main.Controls.Add(this.enum_region, 1, 5);
-			this.table_main.Controls.Add(this.enum_smoking, 1, 6);
-			this.table_main.Controls.Add(this.enum_drinking, 1, 7);
+			this.table_main.Controls.Add(this.enum_gender, 1, 4);
+			this.table_main.Controls.Add(this.enum_sexuality, 1, 5);
+			this.table_main.Controls.Add(this.enum_region, 1, 6);
+			this.table_main.Controls.Add(this.enum_smoking, 1, 7);
+			this.table_main.Controls.Add(this.enum_drinking, 1, 8);
+			this.table_main.Controls.Add(this.lbl_title, 0, 3);
+			this.table_main.Controls.Add(this.txt_title, 1, 3);
 			this.table_main.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.table_main.Location = new System.Drawing.Point(0, 0);
 			this.table_main.Name = "table_main";
-			this.table_main.RowCount = 9;
+			this.table_main.RowCount = 10;
 			this.table_main.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
 			this.table_main.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
 			this.table_main.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+			this.table_main.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
 			this.table_main.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 48F));
 			this.table_main.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 48F));
 			this.table_main.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 48F));
 			this.table_main.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 48F));
 			this.table_main.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 48F));
 			this.table_main.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 48F));
-			this.table_main.Size = new System.Drawing.Size(394, 345);
+			this.table_main.Size = new System.Drawing.Size(394, 375);
 			this.table_main.TabIndex = 0;
 			// 
 			// lbl_timestamp
@@ -213,7 +218,7 @@
 			// 
 			this.lbl_smoking.AutoSize = true;
 			this.lbl_smoking.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.lbl_smoking.Location = new System.Drawing.Point(3, 216);
+			this.lbl_smoking.Location = new System.Drawing.Point(3, 240);
 			this.lbl_smoking.Name = "lbl_smoking";
 			this.lbl_smoking.Padding = new System.Windows.Forms.Padding(0, 7, 0, 0);
 			this.lbl_smoking.Size = new System.Drawing.Size(94, 48);
@@ -224,7 +229,7 @@
 			// 
 			this.lbl_drinking.AutoSize = true;
 			this.lbl_drinking.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.lbl_drinking.Location = new System.Drawing.Point(3, 264);
+			this.lbl_drinking.Location = new System.Drawing.Point(3, 288);
 			this.lbl_drinking.Name = "lbl_drinking";
 			this.lbl_drinking.Padding = new System.Windows.Forms.Padding(0, 7, 0, 0);
 			this.lbl_drinking.Size = new System.Drawing.Size(94, 48);
@@ -288,53 +293,72 @@
 			// enum_gender
 			// 
 			this.enum_gender.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.enum_gender.Location = new System.Drawing.Point(103, 75);
+			this.enum_gender.Location = new System.Drawing.Point(103, 99);
 			this.enum_gender.Margin = new System.Windows.Forms.Padding(3, 3, 3, 1);
 			this.enum_gender.Name = "enum_gender";
 			this.enum_gender.Size = new System.Drawing.Size(288, 44);
-			this.enum_gender.TabIndex = 34;
+			this.enum_gender.TabIndex = 6;
 			// 
 			// enum_sexuality
 			// 
 			this.enum_sexuality.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.enum_sexuality.Location = new System.Drawing.Point(103, 123);
+			this.enum_sexuality.Location = new System.Drawing.Point(103, 147);
 			this.enum_sexuality.Margin = new System.Windows.Forms.Padding(3, 3, 3, 1);
 			this.enum_sexuality.Name = "enum_sexuality";
 			this.enum_sexuality.Size = new System.Drawing.Size(288, 44);
-			this.enum_sexuality.TabIndex = 35;
+			this.enum_sexuality.TabIndex = 7;
 			// 
 			// enum_region
 			// 
 			this.enum_region.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.enum_region.Location = new System.Drawing.Point(103, 171);
+			this.enum_region.Location = new System.Drawing.Point(103, 195);
 			this.enum_region.Margin = new System.Windows.Forms.Padding(3, 3, 3, 1);
 			this.enum_region.Name = "enum_region";
 			this.enum_region.Size = new System.Drawing.Size(288, 44);
-			this.enum_region.TabIndex = 36;
+			this.enum_region.TabIndex = 8;
 			// 
 			// enum_smoking
 			// 
 			this.enum_smoking.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.enum_smoking.Location = new System.Drawing.Point(103, 219);
+			this.enum_smoking.Location = new System.Drawing.Point(103, 243);
 			this.enum_smoking.Margin = new System.Windows.Forms.Padding(3, 3, 3, 1);
 			this.enum_smoking.Name = "enum_smoking";
 			this.enum_smoking.Size = new System.Drawing.Size(288, 44);
-			this.enum_smoking.TabIndex = 37;
+			this.enum_smoking.TabIndex = 9;
 			// 
 			// enum_drinking
 			// 
 			this.enum_drinking.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.enum_drinking.Location = new System.Drawing.Point(103, 267);
+			this.enum_drinking.Location = new System.Drawing.Point(103, 291);
 			this.enum_drinking.Margin = new System.Windows.Forms.Padding(3, 3, 3, 1);
 			this.enum_drinking.Name = "enum_drinking";
 			this.enum_drinking.Size = new System.Drawing.Size(288, 44);
-			this.enum_drinking.TabIndex = 38;
+			this.enum_drinking.TabIndex = 10;
+			// 
+			// lbl_title
+			// 
+			this.lbl_title.AutoSize = true;
+			this.lbl_title.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.lbl_title.Location = new System.Drawing.Point(3, 72);
+			this.lbl_title.Name = "lbl_title";
+			this.lbl_title.Padding = new System.Windows.Forms.Padding(0, 7, 0, 0);
+			this.lbl_title.Size = new System.Drawing.Size(94, 24);
+			this.lbl_title.TabIndex = 0;
+			this.lbl_title.Text = "Title";
+			// 
+			// txt_title
+			// 
+			this.txt_title.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.txt_title.Location = new System.Drawing.Point(103, 75);
+			this.txt_title.Name = "txt_title";
+			this.txt_title.Size = new System.Drawing.Size(288, 20);
+			this.txt_title.TabIndex = 5;
 			// 
 			// DescriptionForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(394, 345);
+			this.ClientSize = new System.Drawing.Size(394, 375);
 			this.Controls.Add(this.table_buttons);
 			this.Controls.Add(this.table_main);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -380,5 +404,7 @@
 		private Controls.EnumSelector enum_region;
 		private Controls.EnumSelector enum_smoking;
 		private Controls.EnumSelector enum_drinking;
+		private System.Windows.Forms.Label lbl_title;
+		private System.Windows.Forms.TextBox txt_title;
 	}
 }

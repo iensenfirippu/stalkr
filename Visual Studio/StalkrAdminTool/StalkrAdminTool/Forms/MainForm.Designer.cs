@@ -30,34 +30,35 @@
 		{
 			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-			this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+			this.menu_main = new System.Windows.Forms.MenuStrip();
 			this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.aboutToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-			this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-			this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
-			this.dataGridView1 = new System.Windows.Forms.DataGridView();
-			this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.status_main = new System.Windows.Forms.StatusStrip();
+			this.status_label = new System.Windows.Forms.ToolStripStatusLabel();
+			this.dgv_main = new System.Windows.Forms.DataGridView();
+			this.context_gridview = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.createNewUserToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.deleteThisUserToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.editThisUserToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.menuStrip1.SuspendLayout();
-			this.statusStrip1.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
-			this.contextMenuStrip1.SuspendLayout();
+			this.status_timer = new System.Windows.Forms.Timer(this.components);
+			this.menu_main.SuspendLayout();
+			this.status_main.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.dgv_main)).BeginInit();
+			this.context_gridview.SuspendLayout();
 			this.SuspendLayout();
 			// 
-			// menuStrip1
+			// menu_main
 			// 
-			this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+			this.menu_main.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
             this.aboutToolStripMenuItem});
-			this.menuStrip1.Location = new System.Drawing.Point(0, 0);
-			this.menuStrip1.Name = "menuStrip1";
-			this.menuStrip1.Size = new System.Drawing.Size(292, 24);
-			this.menuStrip1.TabIndex = 0;
-			this.menuStrip1.Text = "menuStrip1";
+			this.menu_main.Location = new System.Drawing.Point(0, 0);
+			this.menu_main.Name = "menu_main";
+			this.menu_main.Size = new System.Drawing.Size(292, 24);
+			this.menu_main.TabIndex = 1;
+			this.menu_main.Text = "menuStrip1";
 			// 
 			// fileToolStripMenuItem
 			// 
@@ -92,47 +93,48 @@
 			this.aboutToolStripMenuItem1.Text = "About";
 			this.aboutToolStripMenuItem1.Click += new System.EventHandler(this.aboutToolStripMenuItem1_Click);
 			// 
-			// statusStrip1
+			// status_main
 			// 
-			this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripStatusLabel1});
-			this.statusStrip1.Location = new System.Drawing.Point(0, 251);
-			this.statusStrip1.Name = "statusStrip1";
-			this.statusStrip1.Size = new System.Drawing.Size(292, 22);
-			this.statusStrip1.TabIndex = 1;
-			this.statusStrip1.Text = "statusStrip1";
+			this.status_main.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.status_label});
+			this.status_main.Location = new System.Drawing.Point(0, 251);
+			this.status_main.Name = "status_main";
+			this.status_main.Size = new System.Drawing.Size(292, 22);
+			this.status_main.TabIndex = 1;
+			this.status_main.Text = "statusStrip1";
 			// 
-			// toolStripStatusLabel1
+			// status_label
 			// 
-			this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-			this.toolStripStatusLabel1.Size = new System.Drawing.Size(109, 17);
-			this.toolStripStatusLabel1.Text = "toolStripStatusLabel1";
+			this.status_label.Name = "status_label";
+			this.status_label.Size = new System.Drawing.Size(109, 17);
+			this.status_label.Text = "toolStripStatusLabel1";
+			this.status_label.TextChanged += new System.EventHandler(this.status_label_TextChanged);
 			// 
-			// dataGridView1
+			// dgv_main
 			// 
-			this.dataGridView1.AllowUserToAddRows = false;
-			this.dataGridView1.AllowUserToDeleteRows = false;
-			this.dataGridView1.AllowUserToResizeRows = false;
-			this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-			this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.dataGridView1.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
-			this.dataGridView1.Location = new System.Drawing.Point(0, 24);
-			this.dataGridView1.Name = "dataGridView1";
-			this.dataGridView1.RowHeadersVisible = false;
-			this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-			this.dataGridView1.Size = new System.Drawing.Size(292, 227);
-			this.dataGridView1.TabIndex = 2;
-			this.dataGridView1.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellDoubleClick);
-			this.dataGridView1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.dataGridView1_MouseClick);
+			this.dgv_main.AllowUserToAddRows = false;
+			this.dgv_main.AllowUserToDeleteRows = false;
+			this.dgv_main.AllowUserToResizeRows = false;
+			this.dgv_main.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+			this.dgv_main.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.dgv_main.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
+			this.dgv_main.Location = new System.Drawing.Point(0, 24);
+			this.dgv_main.Name = "dgv_main";
+			this.dgv_main.RowHeadersVisible = false;
+			this.dgv_main.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+			this.dgv_main.Size = new System.Drawing.Size(292, 227);
+			this.dgv_main.TabIndex = 2;
+			this.dgv_main.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellDoubleClick);
+			this.dgv_main.MouseClick += new System.Windows.Forms.MouseEventHandler(this.dataGridView1_MouseClick);
 			// 
-			// contextMenuStrip1
+			// context_gridview
 			// 
-			this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+			this.context_gridview.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.createNewUserToolStripMenuItem,
             this.deleteThisUserToolStripMenuItem,
             this.editThisUserToolStripMenuItem});
-			this.contextMenuStrip1.Name = "contextMenuStrip1";
-			this.contextMenuStrip1.Size = new System.Drawing.Size(155, 70);
+			this.context_gridview.Name = "contextMenuStrip1";
+			this.context_gridview.Size = new System.Drawing.Size(155, 70);
 			// 
 			// createNewUserToolStripMenuItem
 			// 
@@ -158,25 +160,30 @@
 			this.editThisUserToolStripMenuItem.Text = "Edit this user";
 			this.editThisUserToolStripMenuItem.MouseUp += new System.Windows.Forms.MouseEventHandler(this.editThisUserToolStripMenuItem_MouseUp);
 			// 
+			// status_timer
+			// 
+			this.status_timer.Interval = 10000;
+			this.status_timer.Tick += new System.EventHandler(this.status_timer_Tick);
+			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(292, 273);
-			this.Controls.Add(this.dataGridView1);
-			this.Controls.Add(this.statusStrip1);
-			this.Controls.Add(this.menuStrip1);
+			this.Controls.Add(this.dgv_main);
+			this.Controls.Add(this.status_main);
+			this.Controls.Add(this.menu_main);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-			this.MainMenuStrip = this.menuStrip1;
+			this.MainMenuStrip = this.menu_main;
 			this.Name = "MainForm";
 			this.Text = "Stalkr Admin Tool - Main window";
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
-			this.menuStrip1.ResumeLayout(false);
-			this.menuStrip1.PerformLayout();
-			this.statusStrip1.ResumeLayout(false);
-			this.statusStrip1.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
-			this.contextMenuStrip1.ResumeLayout(false);
+			this.menu_main.ResumeLayout(false);
+			this.menu_main.PerformLayout();
+			this.status_main.ResumeLayout(false);
+			this.status_main.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.dgv_main)).EndInit();
+			this.context_gridview.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -184,18 +191,19 @@
 
 		#endregion
 
-		private System.Windows.Forms.MenuStrip menuStrip1;
-		private System.Windows.Forms.StatusStrip statusStrip1;
-		private System.Windows.Forms.DataGridView dataGridView1;
-		private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+		private System.Windows.Forms.MenuStrip menu_main;
+		private System.Windows.Forms.StatusStrip status_main;
+		private System.Windows.Forms.DataGridView dgv_main;
+		private System.Windows.Forms.ContextMenuStrip context_gridview;
 		private System.Windows.Forms.ToolStripMenuItem createNewUserToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem deleteThisUserToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem editThisUserToolStripMenuItem;
-		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
+		private System.Windows.Forms.ToolStripStatusLabel status_label;
 		private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem1;
+		private System.Windows.Forms.Timer status_timer;
 	}
 }
 

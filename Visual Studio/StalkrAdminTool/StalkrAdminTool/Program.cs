@@ -17,6 +17,11 @@ namespace StalkrAdminTool
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
 			Application.Run(new MainForm());
+
+			////TESTCODEHERE
+			//EnumList<GenderType> gl = EnumList<GenderType>.FromBooleanString("00010");
+			//gl.List.Add(GenderType.FEMALE);
+			//System.Console.Out.WriteLine(gl.ConvertToBooleanString());
 		}
 	}
 }

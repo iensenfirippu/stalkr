@@ -7,133 +7,103 @@ using System.Threading.Tasks;
 namespace StalkrAdminTool
 {
 	/// <summary>
-	/// Class container for name related variables of the User class
-	/// </summary>
-	public class Names
-	{
-		// Class global variables
-		private String _username;
-		private String _displayname;
-		private String _firstname;
-		private String _lastname;
-
-		// Constructors
-		public Names() : this("", "", "", "") { }
-		public Names(String username) : this(username, "", "", "") { }
-		public Names(String username, String firstname, String lastname) : this(username, firstname, firstname, lastname) { }
-		public Names(String username, String displayname, String firstname, String lastname)
-		{
-			_username = username;
-			_displayname = displayname;
-			_firstname = firstname;
-			_lastname = lastname;
-		}
-
-		// Properties
-		public String UserName
-		{
-			get { return _username; }
-			set { _username = value; }
-		}
-		public String DisplayName
-		{
-			get { return _displayname; }
-			set { _displayname = value; }
-		}
-		public String FirstName
-		{
-			get { return _firstname; }
-			set { _firstname = value; }
-		}
-		public String LastName
-		{
-			get { return _lastname; }
-			set { _lastname = value; }
-		}
-		public String FullName
-		{
-			get { return _lastname + ", " + _firstname; }
-		}
-	}
-
-	/// <summary>
 	/// Class describing User objects
 	/// </summary>
 	public class User
 	{
 		// Class global variables
 		private Guid _uniqueid;
-		private Names _name;
-		private String _password;
-		private DateTime _birthdate;
 		private String _email;
-		private Description _description;
-		private Description _preference;
+		private String _username;
+		private String _password;
+		private String _firstname;
+		private String _lastname;
+		private DateTime _birthday;
 		private GeoLocation _location;
+		private Description _description;
+		private List<Description> _preferences;
+
+		private Dictionary<String, bool> _alteredfields;
 
 		// Constructors
-		public User() : this(Guid.NewGuid()) { }
+		public User() : this(Guid.NewGuid())
+		{
+			_birthday = StalkrToolbelt.TStoDT(0);
+			_location = new GeoLocation();
+			_description = new Description();
+		}
 		public User(Guid guid)
 		{
 			_uniqueid = guid;
+			_preferences = new List<Description>();
+
+			_alteredfields = new Dictionary<string, bool>();
+			_alteredfields.Add("uniqueid", false);
+			_alteredfields.Add("email", false);
+			_alteredfields.Add("username", false);
+			_alteredfields.Add("password", false);
+			_alteredfields.Add("firstname", false);
+			_alteredfields.Add("lastname", false);
+			_alteredfields.Add("birthday", false);
+			_alteredfields.Add("location", false);
+			_alteredfields.Add("description", false);
+			_alteredfields.Add("preference", false);
 		}
-		//public User() : this(new Names(), "", DateTime.Now, "", new GeoLocation()) { }
-		//public User(Names name, String password, DateTime birthdate, String email, GeoLocation location)
-		//	: this(name, password, birthdate, email, location, new Description(), new Description()) { }
-		//public User(Names name, String password, DateTime birthdate, String email, GeoLocation location, Description description, Description preference)
-		//	: this(Guid.NewGuid(), name, password, birthdate, email, location, description, preference) { }
-		//public User(Guid guid, Names name, String password, DateTime birthdate, String email, GeoLocation location, Description description, Description preference)
-		//{
-		//	_uniqueid = guid;
-		//	_name = name;
-		//	_password = password;
-		//	_birthdate = birthdate;
-		//	_email = email;
-		//	_description = description;
-		//	_preference = preference;
-		//	_location = location;
-		//}
 
 		// Properties
 		public Guid UniqueID
 		{
 			get { return _uniqueid; }
-			//set { _uniqueid = value; }
-		}
-		public Names Name
-		{
-			get { return _name; }
-			set { _name = value; }
-		}
-		public String Password
-		{
-			get { return _password; }
-			set { _password = value; }
-		}
-		public DateTime Birthdate
-		{
-			get { return _birthdate; }
-			set { _birthdate = value; }
+			//set { _alteredfields["uniqueid"] = true; _uniqueid = value; }
 		}
 		public String Email
 		{
 			get { return _email; }
-			set { _email = value; }
+			set { _alteredfields["email"] = true; _email = value; }
 		}
-		public Description Description
+		public String Username
 		{
-			get { return _description; }
-			set { _description = value; }
+			get { return _username; }
+			set { _alteredfields["username"] = true; _username = value; }
 		}
-		public Description Preferences
+		public String Password
 		{
-			get { return _preference; }
-			set { _preference = value; }
+			get { return _password; }
+			set { _alteredfields["password"] = true; _password = value; }
+		}
+		public String FirstName
+		{
+			get { return _firstname; }
+			set { _alteredfields["firstname"] = true; _firstname = value; }
+		}
+		public String LastName
+		{
+			get { return _lastname; }
+			set { _alteredfields["lastname"] = true; _lastname = value; }
+		}
+		public String FullName
+		{
+			get { return _lastname + ", " + _firstname; }
+		}
+		public DateTime Birthday
+		{
+			get { return _birthday; }
+			set { _alteredfields["birthday"] = true; _birthday = value; }
 		}
 		public GeoLocation Location
 		{
 			get { return _location; }
-			set { _location = value; }
+			set { _alteredfields["location"] = true; _location = value; }
+		}
+		public Description Description
+		{
+			get { return _description; }
+			set { _alteredfields["description"] = true; _description = value; }
+		}
+		public List<Description> Preferences
+		{
+			get { return _preferences; }
+			set { _alteredfields["preference"] = true; _preferences = value; }
 		}
 	}
 }

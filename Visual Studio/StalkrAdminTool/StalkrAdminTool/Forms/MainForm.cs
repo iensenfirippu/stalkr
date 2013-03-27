@@ -12,11 +12,19 @@ namespace StalkrAdminTool
 {
 	public partial class MainForm : Form
 	{
-		// Class local variables
-		List<User> userlist;
+		#region Class constants
 
 		private static string CLOSEWARNING = "Your software is soon to close, if not safe data you lose. pwease be careful wiff yuz dataz.\nPress affirmative to okay, false to not okay.";
 		private static string CLOSETITLE = "You are about to close...";
+		private static string LOADSUCCESS = "{0} user objects successfully loaded from database";
+		private static string LOADFAIL = "Couldn't connect to database";
+		private static string USEROK = "User object \"{0}\" successfully changed";
+		private static string USERCANCEL = "User edit for object \"{0}\" was cancelled";
+
+		#endregion
+
+		// Class local variables
+		List<User> userlist;
 
 		// Constructor
 		public MainForm()
@@ -28,15 +36,17 @@ namespace StalkrAdminTool
 
 			if (userlist.Count > 0)
 			{
-				toolStripStatusLabel1.Text = userlist.Count + " user objects successfully loaded from database";
+				status_label.Text = LOADSUCCESS.Replace("{0}", userlist.Count.ToString());
 			}
 			else
 			{
-				toolStripStatusLabel1.Text = "Couldn't loaded from database";
+				status_label.Text = LOADFAIL;
 			}
 
 			DrawUserTable();
 		}
+
+		#region Methods
 
 		/// <summary>
 		/// Draws a table of all the users
@@ -44,24 +54,71 @@ namespace StalkrAdminTool
 		private void DrawUserTable()
 		{
 			// Clear old table
-			dataGridView1.Columns.Clear();
-			dataGridView1.Rows.Clear();
+			dgv_main.Columns.Clear();
+			dgv_main.Rows.Clear();
 
 			// Create new table columns
-			dataGridView1.Columns.Add("guid", "Guid");
-			dataGridView1.Columns[0].Visible = false;
-			dataGridView1.Columns.Add("username", "Username");
-			dataGridView1.Columns.Add("displayname", "Displayed name");
-			dataGridView1.Columns.Add("fullname", "Full name");
-			dataGridView1.Columns.Add("birthday", "Birthday");
+			dgv_main.Columns.Add("guid", "Guid");
+			dgv_main.Columns[0].Visible = false;
+			dgv_main.Columns.Add("username", "Username");
+			dgv_main.Columns.Add("fullname", "Full name");
+			dgv_main.Columns.Add("birthday", "Birthday");
+			dgv_main.Columns.Add("prefernces", "# of preferences");
 
 			// Fill out the table rows
 			foreach (User u in userlist)
 			{
-				dataGridView1.Rows.Add(null, u.Name.UserName, u.Name.DisplayName, u.Name.FullName, u.Birthdate.ToShortDateString());
-				dataGridView1.Rows[dataGridView1.Rows.Count - 1].Cells[0].Value = u.UniqueID;
+				dgv_main.Rows.Add(null, u.Username, u.FullName, u.Birthday.ToShortDateString(), u.Preferences.Count);
+				dgv_main.Rows[dgv_main.Rows.Count - 1].Cells[0].Value = u.UniqueID;
 			}
 		}
+
+		// Self-explanatory...
+		private void StartEditUserForm()
+		{
+			User user = GetSelectedUserObject();
+			if (user != null)
+			{
+				// Open the "Edit User" form with the corresponding user object in the list
+				UserForm userform = new UserForm(user);
+				DialogResult dr = userform.ShowDialog();
+
+				if (dr == DialogResult.OK)
+				{
+					status_label.Text = USEROK.Replace("{0}", user.Username);
+				}
+				else
+				{
+					status_label.Text = USERCANCEL.Replace("{0}", user.Username);
+				}
+
+				DrawUserTable();
+			}
+		}
+
+		/// <summary>
+		/// Fetches the User object that is selected in the DataGridView
+		/// </summary>
+		/// <returns>A user object</returns>
+		private User GetSelectedUserObject()
+		{
+			// Finds the desired user object from the selected index in the gridview
+			Guid userid = (Guid)dgv_main.SelectedRows[0].Cells[0].Value;
+			User user = null;
+			for (int i = 0; i < userlist.Count; i++)
+			{
+				if (userlist[i].UniqueID == userid)
+				{
+					user = userlist[i];
+					i = userlist.Count;
+				}
+			}
+			return user;
+		}
+
+		#endregion
+
+		#region Events
 
 		// Event fired when the gridview is being clicked
 		private void dataGridView1_MouseClick(object sender, MouseEventArgs e)
@@ -69,7 +126,7 @@ namespace StalkrAdminTool
 			// On right click, show a contextmenu with edit, add, delete type options
 			if (e.Button == System.Windows.Forms.MouseButtons.Right)
 			{
-				contextMenuStrip1.Show(Cursor.Position);
+				context_gridview.Show(Cursor.Position);
 			}
 		}
 
@@ -85,7 +142,7 @@ namespace StalkrAdminTool
 		{
 			userlist.Add(new User());
 			DrawUserTable();
-			dataGridView1.Rows[dataGridView1.Rows.Count - 1].Selected = true;
+			dgv_main.Rows[dgv_main.Rows.Count - 1].Selected = true;
 			StartEditUserForm();
 		}
 
@@ -104,47 +161,14 @@ namespace StalkrAdminTool
 			StartEditUserForm();
 		}
 
-		// Self-explanatory...
-		private void StartEditUserForm()
-		{
-			User user = GetSelectedUserObject();
-			if (user != null)
-			{
-				// Open the "Edit User" form with the corresponding user object in the list
-				UserForm userform = new UserForm(user);
-				userform.ShowDialog();
-				DrawUserTable();
-			}
-		}
-
-		/// <summary>
-		/// Fetches the User object that is selected in the DataGridView
-		/// </summary>
-		/// <returns>A user object</returns>
-		private User GetSelectedUserObject()
-		{
-			// Finds the desired user object from the selected index in the gridview
-			Guid userid = (Guid)dataGridView1.SelectedRows[0].Cells[0].Value;
-			User user = null;
-			for (int i = 0; i < userlist.Count; i++)
-			{
-				if (userlist[i].UniqueID == userid)
-				{
-					user = userlist[i];
-					i = userlist.Count;
-				}
-			}
-			return user;
-		}
-
-		// Event fired when the "Exit" option is pressed
+		// Event fired when the "About" option is pressed
 		private void aboutToolStripMenuItem1_Click(object sender, EventArgs e)
 		{
 			// TODO: show a proper about box
 			System.Windows.Forms.MessageBox.Show("This is an internal tool for managing the database of the Android app Codenamed \"Stalkr\"\nIt is to be used only by the creators themselves.", "About", MessageBoxButtons.OK, MessageBoxIcon.Information);
 		}
 
-		// Event fired when the "About" option is pressed
+		// Event fired when the "Exit" option is pressed
 		private void exitToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			this.Close();
@@ -161,5 +185,26 @@ namespace StalkrAdminTool
 				e.Cancel = true;
 			}
 		}
+
+		// Event fired when the status label's text is changed
+		private void status_label_TextChanged(object sender, EventArgs e)
+		{
+			if (status_label.Text != "")
+			{
+				// Starts the timer (to clear the message after a tick has passed)
+				status_timer.Start();
+			}
+		}
+
+		// Event fired every time the timer has "waited" a set amount of time
+		private void status_timer_Tick(object sender, EventArgs e)
+		{
+			// clear the status label
+			status_label.Text = "";
+			// stop and reset the timer
+			status_timer.Stop();
+		}
+
+		#endregion
 	}
 }

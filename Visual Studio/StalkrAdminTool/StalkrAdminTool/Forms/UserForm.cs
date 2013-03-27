@@ -12,9 +12,18 @@ namespace StalkrAdminTool
 {
 	public partial class UserForm : Form
 	{
-		// Class global variables
+		#region Class constants
+
+		private static String DELETEWARNINGTITLE = "Please confirm";
+		private static String DELETEWARNINGMESSAGE = "You are about to delete a preference object. This action will be immediately carried out by the database, and the data will be unrecoverable.\nAre you sure you want to delete this object?";
+
+		#endregion
+
+		#region Class global variables
+
 		private User _user;
-		private bool[] _altered;
+
+		#endregion
 
 		// Contructor
 		public UserForm(User user)
@@ -25,12 +34,11 @@ namespace StalkrAdminTool
 
 			txt_guid.Text = _user.UniqueID.ToString().ToUpper();
 			txt_email.Text = _user.Email;
-			txt_user.Text = _user.Name.UserName;
+			txt_user.Text = _user.Username;
 			txt_pass.Text = _user.Password;
-			txt_firstname.Text = _user.Name.FirstName;
-			txt_lastname.Text = _user.Name.LastName;
-			txt_display.Text = _user.Name.DisplayName;
-			date_birth.Value = _user.Birthdate;
+			txt_firstname.Text = _user.FirstName;
+			txt_lastname.Text = _user.LastName;
+			date_birth.Value = _user.Birthday;
 
 			if (_user.Location != null)
 			{
@@ -41,7 +49,7 @@ namespace StalkrAdminTool
 
 			if (_user.Description != null)
 			{
-				txt_description.Text = _user.Description.UniqueID.ToString().ToUpper();
+				txt_description.Text = "Description object";
 				btn_desc_add.Enabled = false;
 				btn_desc_del.Enabled = false;
 				btn_desc_edit.Enabled = true;
@@ -53,11 +61,37 @@ namespace StalkrAdminTool
 				btn_desc_edit.Enabled = false;
 			}
 
-			if (user.Preferences != null)
+			RedrawPreferences();
+		}
+
+		#region Properties
+
+		public User ReturnValue
+		{
+			get { return _user; }
+		}
+
+		#endregion
+
+		#region Methods
+
+		/// <summary>
+		/// Draws or Re-draws the preference dropdown
+		/// </summary>
+		public void RedrawPreferences()
+		{
+			// Clear out old elements
+			drop_preference.Items.Clear();
+			if (_user.Preferences.Count > 0)
 			{
-				txt_preference.Text = user.Preferences.UniqueID.ToString().ToUpper();
-				btn_pref_add.Enabled = false;
-				btn_pref_del.Enabled = false;
+				foreach (Description pref in _user.Preferences)
+				{
+					drop_preference.Items.Add(pref);
+				}
+				drop_preference.SelectedIndex = 0;
+				btn_pref_add.Enabled = true;
+				if (_user.Preferences.Count > 1) { btn_pref_del.Enabled = true; }
+				else { btn_pref_del.Enabled = false; }
 				btn_pref_edit.Enabled = true;
 			}
 			else
@@ -68,109 +102,86 @@ namespace StalkrAdminTool
 			}
 		}
 
-		// Properties
-		public User ReturnValue
-		{
-			get { return _user; }
-		}
-
-		// Methods
-		public void ValueChanged(int index)
-		{
-			_altered[index] = true;
-		}
-
-		#region Methods for the inputfields of the form
-		private void txt_email_TextChanged(object sender, EventArgs e)
-		{
-			_altered[1] = true;
-		}
-		private void txt_user_TextChanged(object sender, EventArgs e)
-		{
-			_altered[2] = true;
-		}
-		private void txt_pass_TextChanged(object sender, EventArgs e)
-		{
-			_altered[3] = true;
-		}
-		private void txt_name_TextChanged(object sender, EventArgs e)
-		{
-			_altered[4] = true;
-		}
-		private void txt_display_TextChanged(object sender, EventArgs e)
-		{
-			_altered[5] = true;
-		}
-		private void date_birth_ValueChanged(object sender, EventArgs e)
-		{
-			_altered[6] = true;
-		}
-		private void num_location_ValueChanged(object sender, EventArgs e)
-		{
-			_altered[7] = true;
-		}
-		private void date_location_ValueChanged(object sender, EventArgs e)
-		{
-			_altered[7] = true;
-		}
 		#endregion
-		#region Methods for description and preference buttons
+
+		#region Events
+
 		private void btn_desc_add_Click(object sender, EventArgs e)
 		{
-			_altered[8] = true;
+			// Never enabled, doesn't do anything
 		}
+
 		private void btn_desc_del_Click(object sender, EventArgs e)
 		{
-			_altered[8] = true;
+			// Never enabled, doesn't do anything
 		}
+
 		private void btn_desc_edit_Click(object sender, EventArgs e)
 		{
-			_altered[8] = true;
+			DescriptionForm form = new DescriptionForm(_user.Description, false);
+			DialogResult dr = form.ShowDialog();
 
-			DescriptionForm form = new DescriptionForm(_user.Description);
-			form.ShowDialog();
+			if (dr == System.Windows.Forms.DialogResult.OK)
+			{
+				_altered[8] = true;
+			}
 		}
+
 		private void btn_pref_add_Click(object sender, EventArgs e)
 		{
-			_altered[9] = true;
+			Description pref = new Description();
+			DescriptionForm form = new DescriptionForm(pref, true);
+			DialogResult dr = form.ShowDialog();
+
+			if (dr == System.Windows.Forms.DialogResult.OK)
+			{
+				_user.Preferences.Add(pref);
+				//DBINSERT
+				RedrawPreferences();
+			}
 		}
+
 		private void btn_pref_del_Click(object sender, EventArgs e)
 		{
-			_altered[9] = true;
+			if (_user.Preferences.Count > 1)
+			{
+				DialogResult dr = System.Windows.Forms.MessageBox.Show(DELETEWARNINGMESSAGE, DELETEWARNINGTITLE, MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
+				if (dr == System.Windows.Forms.DialogResult.Yes)
+				{
+					_user.Preferences.RemoveAt(drop_preference.SelectedIndex);
+					//DBDELETE
+					RedrawPreferences();
+				}
+			}
 		}
+
 		private void btn_pref_edit_Click(object sender, EventArgs e)
 		{
-			_altered[9] = true;
-
-			DescriptionForm form = new DescriptionForm(_user.Preferences);
+			DescriptionForm form = new DescriptionForm(_user.Preferences[drop_preference.SelectedIndex], true);
 			form.ShowDialog();
 		}
-		#endregion
-		#region Form buttons
+
 		private void button_cancel_Click(object sender, EventArgs e)
 		{
 			this.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.Close();
 		}
+
 		private void button_save_Click(object sender, EventArgs e)
 		{
-			//if (_altered[0] == true) { _user.UniqueID = new Guid(txt_guid.Text); }
-			if (_altered[1] == true) { _user.Email = txt_email.Text; }
-			if (_altered[2] == true) { _user.Name.UserName = txt_user.Text; }
-			if (_altered[3] == true) { _user.Password = txt_pass.Text; }
-			if (_altered[4] == true) {
-				_user.Name.FirstName = txt_firstname.Text;
-				_user.Name.LastName = txt_lastname.Text;
-			}
-			if (_altered[5] == true) { _user.Name.DisplayName = txt_display.Text; }
-			if (_altered[6] == true) { _user.Birthdate = date_birth.Value; }
-			if (_altered[7] == true) { _user.Location = new GeoLocation(Convert.ToSingle(num_lat.Value), Convert.ToSingle(num_lon.Value), date_location.Value);  }
-			//if (_altered[8] == true) { _user.Description = _user.Description; }
-			//if (_altered[8] == true) { _user.Preferences = _user.Preferences; }
+			_user.Email = txt_email.Text;
+			_user.Username = txt_user.Text;
+			_user.Password = txt_pass.Text;
+			_user.FirstName = txt_firstname.Text;
+			_user.LastName = txt_lastname.Text;
+			_user.Birthday = date_birth.Value;
+			_user.Location = new GeoLocation(Convert.ToSingle(num_lat.Value), Convert.ToSingle(num_lon.Value), date_location.Value);
 
 			this.DialogResult = System.Windows.Forms.DialogResult.OK;
 			this.Close();
 		}
+
 		#endregion
 	}
 }

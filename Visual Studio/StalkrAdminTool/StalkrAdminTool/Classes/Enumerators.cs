@@ -27,8 +27,16 @@ namespace StalkrAdminTool
 		public Range(int int1) : this(int1, 0) { }
 		public Range(int int1, int int2)
 		{
-			_intmin = int1;
-			_intmax = int2;
+			if (int1 < int2 || int2 == 0)
+			{
+				_intmin = int1;
+				_intmax = int2;
+			}
+			else
+			{
+				_intmin = int2;
+				_intmax = int1;
+			}
 		}
 
 		// Properties
@@ -61,10 +69,11 @@ namespace StalkrAdminTool
 	/// </summary>
 	public class EnumList<T>
 	{
-		// Class global variables
+		#region Class global variables
 		private List<T> _innerlist;
+		#endregion
 
-		// Constructors
+		#region Constructors
 		public EnumList(T single)
 		{
 			_innerlist = new List<T>();
@@ -74,8 +83,9 @@ namespace StalkrAdminTool
 		{
 			_innerlist = plural;
 		}
+		#endregion
 
-		// Properties
+		#region Properties
 		public List<T> List
 		{
 			get { return _innerlist; }
@@ -97,14 +107,96 @@ namespace StalkrAdminTool
 				return value;
 			}
 		}
+		#endregion
 
-		// Methods
+		#region Methods
 		public bool Contains(T t)
 		{
 			return _innerlist.Contains(t);
 		}
+		#endregion
 
-		// implicit converters
+		#region Converter methods
+		/// <summary>
+		/// Creates an EnumList from a binary formatted string representation of the given enum
+		/// </summary>
+		/// <param name="t">The enum type to cast the chars to</param>
+		/// <param name="s">The binary formatted string</param>
+		/// <returns>An EnumList of the given type</returns>
+		public static EnumList<T> FromString(String s)
+		{
+			List<T> l = new List<T>();
+			string[] enumvalues = Enum.GetNames(typeof(T));
+			char[] booleanchars = s.ToCharArray();
+			if (enumvalues.Length == booleanchars.Length)
+			{
+				for (int i = 0; i < enumvalues.Length; i++)
+				{
+					if (booleanchars[i] == '1')
+					{
+						l.Add((T)Enum.Parse(typeof(T), enumvalues[i]));
+					}
+				}
+			}
+			return new EnumList<T>(l);
+		}
+
+		/// <summary>
+		/// Converts the object to a binary formatted string representation of itself
+		/// </summary>
+		/// <returns>String containing only 0s and 1s</returns>
+		public override String ToString()
+		{
+			StringBuilder sb = new StringBuilder();
+
+			T[] enumvalues = (T[])Enum.GetValues(typeof(T));
+			foreach (T t in enumvalues)
+			{
+				if (Contains(t))
+				{
+					sb.Append("1");
+				}
+				else
+				{
+					sb.Append("0");
+				}
+			}
+
+			return sb.ToString();
+		}
+
+		/// <summary>
+		/// Creates an EnumList from a list of strings
+		/// </summary>
+		/// <param name="strings">list of strings</param>
+		/// <returns>EnumList of the given type</returns>
+		public static EnumList<T> FromStringList(List<string> strings)
+		{
+			List<T> l = new List<T>();
+			foreach (string s in strings)
+			{
+				l.Add((T)Enum.Parse(typeof(T), s, true));
+			}
+			return new EnumList<T>(l);
+		}
+
+		/// <summary>
+		/// Converts the object to a list of strings
+		/// </summary>
+		/// <returns>List of strings</returns>
+		public List<string> ToStringList()
+		{
+			List<string> value = new List<string>();
+			foreach (T t in _innerlist)
+			{
+				value.Add(t.ToString());
+			}
+			return value;
+		}
+
+		#endregion
+
+		#region implicit converters
 		public static implicit operator T(EnumList<T> t)
 		{
 			return t.List[0];
@@ -131,6 +223,7 @@ namespace StalkrAdminTool
 			}
 			return new EnumList<T>(l);
 		}
+		#endregion
 	}
 	#endregion
 }

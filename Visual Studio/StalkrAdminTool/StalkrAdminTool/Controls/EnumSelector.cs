@@ -14,36 +14,59 @@ namespace StalkrAdminTool.Controls
 	{
 		private static int CHECKBOXWIDTH = 88;
 		private static int CHECKBOXHEIGTH = 20;
+		private static string FONTFAMILY = "Arial";
 		private static float FONTSIZE = 8;
 
 		private List<string> _values;
 		private List<string> _checkedvalues;
+		private Boolean _ispreference;
 
 		public EnumSelector()
 		{
 			InitializeComponent();
 		}
 
-		public void SetValues(List<string> values, List<string> checkedvalues)
+		public void SetValues(List<string> values, List<string> checkedvalues, Boolean ispreference)
 		{
 			_values = values;
 			_checkedvalues = checkedvalues;
-			Font font = new System.Drawing.Font(new FontFamily("Arial"), FONTSIZE);
+			_ispreference = ispreference;
+			Font font = new System.Drawing.Font(new FontFamily(FONTFAMILY), FONTSIZE);
 
 			flowLayoutPanel1.Controls.Clear();
-			for (int i = 0; i < _values.Count; i++)
+			if (_ispreference)
 			{
-				CheckBox chk = new CheckBox();
-				chk.Font = font;
-				if (CHECKBOXWIDTH >= 0) { chk.Width = CHECKBOXWIDTH; }
-				if (CHECKBOXHEIGTH >= 0) { chk.Height = CHECKBOXHEIGTH; }
-				chk.Margin = new Padding(0);
+				for (int i = 0; i < _values.Count; i++)
+				{
+					CheckBox chk = new CheckBox();
+					chk.Font = font;
+					if (CHECKBOXWIDTH >= 0) { chk.Width = CHECKBOXWIDTH; }
+					if (CHECKBOXHEIGTH >= 0) { chk.Height = CHECKBOXHEIGTH; }
+					chk.Margin = new Padding(0);
 
-				chk.Name = _values[i];
-				chk.Text = _values[i];
-				if (_checkedvalues.Contains(_values[i])) { chk.Checked = true; }
-				chk.CheckedChanged += new System.EventHandler(this.Checkbox_CheckedChanged);
-				flowLayoutPanel1.Controls.Add(chk);
+					chk.Name = _values[i];
+					chk.Text = _values[i];
+					if (_checkedvalues.Contains(_values[i])) { chk.Checked = true; }
+					chk.CheckedChanged += new System.EventHandler(this.Checkbox_CheckedChanged);
+					flowLayoutPanel1.Controls.Add(chk);
+				}
+			}
+			else
+			{
+				for (int i = 0; i < _values.Count; i++)
+				{
+					RadioButton rad = new RadioButton();
+					rad.Font = font;
+					if (CHECKBOXWIDTH >= 0) { rad.Width = CHECKBOXWIDTH; }
+					if (CHECKBOXHEIGTH >= 0) { rad.Height = CHECKBOXHEIGTH; }
+					rad.Margin = new Padding(0);
+
+					rad.Name = _values[i];
+					rad.Text = _values[i];
+					if (_checkedvalues.Contains(_values[i])) { rad.Checked = true; }
+					rad.CheckedChanged += new System.EventHandler(this.Checkbox_CheckedChanged);
+					flowLayoutPanel1.Controls.Add(rad);
+				}
 			}
 		}
 
@@ -51,9 +74,25 @@ namespace StalkrAdminTool.Controls
 		{
 			List<string> checkedvaluesnew = new List<string>();
 
-			foreach (CheckBox chk in flowLayoutPanel1.Controls)
+			if (_ispreference)
 			{
-				checkedvaluesnew.Add(chk.Name);
+				foreach (CheckBox chk in flowLayoutPanel1.Controls)
+				{
+					if (chk.Checked == true)
+					{
+						checkedvaluesnew.Add(chk.Name);
+					}
+				}
+			}
+			else
+			{
+				foreach (RadioButton rad in flowLayoutPanel1.Controls)
+				{
+					if (rad.Checked == true)
+					{
+						checkedvaluesnew.Add(rad.Name);
+					}
+				}
 			}
 
 			_checkedvalues = checkedvaluesnew;

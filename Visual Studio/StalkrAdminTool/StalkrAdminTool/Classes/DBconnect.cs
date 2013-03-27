@@ -85,7 +85,10 @@ namespace StalkrAdminTool
 		// Select all users from the database
 		public List<User> SelectAllUsers()
 		{
-			string query = "SELECT * FROM user AS usr INNER JOIN description AS dscr ON usr.info_description = dscr.guid INNER JOIN description AS pref ON usr.pref_description = pref.guid";
+			string query = "SELECT * FROM user AS usr " +
+				"INNER JOIN description AS dscr ON usr.u_id = dscr.d_id " +
+				"INNER JOIN userdescription AS ud ON usr.u_id = ud.u_id " +
+				"INNER JOIN description AS pref ON ud.d_id = pref.d_id";
 
 			//Create a list to store the result
 			List<User> list = new List<User>();
@@ -101,30 +104,38 @@ namespace StalkrAdminTool
 				//Read the data and store them in the list
 				while (dataReader.Read())
 				{
-					User u = new User(new Guid(dataReader["guid"].ToString()));
-					u.Name = new Names(dataReader["username"].ToString(), dataReader["displayname"].ToString(), dataReader["firstname"].ToString(), dataReader["lastname"].ToString());
+					User u = new User(new Guid(dataReader["u_id"].ToString()));
+					u.Username = dataReader["username"].ToString();
+					u.FirstName = dataReader["firstname"].ToString();
+					u.LastName = dataReader["lastname"].ToString();
 					u.Password = dataReader["password"].ToString();
-					u.Birthdate = StalkrToolbelt.TStoDT(Convert.ToDouble(dataReader["birthday"]));
+					u.Birthday = StalkrToolbelt.TStoDT(Convert.ToDouble(dataReader["birthday"]));
 					u.Email = dataReader["email"].ToString();
-					u.Location = new GeoLocation(Convert.ToSingle(dataReader["location_latitude"]), Convert.ToSingle(dataReader["location_longitude"]), StalkrToolbelt.TStoDT(Convert.ToDouble(dataReader["location_timestamp"])));
+					u.Location = new GeoLocation(Convert.ToSingle(dataReader["loc_lat"]), Convert.ToSingle(dataReader["loc_lon"]), StalkrToolbelt.TStoDT(Convert.ToDouble(dataReader["loc_tim"])));
 
-					u.Description = new Description(new Guid(dataReader[13].ToString()));
-					u.Description.TimeStamp = StalkrToolbelt.TStoDT(Convert.ToDouble(dataReader[14]));
-					u.Description.Gender = (GenderType) Convert.ToInt32(dataReader[20].ToString());
-					u.Description.Sexuality = (SexualityType) Convert.ToInt32(dataReader[23].ToString());
-					u.Description.Age = new Range(Convert.ToInt32(dataReader[18].ToString()), Convert.ToInt32(dataReader[19].ToString()));
-					u.Description.Area = (AreaType) Convert.ToInt32(dataReader[16].ToString());
-					u.Description.Smoking = (SmokingType) Convert.ToInt32(dataReader[21].ToString());
-					u.Description.Drinking = (DrinkingType) Convert.ToInt32(dataReader[22].ToString());
+					u.Description = new Description(new Guid(dataReader[10].ToString()));
+					u.Description.TimeStamp = StalkrToolbelt.TStoDT(Convert.ToDouble(dataReader[11]));
+					u.Description.Title = dataReader[12].ToString();
+					u.Description.Age = new Range(Convert.ToInt32(dataReader[13].ToString()), Convert.ToInt32(dataReader[14].ToString()));
+					u.Description.Gender = EnumList<GenderType>.FromString(dataReader[15].ToString());
+					u.Description.Sexuality = EnumList<SexualityType>.FromString(dataReader[16].ToString());
+					//country = 17
+					u.Description.Area = EnumList<AreaType>.FromString(dataReader[18].ToString());
+					//city = 19
+					u.Description.Smoking = EnumList<SmokingType>.FromString(dataReader[20].ToString());
+					u.Description.Drinking = EnumList<DrinkingType>.FromString(dataReader[21].ToString());
 
-					u.Preferences = new Description(new Guid(dataReader[24].ToString()));
-					u.Preferences.TimeStamp = StalkrToolbelt.TStoDT(Convert.ToDouble(dataReader[25]));
-					u.Preferences.Gender = (GenderType)Convert.ToInt32(dataReader[31].ToString());
-					u.Preferences.Sexuality = (SexualityType)Convert.ToInt32(dataReader[34].ToString());
-					u.Preferences.Age = new Range(Convert.ToInt32(dataReader[29].ToString()), Convert.ToInt32(dataReader[30].ToString()));
-					u.Preferences.Area = (AreaType)Convert.ToInt32(dataReader[27].ToString());
-					u.Preferences.Smoking = (SmokingType)Convert.ToInt32(dataReader[32].ToString());
-					u.Preferences.Drinking = (DrinkingType)Convert.ToInt32(dataReader[33].ToString());
+					u.Preferences.Add(new Description(new Guid(dataReader[24].ToString())));
+					u.Preferences[0].TimeStamp = StalkrToolbelt.TStoDT(Convert.ToDouble(dataReader[25]));
+					u.Preferences[0].Title = dataReader[26].ToString();
+					u.Preferences[0].Age = new Range(Convert.ToInt32(dataReader[27].ToString()), Convert.ToInt32(dataReader[28].ToString()));
+					u.Preferences[0].Gender = EnumList<GenderType>.FromString(dataReader[29].ToString());
+					u.Preferences[0].Sexuality = EnumList<SexualityType>.FromString(dataReader[30].ToString());
+					//country = 31
+					u.Preferences[0].Area = EnumList<AreaType>.FromString(dataReader[32].ToString());
+					//city = 33
+					u.Preferences[0].Smoking = EnumList<SmokingType>.FromString(dataReader[34].ToString());
+					u.Preferences[0].Drinking = EnumList<DrinkingType>.FromString(dataReader[35].ToString());
 
 					list.Add(u);
 				}

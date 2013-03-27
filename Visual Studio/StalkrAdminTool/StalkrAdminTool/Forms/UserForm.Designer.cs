@@ -32,10 +32,8 @@
 			this.table_buttons = new System.Windows.Forms.TableLayoutPanel();
 			this.button_save = new System.Windows.Forms.Button();
 			this.button_cancel = new System.Windows.Forms.Button();
-			this.txt_display = new System.Windows.Forms.TextBox();
 			this.txt_pass = new System.Windows.Forms.TextBox();
 			this.txt_user = new System.Windows.Forms.TextBox();
-			this.lbl_display = new System.Windows.Forms.Label();
 			this.lbl_name = new System.Windows.Forms.Label();
 			this.lbl_pass = new System.Windows.Forms.Label();
 			this.lbl_user = new System.Windows.Forms.Label();
@@ -45,10 +43,10 @@
 			this.txt_email = new System.Windows.Forms.TextBox();
 			this.table_main = new System.Windows.Forms.TableLayoutPanel();
 			this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
-			this.txt_preference = new System.Windows.Forms.TextBox();
 			this.btn_pref_add = new System.Windows.Forms.Button();
 			this.btn_pref_del = new System.Windows.Forms.Button();
 			this.btn_pref_edit = new System.Windows.Forms.Button();
+			this.drop_preference = new System.Windows.Forms.ComboBox();
 			this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
 			this.txt_description = new System.Windows.Forms.TextBox();
 			this.btn_desc_add = new System.Windows.Forms.Button();
@@ -101,7 +99,7 @@
 			this.button_save.Location = new System.Drawing.Point(103, 3);
 			this.button_save.Name = "button_save";
 			this.button_save.Size = new System.Drawing.Size(151, 27);
-			this.button_save.TabIndex = 0;
+			this.button_save.TabIndex = 99;
 			this.button_save.Text = "Save";
 			this.button_save.UseVisualStyleBackColor = true;
 			this.button_save.Click += new System.EventHandler(this.button_save_Click);
@@ -112,19 +110,10 @@
 			this.button_cancel.Location = new System.Drawing.Point(260, 3);
 			this.button_cancel.Name = "button_cancel";
 			this.button_cancel.Size = new System.Drawing.Size(151, 27);
-			this.button_cancel.TabIndex = 1;
+			this.button_cancel.TabIndex = 100;
 			this.button_cancel.Text = "Cancel";
 			this.button_cancel.UseVisualStyleBackColor = true;
 			this.button_cancel.Click += new System.EventHandler(this.button_cancel_Click);
-			// 
-			// txt_display
-			// 
-			this.txt_display.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.txt_display.Location = new System.Drawing.Point(103, 123);
-			this.txt_display.Name = "txt_display";
-			this.txt_display.Size = new System.Drawing.Size(308, 20);
-			this.txt_display.TabIndex = 7;
-			this.txt_display.TextChanged += new System.EventHandler(this.txt_display_TextChanged);
 			// 
 			// txt_pass
 			// 
@@ -133,7 +122,6 @@
 			this.txt_pass.Name = "txt_pass";
 			this.txt_pass.Size = new System.Drawing.Size(308, 20);
 			this.txt_pass.TabIndex = 4;
-			this.txt_pass.TextChanged += new System.EventHandler(this.txt_pass_TextChanged);
 			// 
 			// txt_user
 			// 
@@ -142,18 +130,6 @@
 			this.txt_user.Name = "txt_user";
 			this.txt_user.Size = new System.Drawing.Size(308, 20);
 			this.txt_user.TabIndex = 3;
-			this.txt_user.TextChanged += new System.EventHandler(this.txt_user_TextChanged);
-			// 
-			// lbl_display
-			// 
-			this.lbl_display.AutoSize = true;
-			this.lbl_display.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.lbl_display.Location = new System.Drawing.Point(3, 120);
-			this.lbl_display.Name = "lbl_display";
-			this.lbl_display.Size = new System.Drawing.Size(94, 24);
-			this.lbl_display.TabIndex = 8;
-			this.lbl_display.Text = "Displayname";
-			this.lbl_display.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// lbl_name
 			// 
@@ -162,7 +138,7 @@
 			this.lbl_name.Location = new System.Drawing.Point(3, 96);
 			this.lbl_name.Name = "lbl_name";
 			this.lbl_name.Size = new System.Drawing.Size(94, 24);
-			this.lbl_name.TabIndex = 6;
+			this.lbl_name.TabIndex = 0;
 			this.lbl_name.Text = "Name";
 			this.lbl_name.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
@@ -173,7 +149,7 @@
 			this.lbl_pass.Location = new System.Drawing.Point(3, 72);
 			this.lbl_pass.Name = "lbl_pass";
 			this.lbl_pass.Size = new System.Drawing.Size(94, 24);
-			this.lbl_pass.TabIndex = 5;
+			this.lbl_pass.TabIndex = 0;
 			this.lbl_pass.Text = "Password";
 			this.lbl_pass.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
@@ -184,7 +160,7 @@
 			this.lbl_user.Location = new System.Drawing.Point(3, 48);
 			this.lbl_user.Name = "lbl_user";
 			this.lbl_user.Size = new System.Drawing.Size(94, 24);
-			this.lbl_user.TabIndex = 4;
+			this.lbl_user.TabIndex = 0;
 			this.lbl_user.Text = "Username";
 			this.lbl_user.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
@@ -215,7 +191,7 @@
 			this.lbl_email.Location = new System.Drawing.Point(3, 24);
 			this.lbl_email.Name = "lbl_email";
 			this.lbl_email.Size = new System.Drawing.Size(94, 24);
-			this.lbl_email.TabIndex = 2;
+			this.lbl_email.TabIndex = 0;
 			this.lbl_email.Text = "Email";
 			this.lbl_email.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
@@ -226,7 +202,6 @@
 			this.txt_email.Name = "txt_email";
 			this.txt_email.Size = new System.Drawing.Size(308, 20);
 			this.txt_email.TabIndex = 2;
-			this.txt_email.TextChanged += new System.EventHandler(this.txt_email_TextChanged);
 			// 
 			// table_main
 			// 
@@ -242,23 +217,21 @@
 			this.table_main.Controls.Add(this.lbl_name, 0, 4);
 			this.table_main.Controls.Add(this.txt_user, 1, 2);
 			this.table_main.Controls.Add(this.txt_pass, 1, 3);
-			this.table_main.Controls.Add(this.tableLayoutPanel3, 1, 10);
-			this.table_main.Controls.Add(this.tableLayoutPanel4, 1, 9);
-			this.table_main.Controls.Add(this.lbl_display, 0, 5);
+			this.table_main.Controls.Add(this.tableLayoutPanel3, 1, 9);
+			this.table_main.Controls.Add(this.tableLayoutPanel4, 1, 8);
 			this.table_main.Controls.Add(this.table_name, 1, 4);
-			this.table_main.Controls.Add(this.txt_display, 1, 5);
-			this.table_main.Controls.Add(this.lbl_birth, 0, 6);
-			this.table_main.Controls.Add(this.lbl_location, 0, 7);
-			this.table_main.Controls.Add(this.lbl_preference, 0, 10);
-			this.table_main.Controls.Add(this.lbl_description, 0, 9);
-			this.table_main.Controls.Add(this.lbl_locatime, 0, 8);
-			this.table_main.Controls.Add(this.table_location, 1, 7);
-			this.table_main.Controls.Add(this.date_birth, 1, 6);
-			this.table_main.Controls.Add(this.date_location, 1, 8);
+			this.table_main.Controls.Add(this.lbl_birth, 0, 5);
+			this.table_main.Controls.Add(this.lbl_location, 0, 6);
+			this.table_main.Controls.Add(this.lbl_preference, 0, 9);
+			this.table_main.Controls.Add(this.lbl_description, 0, 8);
+			this.table_main.Controls.Add(this.lbl_locatime, 0, 7);
+			this.table_main.Controls.Add(this.table_location, 1, 6);
+			this.table_main.Controls.Add(this.date_birth, 1, 5);
+			this.table_main.Controls.Add(this.date_location, 1, 7);
 			this.table_main.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.table_main.Location = new System.Drawing.Point(0, 0);
 			this.table_main.Name = "table_main";
-			this.table_main.RowCount = 12;
+			this.table_main.RowCount = 11;
 			this.table_main.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
 			this.table_main.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
 			this.table_main.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
@@ -270,7 +243,7 @@
 			this.table_main.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
 			this.table_main.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
 			this.table_main.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
-			this.table_main.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+			this.table_main.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.table_main.Size = new System.Drawing.Size(414, 325);
 			this.table_main.TabIndex = 0;
 			// 
@@ -281,27 +254,18 @@
 			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 24F));
 			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 24F));
 			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 24F));
-			this.tableLayoutPanel3.Controls.Add(this.txt_preference, 0, 0);
 			this.tableLayoutPanel3.Controls.Add(this.btn_pref_add, 1, 0);
 			this.tableLayoutPanel3.Controls.Add(this.btn_pref_del, 2, 0);
 			this.tableLayoutPanel3.Controls.Add(this.btn_pref_edit, 3, 0);
+			this.tableLayoutPanel3.Controls.Add(this.drop_preference, 0, 0);
 			this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanel3.Location = new System.Drawing.Point(100, 240);
+			this.tableLayoutPanel3.Location = new System.Drawing.Point(100, 216);
 			this.tableLayoutPanel3.Margin = new System.Windows.Forms.Padding(0);
 			this.tableLayoutPanel3.Name = "tableLayoutPanel3";
 			this.tableLayoutPanel3.RowCount = 1;
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel3.Size = new System.Drawing.Size(314, 24);
 			this.tableLayoutPanel3.TabIndex = 18;
-			// 
-			// txt_preference
-			// 
-			this.txt_preference.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.txt_preference.Location = new System.Drawing.Point(3, 3);
-			this.txt_preference.Name = "txt_preference";
-			this.txt_preference.ReadOnly = true;
-			this.txt_preference.Size = new System.Drawing.Size(236, 20);
-			this.txt_preference.TabIndex = 16;
 			// 
 			// btn_pref_add
 			// 
@@ -313,7 +277,7 @@
 			this.btn_pref_add.Margin = new System.Windows.Forms.Padding(0);
 			this.btn_pref_add.Name = "btn_pref_add";
 			this.btn_pref_add.Size = new System.Drawing.Size(24, 24);
-			this.btn_pref_add.TabIndex = 17;
+			this.btn_pref_add.TabIndex = 15;
 			this.btn_pref_add.UseVisualStyleBackColor = true;
 			this.btn_pref_add.Click += new System.EventHandler(this.btn_pref_add_Click);
 			// 
@@ -327,7 +291,7 @@
 			this.btn_pref_del.Margin = new System.Windows.Forms.Padding(0);
 			this.btn_pref_del.Name = "btn_pref_del";
 			this.btn_pref_del.Size = new System.Drawing.Size(24, 24);
-			this.btn_pref_del.TabIndex = 18;
+			this.btn_pref_del.TabIndex = 16;
 			this.btn_pref_del.UseVisualStyleBackColor = true;
 			this.btn_pref_del.Click += new System.EventHandler(this.btn_pref_del_Click);
 			// 
@@ -341,9 +305,19 @@
 			this.btn_pref_edit.Margin = new System.Windows.Forms.Padding(0);
 			this.btn_pref_edit.Name = "btn_pref_edit";
 			this.btn_pref_edit.Size = new System.Drawing.Size(24, 24);
-			this.btn_pref_edit.TabIndex = 19;
+			this.btn_pref_edit.TabIndex = 17;
 			this.btn_pref_edit.UseVisualStyleBackColor = true;
 			this.btn_pref_edit.Click += new System.EventHandler(this.btn_pref_edit_Click);
+			// 
+			// drop_preference
+			// 
+			this.drop_preference.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.drop_preference.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.drop_preference.FormattingEnabled = true;
+			this.drop_preference.Location = new System.Drawing.Point(3, 3);
+			this.drop_preference.Name = "drop_preference";
+			this.drop_preference.Size = new System.Drawing.Size(236, 21);
+			this.drop_preference.TabIndex = 14;
 			// 
 			// tableLayoutPanel4
 			// 
@@ -357,7 +331,7 @@
 			this.tableLayoutPanel4.Controls.Add(this.btn_desc_del, 2, 0);
 			this.tableLayoutPanel4.Controls.Add(this.btn_desc_edit, 3, 0);
 			this.tableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanel4.Location = new System.Drawing.Point(100, 216);
+			this.tableLayoutPanel4.Location = new System.Drawing.Point(100, 192);
 			this.tableLayoutPanel4.Margin = new System.Windows.Forms.Padding(0);
 			this.tableLayoutPanel4.Name = "tableLayoutPanel4";
 			this.tableLayoutPanel4.RowCount = 1;
@@ -384,7 +358,7 @@
 			this.btn_desc_add.Margin = new System.Windows.Forms.Padding(0);
 			this.btn_desc_add.Name = "btn_desc_add";
 			this.btn_desc_add.Size = new System.Drawing.Size(24, 24);
-			this.btn_desc_add.TabIndex = 13;
+			this.btn_desc_add.TabIndex = 11;
 			this.btn_desc_add.UseVisualStyleBackColor = true;
 			this.btn_desc_add.Click += new System.EventHandler(this.btn_desc_add_Click);
 			// 
@@ -398,7 +372,7 @@
 			this.btn_desc_del.Margin = new System.Windows.Forms.Padding(0);
 			this.btn_desc_del.Name = "btn_desc_del";
 			this.btn_desc_del.Size = new System.Drawing.Size(24, 24);
-			this.btn_desc_del.TabIndex = 14;
+			this.btn_desc_del.TabIndex = 12;
 			this.btn_desc_del.UseVisualStyleBackColor = true;
 			this.btn_desc_del.Click += new System.EventHandler(this.btn_desc_del_Click);
 			// 
@@ -412,7 +386,7 @@
 			this.btn_desc_edit.Margin = new System.Windows.Forms.Padding(0);
 			this.btn_desc_edit.Name = "btn_desc_edit";
 			this.btn_desc_edit.Size = new System.Drawing.Size(24, 24);
-			this.btn_desc_edit.TabIndex = 15;
+			this.btn_desc_edit.TabIndex = 13;
 			this.btn_desc_edit.UseVisualStyleBackColor = true;
 			this.btn_desc_edit.Click += new System.EventHandler(this.btn_desc_edit_Click);
 			// 
@@ -439,7 +413,6 @@
 			this.txt_firstname.Name = "txt_firstname";
 			this.txt_firstname.Size = new System.Drawing.Size(151, 20);
 			this.txt_firstname.TabIndex = 5;
-			this.txt_firstname.TextChanged += new System.EventHandler(this.txt_name_TextChanged);
 			// 
 			// txt_lastname
 			// 
@@ -448,27 +421,26 @@
 			this.txt_lastname.Name = "txt_lastname";
 			this.txt_lastname.Size = new System.Drawing.Size(151, 20);
 			this.txt_lastname.TabIndex = 6;
-			this.txt_lastname.TextChanged += new System.EventHandler(this.txt_name_TextChanged);
 			// 
 			// lbl_birth
 			// 
 			this.lbl_birth.AutoSize = true;
 			this.lbl_birth.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.lbl_birth.Location = new System.Drawing.Point(3, 144);
+			this.lbl_birth.Location = new System.Drawing.Point(3, 120);
 			this.lbl_birth.Name = "lbl_birth";
 			this.lbl_birth.Size = new System.Drawing.Size(94, 24);
-			this.lbl_birth.TabIndex = 14;
-			this.lbl_birth.Text = "Birthdate";
+			this.lbl_birth.TabIndex = 0;
+			this.lbl_birth.Text = "Birthday";
 			this.lbl_birth.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// lbl_location
 			// 
 			this.lbl_location.AutoSize = true;
 			this.lbl_location.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.lbl_location.Location = new System.Drawing.Point(3, 168);
+			this.lbl_location.Location = new System.Drawing.Point(3, 144);
 			this.lbl_location.Name = "lbl_location";
 			this.lbl_location.Size = new System.Drawing.Size(94, 24);
-			this.lbl_location.TabIndex = 15;
+			this.lbl_location.TabIndex = 0;
 			this.lbl_location.Text = "Location";
 			this.lbl_location.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
@@ -476,10 +448,10 @@
 			// 
 			this.lbl_preference.AutoSize = true;
 			this.lbl_preference.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.lbl_preference.Location = new System.Drawing.Point(3, 240);
+			this.lbl_preference.Location = new System.Drawing.Point(3, 216);
 			this.lbl_preference.Name = "lbl_preference";
 			this.lbl_preference.Size = new System.Drawing.Size(94, 24);
-			this.lbl_preference.TabIndex = 17;
+			this.lbl_preference.TabIndex = 0;
 			this.lbl_preference.Text = "Preference";
 			this.lbl_preference.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
@@ -487,10 +459,10 @@
 			// 
 			this.lbl_description.AutoSize = true;
 			this.lbl_description.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.lbl_description.Location = new System.Drawing.Point(3, 216);
+			this.lbl_description.Location = new System.Drawing.Point(3, 192);
 			this.lbl_description.Name = "lbl_description";
 			this.lbl_description.Size = new System.Drawing.Size(94, 24);
-			this.lbl_description.TabIndex = 16;
+			this.lbl_description.TabIndex = 0;
 			this.lbl_description.Text = "Description";
 			this.lbl_description.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
@@ -498,10 +470,10 @@
 			// 
 			this.lbl_locatime.AutoSize = true;
 			this.lbl_locatime.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.lbl_locatime.Location = new System.Drawing.Point(3, 192);
+			this.lbl_locatime.Location = new System.Drawing.Point(3, 168);
 			this.lbl_locatime.Name = "lbl_locatime";
 			this.lbl_locatime.Size = new System.Drawing.Size(94, 24);
-			this.lbl_locatime.TabIndex = 21;
+			this.lbl_locatime.TabIndex = 0;
 			this.lbl_locatime.Text = "Location update";
 			this.lbl_locatime.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
@@ -517,7 +489,7 @@
 			this.table_location.Controls.Add(this.num_lat, 1, 0);
 			this.table_location.Controls.Add(this.num_lon, 3, 0);
 			this.table_location.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.table_location.Location = new System.Drawing.Point(100, 168);
+			this.table_location.Location = new System.Drawing.Point(100, 144);
 			this.table_location.Margin = new System.Windows.Forms.Padding(0);
 			this.table_location.Name = "table_location";
 			this.table_location.RowCount = 1;
@@ -533,7 +505,7 @@
 			this.lbl_lat.Margin = new System.Windows.Forms.Padding(0);
 			this.lbl_lat.Name = "lbl_lat";
 			this.lbl_lat.Size = new System.Drawing.Size(24, 24);
-			this.lbl_lat.TabIndex = 2;
+			this.lbl_lat.TabIndex = 0;
 			this.lbl_lat.Text = "lat";
 			this.lbl_lat.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
@@ -545,7 +517,7 @@
 			this.lbl_lon.Margin = new System.Windows.Forms.Padding(0);
 			this.lbl_lon.Name = "lbl_lon";
 			this.lbl_lon.Size = new System.Drawing.Size(24, 24);
-			this.lbl_lon.TabIndex = 3;
+			this.lbl_lon.TabIndex = 0;
 			this.lbl_lon.Text = "lon";
 			this.lbl_lon.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
@@ -556,7 +528,7 @@
 			this.num_lat.Location = new System.Drawing.Point(27, 3);
 			this.num_lat.Name = "num_lat";
 			this.num_lat.Size = new System.Drawing.Size(127, 20);
-			this.num_lat.TabIndex = 9;
+			this.num_lat.TabIndex = 8;
 			// 
 			// num_lon
 			// 
@@ -565,30 +537,27 @@
 			this.num_lon.Location = new System.Drawing.Point(184, 3);
 			this.num_lon.Name = "num_lon";
 			this.num_lon.Size = new System.Drawing.Size(127, 20);
-			this.num_lon.TabIndex = 10;
-			this.num_lon.ValueChanged += new System.EventHandler(this.num_location_ValueChanged);
+			this.num_lon.TabIndex = 9;
 			// 
 			// date_birth
 			// 
 			this.date_birth.CustomFormat = "dd/MM/yy";
 			this.date_birth.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.date_birth.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-			this.date_birth.Location = new System.Drawing.Point(103, 147);
+			this.date_birth.Location = new System.Drawing.Point(103, 123);
 			this.date_birth.Name = "date_birth";
 			this.date_birth.Size = new System.Drawing.Size(308, 20);
-			this.date_birth.TabIndex = 8;
-			this.date_birth.ValueChanged += new System.EventHandler(this.date_birth_ValueChanged);
+			this.date_birth.TabIndex = 7;
 			// 
 			// date_location
 			// 
 			this.date_location.CustomFormat = "dd/MM/yy HH:mm";
 			this.date_location.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.date_location.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-			this.date_location.Location = new System.Drawing.Point(103, 195);
+			this.date_location.Location = new System.Drawing.Point(103, 171);
 			this.date_location.Name = "date_location";
 			this.date_location.Size = new System.Drawing.Size(308, 20);
-			this.date_location.TabIndex = 11;
-			this.date_location.ValueChanged += new System.EventHandler(this.date_location_ValueChanged);
+			this.date_location.TabIndex = 10;
 			// 
 			// UserForm
 			// 
@@ -608,7 +577,6 @@
 			this.table_main.ResumeLayout(false);
 			this.table_main.PerformLayout();
 			this.tableLayoutPanel3.ResumeLayout(false);
-			this.tableLayoutPanel3.PerformLayout();
 			this.tableLayoutPanel4.ResumeLayout(false);
 			this.tableLayoutPanel4.PerformLayout();
 			this.table_name.ResumeLayout(false);
@@ -626,10 +594,8 @@
 		private System.Windows.Forms.TableLayoutPanel table_buttons;
 		private System.Windows.Forms.Button button_save;
 		private System.Windows.Forms.Button button_cancel;
-		private System.Windows.Forms.TextBox txt_display;
 		private System.Windows.Forms.TextBox txt_pass;
 		private System.Windows.Forms.TextBox txt_user;
-		private System.Windows.Forms.Label lbl_display;
 		private System.Windows.Forms.Label lbl_name;
 		private System.Windows.Forms.Label lbl_pass;
 		private System.Windows.Forms.Label lbl_user;
@@ -643,7 +609,6 @@
 		private System.Windows.Forms.Label lbl_description;
 		private System.Windows.Forms.Label lbl_preference;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
-		private System.Windows.Forms.TextBox txt_preference;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
 		private System.Windows.Forms.TextBox txt_description;
 		private System.Windows.Forms.TableLayoutPanel table_name;
@@ -658,10 +623,11 @@
 		private System.Windows.Forms.Button btn_pref_add;
 		private System.Windows.Forms.Button btn_pref_del;
 		private System.Windows.Forms.Button btn_pref_edit;
-		private System.Windows.Forms.Button btn_desc_add;
-		private System.Windows.Forms.Button btn_desc_del;
 		private System.Windows.Forms.Button btn_desc_edit;
 		private System.Windows.Forms.NumericUpDown num_lat;
 		private System.Windows.Forms.NumericUpDown num_lon;
+		private System.Windows.Forms.ComboBox drop_preference;
+		private System.Windows.Forms.Button btn_desc_add;
+		private System.Windows.Forms.Button btn_desc_del;
 	}
 }
