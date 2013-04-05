@@ -1,0 +1,12 @@
+C:\Users\Philip\Documents\GitHub\stalkr\Visual Studio\StalkrAdminTool\StalkrAdminTool\bin\Release\StalkrAdminTool.exe.config
+C:\Users\Philip\Documents\GitHub\stalkr\Visual Studio\StalkrAdminTool\StalkrAdminTool\bin\Release\StalkrAdminTool.exe
+C:\Users\Philip\Documents\GitHub\stalkr\Visual Studio\StalkrAdminTool\StalkrAdminTool\bin\Release\StalkrAdminTool.pdb
+C:\Users\Philip\Documents\GitHub\stalkr\Visual Studio\StalkrAdminTool\StalkrAdminTool\bin\Release\MySql.Data.dll
+C:\Users\Philip\Documents\GitHub\stalkr\Visual Studio\StalkrAdminTool\StalkrAdminTool\obj\Release\StalkrAdminTool.Controls.EnumSelector.resources
+C:\Users\Philip\Documents\GitHub\stalkr\Visual Studio\StalkrAdminTool\StalkrAdminTool\obj\Release\StalkrAdminTool.DescriptionForm.resources
+C:\Users\Philip\Documents\GitHub\stalkr\Visual Studio\StalkrAdminTool\StalkrAdminTool\obj\Release\StalkrAdminTool.MainForm.resources
+C:\Users\Philip\Documents\GitHub\stalkr\Visual Studio\StalkrAdminTool\StalkrAdminTool\obj\Release\StalkrAdminTool.Properties.Resources.resources
+C:\Users\Philip\Documents\GitHub\stalkr\Visual Studio\StalkrAdminTool\StalkrAdminTool\obj\Release\StalkrAdminTool.UserForm.resources
+C:\Users\Philip\Documents\GitHub\stalkr\Visual Studio\StalkrAdminTool\StalkrAdminTool\obj\Release\StalkrAdminTool.csproj.GenerateResource.Cache
+C:\Users\Philip\Documents\GitHub\stalkr\Visual Studio\StalkrAdminTool\StalkrAdminTool\obj\Release\StalkrAdminTool.exe
+C:\Users\Philip\Documents\GitHub\stalkr\Visual Studio\StalkrAdminTool\StalkrAdminTool\obj\Release\StalkrAdminTool.pdb

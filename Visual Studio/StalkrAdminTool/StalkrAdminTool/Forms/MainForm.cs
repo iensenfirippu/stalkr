@@ -20,6 +20,7 @@ namespace StalkrAdminTool
 		private static string LOADFAIL = "Couldn't connect to database";
 		private static string USEROK = "User object \"{0}\" successfully changed";
 		private static string USERCANCEL = "User edit for object \"{0}\" was cancelled";
+		private static string NOSELECTEDUSER = "No user object selected, please select or create a user object and try again.";
 
 		#endregion
 
@@ -94,6 +95,10 @@ namespace StalkrAdminTool
 
 				DrawUserTable();
 			}
+			else
+			{
+				status_label.Text = NOSELECTEDUSER;
+			}
 		}
 
 		/// <summary>
@@ -102,18 +107,25 @@ namespace StalkrAdminTool
 		/// <returns>A user object</returns>
 		private User GetSelectedUserObject()
 		{
-			// Finds the desired user object from the selected index in the gridview
-			Guid userid = (Guid)dgv_main.SelectedRows[0].Cells[0].Value;
-			User user = null;
-			for (int i = 0; i < userlist.Count; i++)
+			try
 			{
-				if (userlist[i].UniqueID == userid)
+				// Finds the desired user object from the selected index in the gridview
+				Guid userid = (Guid)dgv_main.SelectedRows[0].Cells[0].Value;
+				User user = null;
+				for (int i = 0; i < userlist.Count; i++)
 				{
-					user = userlist[i];
-					i = userlist.Count;
+					if (userlist[i].UniqueID == userid)
+					{
+						user = userlist[i];
+						i = userlist.Count;
+					}
 				}
+				return user;
 			}
-			return user;
+			catch (Exception)
+			{
+				return null;
+			}
 		}
 
 		#endregion
@@ -151,8 +163,15 @@ namespace StalkrAdminTool
 		{
 			// Deletes the selected user from the userlist and reloads the gridview
 			User user = GetSelectedUserObject();
-			userlist.Remove(user);
-			DrawUserTable();
+			if (user != null)
+			{
+				userlist.Remove(user);
+				DrawUserTable();
+			}
+			else
+			{
+				status_label.Text = NOSELECTEDUSER;
+			}
 		}
 
 		// Event fired when the "Edit User" option is pressed

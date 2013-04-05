@@ -30,7 +30,6 @@ namespace StalkrAdminTool
 		{
 			InitializeComponent();
 			_user = user;
-			_altered = new bool[] { false, false, false, false, false, false, false, false, false, false, false };
 
 			txt_guid.Text = _user.UniqueID.ToString().ToUpper();
 			txt_email.Text = _user.Email;
@@ -119,12 +118,7 @@ namespace StalkrAdminTool
 		private void btn_desc_edit_Click(object sender, EventArgs e)
 		{
 			DescriptionForm form = new DescriptionForm(_user.Description, false);
-			DialogResult dr = form.ShowDialog();
-
-			if (dr == System.Windows.Forms.DialogResult.OK)
-			{
-				_altered[8] = true;
-			}
+			form.ShowDialog();
 		}
 
 		private void btn_pref_add_Click(object sender, EventArgs e)
