@@ -14,7 +14,6 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.UUID;
 import stalkrlib.Description.Area;
 import stalkrlib.Description.Drinking;
 import stalkrlib.Description.Gender;
@@ -30,7 +29,6 @@ public class UserMapper {
     private final String IP_ADDRESS = "localhost";
     private final String USERNAME = "root";
     private final String PASSWORD = "";
-    private final int IP_PORT = 80;
     private Connection con;
     private Statement sta;
     
@@ -233,4 +231,9 @@ public class UserMapper {
             return passwordMatch;
         }
      }
+    
+    public void updateUser(User user){
+        //EXAMPLE 1: int i = Gender.FEMALE.ordinal(); ENUM -> INT
+        //EXAMPLE 2: Gender.values()[i] INT -> ENUM
+    }
 }
