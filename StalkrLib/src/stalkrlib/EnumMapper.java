@@ -11,9 +11,9 @@ import java.util.ArrayList;
  * @author Sommer
  */
 
-public class EnumMapper <T extends Enum>{
+public class EnumMapper {
     
-    public ArrayList<Enum> stringToEnumList(T e, String s){
+    public static ArrayList<Enum> stringToEnumList(Enum e, String s){
         Enum[] ea = e.getClass().getEnumConstants();
         char[] ca = s.toCharArray();
         ArrayList<Enum> enums = new ArrayList();
@@ -25,12 +25,17 @@ public class EnumMapper <T extends Enum>{
         return enums;
     }
     
-    public String enumListToString(T e, ArrayList<Enum> enums){
+    public static String enumListToString(Enum e, ArrayList<Enum> enums){
         Enum[] ea = e.getClass().getEnumConstants();
         String s = "";
+        int j = 0;
         for(int i = 0; i < ea.length; i++){
-            if(enums.get(i) == ea[i]){
+            if(j == enums.size()){
+                s = s + "0";
+            }
+            else if(enums.get(j) == ea[i]){
                 s = s + "1";
+                j++;
             }
             else{
                 s = s + "0";
@@ -38,8 +43,5 @@ public class EnumMapper <T extends Enum>{
         }
         return s;
     }
-
-    
-    
     
 }

@@ -2,8 +2,6 @@ package stalkrlib;
 
 import java.util.ArrayList;
 import java.util.UUID;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -17,25 +15,19 @@ public class Description {
     public enum Drinking{ NO, YES }
     public enum Sexuality{ ASEXUAL, HETERO, HOMO, BISEXUAL }
     
-    private Gender gender;
+    private ArrayList<Enum> gender;
     private Range age;
-    private Area area;
-    private Smoking smoking;
-    private Drinking drinking;
-    private Sexuality sexuality;
+    private ArrayList<Enum> area;
+    private ArrayList<Enum> smoking;
+    private ArrayList<Enum> drinking;
+    private ArrayList<Enum> sexuality;
     private String id;
 
-    public Description(Gender gender, Range age, Area area, Smoking smoking, Drinking drinking, Sexuality sexuality) {
-        this.gender = gender;
-        this.age = age;
-        this.area = area;
-        this.smoking = smoking;
-        this.drinking = drinking;
-        this.sexuality = sexuality;
-        this.id = UUID.randomUUID().toString();
-    }
+    public Description(){
     
-    public Description(String id, Gender gender, Range age, Area area, Smoking smoking, Drinking drinking, Sexuality sexuality) {
+    }
+
+    public Description(String id, ArrayList<Enum> gender, Range age, ArrayList<Enum> area, ArrayList<Enum> smoking, ArrayList<Enum> drinking, ArrayList<Enum> sexuality) {
         this.gender = gender;
         this.age = age;
         this.area = area;
@@ -45,47 +37,25 @@ public class Description {
         this.id = id;
     }
     
+     public Description(ArrayList<Enum> gender, Range age, ArrayList<Enum> area, ArrayList<Enum> smoking, ArrayList<Enum> drinking, ArrayList<Enum> sexuality) {
+        this.gender = gender;
+        this.age = age;
+        this.area = area;
+        this.smoking = smoking;
+        this.drinking = drinking;
+        this.sexuality = sexuality;
+        this.id = UUID.randomUUID().toString();
+    }
+    
     public double comparePreference(Description stranger){        
-        int searchParams = 6;
-        int matches = 0;
-        
-        try {
-            if(age.isWithinRange(stranger.age.getMin())){
-                matches++;
-            }
-        } 
-        catch (MaxIsMinException ex) {
-            return 0;
-        }
-        
-        if(gender == stranger.gender){
-            matches++;
-        }
-        
-        if(area == stranger.area){
-            matches++;
-        }
-        
-        if(smoking == stranger.smoking){
-            matches++;
-        }
-        
-        if(drinking == stranger.drinking){
-            matches++;
-        }
-        
-        if(sexuality == stranger.sexuality){
-            matches++;
-        }
-        
-        return (matches / searchParams) * 100;
+        return -1.0;
     }
 
-    public Gender getGender() {
+    public ArrayList<Enum> getGender() {
         return gender;
     }
 
-    public void setGender(Gender gender) {
+    public void setGender(ArrayList<Enum> gender) {
         this.gender = gender;
     }
 
@@ -97,40 +67,44 @@ public class Description {
         this.age = age;
     }
 
-    public Area getArea() {
+    public ArrayList<Enum> getArea() {
         return area;
     }
 
-    public void setArea(Area area) {
+    public void setArea(ArrayList<Enum> area) {
         this.area = area;
     }
 
-    public Smoking getSmoking() {
+    public ArrayList<Enum> getSmoking() {
         return smoking;
     }
 
-    public void setSmoking(Smoking smoking) {
+    public void setSmoking(ArrayList<Enum> smoking) {
         this.smoking = smoking;
     }
 
-    public Drinking getDrinking() {
+    public ArrayList<Enum> getDrinking() {
         return drinking;
     }
 
-    public void setDrinking(Drinking drinking) {
+    public void setDrinking(ArrayList<Enum> drinking) {
         this.drinking = drinking;
     }
 
-    public Sexuality getSexuality() {
+    public ArrayList<Enum> getSexuality() {
         return sexuality;
     }
 
-    public void setSexuality(Sexuality sexuality) {
+    public void setSexuality(ArrayList<Enum> sexuality) {
         this.sexuality = sexuality;
     }
 
     public String getId() {
         return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
 }
