@@ -50,7 +50,7 @@ public class Javalibtest
 		p1.setDrinking(EnumMapper.stringToEnumList(Drinking.NO, "11"));
 		u1.getPreferences().add(p1);
 
-		System.out.println("Converting user \"" + u1.getUsername() + "\" to string:");
+		/*System.out.println("Converting user \"" + u1.getUsername() + "\" to string:");
 		System.out.println("Email: " + u1.getEmail());
 		System.out.println("Description title: " + u1.getDescription().getTitle());
 		System.out.println("Minimum age: " + u1.getDescription().getAge().getMin());
@@ -72,6 +72,26 @@ public class Javalibtest
 		System.out.println("Minimum age: " + u2.getDescription().getAge().getMin());
 		System.out.println("Sexuality: " + EnumMapper.enumListToString(Sexuality.ASEXUAL, u2.getDescription().getSexuality()));
 		System.out.println("Sexuality pref: " + EnumMapper.enumListToString(Sexuality.ASEXUAL, u2.getPreference(0).getSexuality()));
-		System.out.println("Preferenece title: " + u2.getPreference(0).getTitle());
+		System.out.println("Preferenece title: " + u2.getPreference(0).getTitle());*/
+		
+        /*StringBuilder sb = new StringBuilder();
+        // SELECT all fields in user
+        sb.append("SELECT user.*, ");
+        // SELECT all but d_id from description
+        sb.append("dscr.timestamp, dscr.title, dscr.age, dscr.age_max, dscr.gender, ");
+        sb.append("dscr.sexuality, dscr.region, dscr.smoking, dscr.drinking, ");
+        // SELECT all (with alias) from "preference"
+        sb.append("pref.d_id AS p_id, pref.timestamp AS p_timestamp, pref.title AS p_title, ");
+        sb.append("pref.age AS p_age, pref.age_max AS p_agemax, ");
+        sb.append("pref.gender AS p_gender, pref.sexuality AS p_sexuality, ");
+        sb.append("pref.region AS p_region, ");
+        sb.append("pref.smoking AS p_smoking, pref.drinking AS p_drinking ");
+        // FROM user table
+        sb.append("FROM user ");
+        sb.append("INNER JOIN description AS dscr ON user.u_id = dscr.d_id ");
+        sb.append("INNER JOIN userdescription AS ud ON user.u_id = ud.u_id ");
+        sb.append("INNER JOIN description AS pref ON ud.d_id = pref.d_id ");
+        sb.append("WHERE user.u_id = '").append("1A6747B2-931C-11E2-AE68-D7146188709B").append("' ");
+		System.out.println(sb.toString());*/
 	}
 }
