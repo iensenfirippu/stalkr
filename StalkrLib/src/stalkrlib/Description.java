@@ -1,6 +1,7 @@
 package stalkrlib;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.UUID;
 
 /**
@@ -22,12 +23,14 @@ public class Description {
     private ArrayList<Enum> drinking;
     private ArrayList<Enum> sexuality;
     private String id;
+	private String title;
+	private Date timestamp;
 
     public Description(){
     
     }
 
-    public Description(String id, ArrayList<Enum> gender, Range age, ArrayList<Enum> area, ArrayList<Enum> smoking, ArrayList<Enum> drinking, ArrayList<Enum> sexuality) {
+    public Description(String id, String title, Date timestamp, ArrayList<Enum> gender, Range age, ArrayList<Enum> area, ArrayList<Enum> smoking, ArrayList<Enum> drinking, ArrayList<Enum> sexuality) {
         this.gender = gender;
         this.age = age;
         this.area = area;
@@ -35,9 +38,11 @@ public class Description {
         this.drinking = drinking;
         this.sexuality = sexuality;
         this.id = id;
+		this.title = title;
+		this.timestamp = timestamp;
     }
     
-     public Description(ArrayList<Enum> gender, Range age, ArrayList<Enum> area, ArrayList<Enum> smoking, ArrayList<Enum> drinking, ArrayList<Enum> sexuality) {
+     public Description(String title, Date timestamp, ArrayList<Enum> gender, Range age, ArrayList<Enum> area, ArrayList<Enum> smoking, ArrayList<Enum> drinking, ArrayList<Enum> sexuality) {
         this.gender = gender;
         this.age = age;
         this.area = area;
@@ -45,6 +50,8 @@ public class Description {
         this.drinking = drinking;
         this.sexuality = sexuality;
         this.id = UUID.randomUUID().toString();
+		this.title = title;
+		this.timestamp = timestamp;
     }
     
     public double comparePreference(Description stranger){        
@@ -105,6 +112,22 @@ public class Description {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public Date getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(Date timestamp) {
+        this.timestamp = timestamp;
     }
 
 }
