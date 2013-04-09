@@ -51,40 +51,6 @@ public class UserMapper {
         }
     }
     
-    public String test(){
-        String result = "couldn't connect";
-        User u = new User(UUID.randomUUID().toString());
-		
-        StringBuilder sb = new StringBuilder();
-        sb.append("SELECT username FROM user LIMIT 0,1");
-        
-        try
-		{
-            connect();
-            ResultSet rs = sta.executeQuery(sb.toString());
-
-			while (rs.next())
-			{
-				u.setUsername(rs.getString("username"));
-			}
-        }
-        catch(SQLException ex)
-		{
-			result = "SQL error: " + ex.getErrorCode();
-			//ex.printStackTrace();
-        }
-        catch(Exception ex)
-		{
-			result = ex.toString();
-			//ex.printStackTrace();
-        }
-        finally
-		{
-            disconnect();
-            return u.getUsername() + ": " + u.getId();
-        }
-     }
-    
     public boolean saveUser(String userasstring){
 		boolean exists = false;
 		boolean result = false;
@@ -138,49 +104,49 @@ public class UserMapper {
                 + "password, firstname, lastname, birthday, "
                 + "loc_lat, loc_lon, loc_tim"
                 + ") VALUES (");
-        sb1.append("'")	.append(user.getId())										.append("', ");
-        sb1.append("'")	.append(user.getEmail())									.append("', ");
-        sb1.append("'")	.append(user.getUsername())									.append("', ");
-        sb1.append("'")	.append(user.getPassword())									.append("', ");
-        sb1.append("'")	.append(user.getFirstName())								.append("', ");
-        sb1.append("'")	.append(user.getLastName())									.append("', ");
-        sb1				.append(user.getBirthdate().getTime() / 1000)				.append(", ");
-        sb1				.append(user.getLastLocation().getLatitude())				.append(", ");
-        sb1				.append(user.getLastLocation().getLongitude())				.append(", ");
-        sb1				.append(user.getLastLocation().getTime().getTime() / 1000)	;
+        sb1.append("'").append(user.getId()).append("', ");
+        sb1.append("'").append(user.getEmail()).append("', ");
+        sb1.append("'").append(user.getUsername()).append("', ");
+        sb1.append("'").append(user.getPassword()).append("', ");
+        sb1.append("'").append(user.getFirstName()).append("', ");
+        sb1.append("'").append(user.getLastName()).append("', ");
+        sb1.append(user.getBirthdate().getTime() / 1000).append(", ");
+        sb1.append(user.getLastLocation().getLatitude()).append(", ");
+        sb1.append(user.getLastLocation().getLongitude()).append(", ");
+        sb1.append(user.getLastLocation().getTime().getTime() / 1000);
         sb1.append(");");
         
         sb2.append("INSERT INTO description (d_id, timestamp, title, age, age_max, "
                 + "gender, sexuality, region, smoking, drinking) VALUES (");
-        sb2.append("'")	.append(user.getDescription().getId())															.append("', ");
-        sb2				.append(user.getPreference(0).getTimestamp().getTime() / 1000)									.append(", ");
-        sb2.append("'")	.append(user.getPreference(0).getTitle())														.append("', ");
-        sb2				.append(user.getDescription().getAge().getMin())												.append(", ");
-        sb2				.append(user.getDescription().getAge().getMax())												.append(", ");
-        sb2.append("'")	.append(EnumMapper.enumListToString(Gender.OTHER, user.getDescription().getGender()))			.append("', ");
-        sb2.append("'")	.append(EnumMapper.enumListToString(Sexuality.ASEXUAL, user.getDescription().getSexuality()))	.append("', ");
-        sb2.append("'")	.append(EnumMapper.enumListToString(Area.NOTSPECIFIED, user.getDescription().getArea()))		.append("', ");
-        sb2.append("'")	.append(EnumMapper.enumListToString(Smoking.NO, user.getDescription().getSmoking()))			.append("', ");
-        sb2.append("'")	.append(EnumMapper.enumListToString(Drinking.NO, user.getDescription().getDrinking()))			.append("'");
+        sb2.append("'").append(user.getDescription().getId()).append("', ");
+        sb2.append(user.getPreference(0).getTimestamp().getTime() / 1000).append(", ");
+        sb2.append("'").append(user.getPreference(0).getTitle()).append("', ");
+        sb2.append(user.getDescription().getAge().getMin()).append(", ");
+        sb2.append(user.getDescription().getAge().getMax()).append(", ");
+        sb2.append("'").append(EnumMapper.enumListToString(Gender.OTHER, user.getDescription().getGender())).append("', ");
+        sb2.append("'").append(EnumMapper.enumListToString(Sexuality.ASEXUAL, user.getDescription().getSexuality())).append("', ");
+        sb2.append("'").append(EnumMapper.enumListToString(Area.NOTSPECIFIED, user.getDescription().getArea())).append("', ");
+        sb2.append("'").append(EnumMapper.enumListToString(Smoking.NO, user.getDescription().getSmoking())).append("', ");
+        sb2.append("'").append(EnumMapper.enumListToString(Drinking.NO, user.getDescription().getDrinking())).append("'");
 		sb2.append(");");
 		
         sb3.append("INSERT INTO description (d_id, timestamp, title, age, age_max, "
                 + "gender, sexuality, region, smoking, drinking) VALUES (");
-        sb3.append("'")	.append(user.getPreference(0).getId())															.append("', ");
-        sb3				.append(user.getPreference(0).getTimestamp().getTime() / 1000)									.append(", ");
-        sb3.append("'")	.append(user.getPreference(0).getTitle())														.append("', ");
-        sb3				.append(user.getPreference(0).getAge().getMin())												.append(", ");
-        sb3				.append(user.getPreference(0).getAge().getMax())												.append(", ");
-        sb3.append("'")	.append(EnumMapper.enumListToString(Gender.OTHER, user.getPreference(0).getGender()))			.append("', ");
-        sb3.append("'")	.append(EnumMapper.enumListToString(Sexuality.ASEXUAL, user.getPreference(0).getSexuality()))	.append("', ");
-        sb3.append("'")	.append(EnumMapper.enumListToString(Area.NOTSPECIFIED, user.getPreference(0).getArea()))		.append("', ");
-        sb3.append("'")	.append(EnumMapper.enumListToString(Smoking.NO, user.getPreference(0).getSmoking()))			.append("', ");
-        sb3.append("'")	.append(EnumMapper.enumListToString(Drinking.NO, user.getPreference(0).getDrinking()))			.append("'");
+        sb3.append("'").append(user.getPreference(0).getId()).append("', ");
+        sb3.append(user.getPreference(0).getTimestamp().getTime() / 1000).append(", ");
+        sb3.append("'").append(user.getPreference(0).getTitle()).append("', ");
+        sb3.append(user.getPreference(0).getAge().getMin()).append(", ");
+        sb3.append(user.getPreference(0).getAge().getMax()).append(", ");
+        sb3.append("'").append(EnumMapper.enumListToString(Gender.OTHER, user.getPreference(0).getGender())).append("', ");
+        sb3.append("'").append(EnumMapper.enumListToString(Sexuality.ASEXUAL, user.getPreference(0).getSexuality())).append("', ");
+        sb3.append("'").append(EnumMapper.enumListToString(Area.NOTSPECIFIED, user.getPreference(0).getArea())).append("', ");
+        sb3.append("'").append(EnumMapper.enumListToString(Smoking.NO, user.getPreference(0).getSmoking())).append("', ");
+        sb3.append("'").append(EnumMapper.enumListToString(Drinking.NO, user.getPreference(0).getDrinking())).append("'");
 		sb3.append(");");
 		
         sb4.append("INSERT INTO userdescription (u_id, d_id) VALUES (");
-        sb4.append("'")	.append(user.getId())										.append("', ");
-        sb4.append("'")	.append(user.getPreference(0).getId())						.append("');");
+        sb4.append("'").append(user.getId()).append("', ");
+        sb4.append("'").append(user.getPreference(0).getId()).append("');");
         
         try{
             connect();
@@ -215,27 +181,27 @@ public class UserMapper {
         StringBuilder sb3 = new StringBuilder();
         
         sb1.append("UPDATE user SET ");
-        sb1.append("email='")		.append(user.getEmail())									.append("',");
-        sb1.append("username='")	.append(user.getUsername())									.append("',");
-        sb1.append("password='")	.append(user.getPassword())									.append("',");
-        sb1.append("firstname='")	.append(user.getFirstName())								.append("',");
-        sb1.append("lastname='")	.append(user.getLastName())									.append("',");
-        sb1.append("birthday=")		.append(user.getBirthdate().getTime() / 1000)				.append(",");
-        sb1.append("loc_lat=")		.append(user.getLastLocation().getLatitude())				.append(",");
-        sb1.append("loc_lon=")		.append(user.getLastLocation().getLongitude())				.append(",");
-        sb1.append("loc_tim=")		.append(user.getLastLocation().getTime().getTime() / 1000)	.append(" ");
-        sb1.append("WHERE u_id = '").append(user.getId())										.append("';");
+        sb1.append("email='").append(user.getEmail()).append("',");
+        sb1.append("username='").append(user.getUsername()).append("',");
+        sb1.append("password='").append(user.getPassword()).append("',");
+        sb1.append("firstname='").append(user.getFirstName()).append("',");
+        sb1.append("lastname='").append(user.getLastName()).append("',");
+        sb1.append("birthday=").append(user.getBirthdate().getTime() / 1000).append(",");
+        sb1.append("loc_lat=").append(user.getLastLocation().getLatitude()).append(",");
+        sb1.append("loc_lon=").append(user.getLastLocation().getLongitude()).append(",");
+        sb1.append("loc_tim=").append(user.getLastLocation().getTime().getTime() / 1000).append(" ");
+        sb1.append("WHERE u_id = '").append(user.getId()).append("';");
 
         sb2.append("UPDATE description SET ");
-        sb2.append("title='")		.append(user.getDescription().getTitle())														.append("',");
-        sb2.append("timestamp=")	.append(user.getDescription().getTimestamp().getTime() / 1000)									.append(",");
-        sb2.append("age=")			.append(user.getDescription().getAge().getMin())												.append(",");
-        sb2.append("age_max=")		.append(user.getDescription().getAge().getMax())												.append(",");
-        sb2.append("gender='")		.append(EnumMapper.enumListToString(Gender.OTHER, user.getDescription().getGender()))			.append("',");
-        sb2.append("sexuality='")	.append(EnumMapper.enumListToString(Sexuality.ASEXUAL, user.getDescription().getSexuality()))	.append("',");
-        sb2.append("region='")		.append(EnumMapper.enumListToString(Area.NOTSPECIFIED, user.getDescription().getArea()))		.append("',");
-        sb2.append("smoking='")		.append(EnumMapper.enumListToString(Smoking.NO, user.getDescription().getSmoking()))			.append("',");
-        sb2.append("drinking='")	.append(EnumMapper.enumListToString(Drinking.NO, user.getDescription().getDrinking()))			.append("' ");
+        sb2.append("title='").append(user.getDescription().getTitle()).append("',");
+        sb2.append("timestamp=").append(user.getDescription().getTimestamp().getTime() / 1000).append(",");
+        sb2.append("age=").append(user.getDescription().getAge().getMin()).append(",");
+        sb2.append("age_max=").append(user.getDescription().getAge().getMax()).append(",");
+        sb2.append("gender='").append(EnumMapper.enumListToString(Gender.OTHER, user.getDescription().getGender())).append("',");
+        sb2.append("sexuality='").append(EnumMapper.enumListToString(Sexuality.ASEXUAL, user.getDescription().getSexuality())).append("',");
+        sb2.append("region='").append(EnumMapper.enumListToString(Area.NOTSPECIFIED, user.getDescription().getArea())).append("',");
+        sb2.append("smoking='").append(EnumMapper.enumListToString(Smoking.NO, user.getDescription().getSmoking())).append("',");
+        sb2.append("drinking='").append(EnumMapper.enumListToString(Drinking.NO, user.getDescription().getDrinking())).append("' ");
         sb2.append("WHERE d_id = '").append(user.getDescription().getId())															.append("';");
 
         sb3.append("UPDATE description SET ");
@@ -286,7 +252,7 @@ public class UserMapper {
 
         sb1.append("DELETE FROM description WHERE ");
         sb1.append("d_id = '").append(uuid).append("'");
-        sb2.append("DELETE pref.* FROM description AS pref");
+        sb2.append("DELETE pref.* FROM description AS pref ");
         sb2.append("INNER JOIN userdescription AS ud ON pref.d_id = ud.d_id ");
         sb2.append("WHERE ud.u_id = '").append(uuid).append("'");
         sb3.append("DELETE FROM userdescription WHERE ");
@@ -466,18 +432,20 @@ public class UserMapper {
         }
     }
     
-    public String verifyLogin(String username, String password){
+    public boolean verifyLogin(String username, String password){
         boolean passwordMatch = false;
         
         StringBuilder sb = new StringBuilder();
-        sb.append("SELECT COUNT (guid) FROM user WHERE ");
-        sb.append("username ='").append(username).append("' AND ");
-        sb.append("password ='").append(password).append("'");
+        sb.append("SELECT COUNT(u_id) AS number FROM user WHERE ");
+        sb.append("username = '").append(username).append("' AND ");
+        sb.append("password = '").append(password).append("'");
         
         try{
             connect();
             ResultSet rs = sta.executeQuery(sb.toString());
-            if(rs.getInt(1) == 1){
+			rs.first();
+			
+            if(rs.getInt("number") == 1){
                 passwordMatch = true;
             }
         }
@@ -486,8 +454,7 @@ public class UserMapper {
         }
         finally{
             disconnect();
-            //return passwordMatch;
-			return sb.toString();
+            return passwordMatch;
         }
      }
 }

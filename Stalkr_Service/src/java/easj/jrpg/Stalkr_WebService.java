@@ -11,16 +11,9 @@ import javax.jws.WebParam;
  */
 @WebService(serviceName = "WS")
 public class Stalkr_WebService {
-
-    @WebMethod(operationName = "test")
-    public String test()
-	{
-		UserMapper um = new UserMapper();
-		return um.test();
-    }
 	
     @WebMethod(operationName = "verifyLogin")
-    public String verifyLogin(@WebParam(name = "user") String user, @WebParam(name = "pass") String pass)
+    public boolean verifyLogin(@WebParam(name = "user") String user, @WebParam(name = "pass") String pass)
 	{
 		UserMapper um = new UserMapper();
 		return um.verifyLogin(user, pass);
@@ -52,10 +45,10 @@ public class Stalkr_WebService {
 	{
 		boolean result = false;
 		UserMapper um = new UserMapper();
-		//if (um.verifyLogin(user, pass))
-		//{
+		if (um.verifyLogin(user, pass))
+		{
 			result = um.deleteUser(id);
-		//}
+		}
 		return result;
     }
 }
