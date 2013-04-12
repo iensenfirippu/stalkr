@@ -1,0 +1,87 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package easj.jrpg.stalkrlib;
+
+import java.util.ArrayList;
+
+/**
+ * Class describing the Gender(s) of a user or preference
+ * @author Philip
+ */
+@SuppressWarnings("rawtypes")
+public class EnumList<T extends Enum>
+{
+	// Enums
+	public enum GenderType { OTHER, MALE, FEMALE, HERMAPHRODITE, TRANSGENDER }
+	public enum SexualityType { ASEXUAL, HETERO, HOMO, BISEXUAL }
+	public enum AreaType { UNSPECIFIED, JYLLAND, FYN, SJAELLAND, BORNHOLM }
+	public enum SmokingType { NO, YES, OCCASIONALLY }
+	public enum DrinkingType { NO, YES }
+	
+	// Class global variables
+	private Class _t;
+	private char[] _chars;
+
+	// Constructors
+	public EnumList(T single, boolean addtolist)
+	{
+		_t = single.getClass();
+		T[] enums = (T[])_t.getEnumConstants();
+		_chars = new char[enums.length];
+		for (int i = 0; i < enums.length; i++) { _chars[i] = '0'; }
+		if (addtolist) { _chars[single.ordinal()] = '1'; }
+	}
+	
+	// Methods
+	@Override
+	public String toString() { return new String(_chars); }
+	
+	public void add(T single) { _chars[single.ordinal()] = '1'; }
+	public void remove(T single) { _chars[single.ordinal()] = '0'; }
+	public void fill() { for (char c : _chars) { c = '1'; } }
+	public void clear() { for (char c : _chars) { c = '0'; } }
+	public boolean contains(T t) { return _chars[t.ordinal()] == '1'; }
+	
+	public void loadString(String s) { if (s.length() == _chars.length) { _chars = s.toCharArray(); } }
+	public void loadList(ArrayList<T> list) { clear(); for (T t : list) { _chars[t.ordinal()] = '1'; } }
+	
+	public ArrayList<T> getEnumConstants()
+	{
+		ArrayList<T> list = new ArrayList<T>();
+		for (T t : (T[])_t.getEnumConstants())
+		{
+			list.add(t);
+		}
+		return list;
+	}
+	
+	public ArrayList<T> toList()
+	{
+		ArrayList<T> list = new ArrayList<T>();
+		T[] enums = (T[])_t.getEnumConstants();
+		for (int i = 0; i < _chars.length; i++)
+		{
+			if (_chars[i] == '1')
+			{
+				list.add(enums[i]);
+			}
+		}
+		return list;
+	}
+	
+	public ArrayList<String> toStringList()
+	{
+		ArrayList<String> list = new ArrayList<String>();
+		T[] enums = (T[])_t.getEnumConstants();
+		for (int i = 0; i < _chars.length; i++)
+		{
+			if (_chars[i] == '1')
+			{
+				list.add(enums[i].toString());
+			}
+		}
+		return list;
+	}
+}

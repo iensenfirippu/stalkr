@@ -1,11 +1,5 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package easj.jrpg.mappers;
 
-import easj.jrpg.stalkrlib.*;
-import easj.jrpg.stalkrlib.enums.*;
 import java.sql.Connection;
 import java.util.Date;
 import java.sql.DriverManager;
@@ -14,303 +8,292 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.UUID;
+import easj.jrpg.stalkrlib.*;
+import easj.jrpg.stalkrlib.EnumList.*;
 
 /**
  *
- * @author Sommer
+ * @author Philip
  */
 public class UserMapper
 {
-    private final String DRIVER = "com.mysql.jdbc.Driver";
-    private final String SERVER = "localhost";
-    private final String DATABASE = "stalkr";
-    private final String USERNAME = "root";
-    private final String PASSWORD = "";
-    private Connection con;
-    private Statement sta;
-    
-    private void connect()
+	private final String DRIVER = "com.mysql.jdbc.Driver";
+	private final String SERVER = "localhost:3306";
+	private final String DATABASE = "stalkr";
+	private final String USERNAME = "stalkr";
+	private final String PASSWORD = "DatabasePassword1";
+//	private final String USERNAME = "root";
+//	private final String PASSWORD = "";
+	private Connection con;
+	private Statement sta;
+	
+	/**
+	 * Connects to the database
+	 */
+	private void connect()
 	{
-        try
-		{
-            Class.forName(DRIVER);
-            con = DriverManager.getConnection("jdbc:mysql://" + SERVER + "/" + DATABASE + "?user=" + USERNAME + "&password=" + PASSWORD);
-            sta = con.createStatement();
-        }
-        catch(Exception e)
-		{
-            e.printStackTrace();
-        }
-    }
-    
-    private void disconnect()
-	{
-        try
-		{
-            sta.close();
-            sta = null;
-            con.close();
-            con = null;
-        }
-        catch(Exception e)
-		{
-            e.printStackTrace();
-        }
-    }
-    
-    public String test()
-	{
-        String result = "couldn't connect";
-        User u = new User();
-		
-        StringBuilder sb = new StringBuilder();
-        sb.append("SELECT username FROM user LIMIT 0,1");
-        
-        try
-		{
-            connect();
-            ResultSet rs = sta.executeQuery(sb.toString());
-
-			while (rs.next())
-			{
-				u.setUsername(rs.getString("username"));
-			}
-        }
-        catch(SQLException ex)
-		{
-			result = "SQL error: " + ex.getErrorCode();
-			//ex.printStackTrace();
-        }
-        catch(Exception ex)
-		{
-			result = ex.toString();
-			//ex.printStackTrace();
-        }
-        finally
-		{
-            disconnect();
-            return u.getUsername() + ": " + u.getUniqueID();
-        }
-     }
-    
-    public boolean verifyLogin(String username, String password)
-	{
-        boolean passwordMatch = false;
-        
-        StringBuilder sb = new StringBuilder();
-        sb.append("SELECT COUNT(guid) FROM user WHERE ");
-        sb.append("username ='").append(username).append("' AND ");
-        sb.append("password ='").append(password).append("'");
-        
-        try
-		{
-            connect();
-            ResultSet rs = sta.executeQuery(sb.toString());
-			rs.first();
-			
-            if(rs.getInt(1) == 1)
-			{
-                passwordMatch = true;
-            }
-        }
-        catch(Exception ex)
-		{
-            ex.printStackTrace();
-        }
-        finally
-		{
-            disconnect();
-            return passwordMatch;
-        }
-     }
-    
-    public boolean saveUser(User user)
-	{
-		boolean exists = false;
-		boolean result = false;
-		
-        StringBuilder sb = new StringBuilder();
-        sb.append("SELECT count(u_id) FROM user ");
-		sb.append("WHERE id = '").append(user.getUniqueID()).append("'");
-		
 		try
 		{
-			ResultSet rs = sta.executeQuery(sb.toString());
-			rs.first();
-			
-			if (rs.getInt(1) == 1)
-			{
-				exists = true;
-			}
+			Class.forName(DRIVER);
+			con = DriverManager.getConnection("jdbc:mysql://" + SERVER + "/" + DATABASE + "?user=" + USERNAME + "&password=" + PASSWORD);
+			sta = con.createStatement();
 		}
-        catch(Exception ex)
+		catch(Exception e)
 		{
-            ex.printStackTrace();
-        }
-        finally
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Closes the connection with the database
+	 */
+	private void disconnect()
+	{
+		try
 		{
-            disconnect();
-        }
+			sta.close();
+			sta = null;
+			con.close();
+			con = null;
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Saves a user to the database
+	 * @param userasstring The user as a string
+	 * @return true on success
+	 */
+	public boolean saveUser(String userasstring)
+	{
+		boolean result = false;
 		
-		if (exists)
+		boolean userexists = false;
+		boolean descriptionexists = false;
+		ArrayList<String> preferenceids = new ArrayList<String>();
+		User user = Tools.UserFromString(userasstring);
+		
+		if (user != null)
 		{
-			result = updateUser(user);
-		}
-		else
-		{
-			result = createUser(user);
+			StringBuilder sb1 = new StringBuilder();
+			StringBuilder sb2 = new StringBuilder();
+			StringBuilder sb3 = new StringBuilder();
+			
+			sb1.append("SELECT count(u_id) AS users FROM user ");
+			sb1.append("WHERE u_id = '").append(user.getUniqueID().toString()).append("';");
+			
+			sb2.append("SELECT count(d_id) AS descriptions FROM description ");
+			sb2.append("WHERE d_id = '").append(user.getUniqueID().toString()).append("';");
+			
+			sb3.append("SELECT d_id AS p_id FROM userdescription ");
+			sb3.append("WHERE u_id = '").append(user.getUniqueID().toString()).append("';");
+
+			try
+			{
+				connect();
+				ResultSet rs = sta.executeQuery(sb1.toString());
+				rs.first();
+				if (rs.getInt("users") == 1) { userexists = true; }
+				rs = sta.executeQuery(sb2.toString());
+				rs.first();
+				if (rs.getInt("descriptions") == 1) { descriptionexists = true; }
+				rs = sta.executeQuery(sb3.toString());
+				while (rs.next())
+				{
+					preferenceids.add(rs.getString("p_id"));
+				}
+			}
+			catch(Exception ex)
+			{
+				ex.printStackTrace();
+			}
+			finally
+			{
+				disconnect();
+			}
+
+			ArrayList<String> sqlstatements = new ArrayList<String>();
+			
+			// user UPDATE
+			if (userexists)			{ sqlstatements.add(makeStatement_UpdateUser(user)); }
+			// user INSERT
+			else					{ sqlstatements.add(makeStatement_InsertUser(user)); }
+			
+			// Description UPDATE
+			if (descriptionexists)	{ sqlstatements.add(makeStatement_UpdateDescription(user.getDescription())); }
+			// Description INSERT
+			else					{ sqlstatements.add(makeStatement_InsertDescription(user.getDescription())); }
+			
+			for (Description p : user.getPreferences())
+			{
+				// Preference UPDATE
+				if (preferenceids.contains(p.getUniqueID().toString()))
+				{
+					sqlstatements.add(makeStatement_UpdateDescription(p));
+					preferenceids.remove(p.getUniqueID().toString());
+				}
+				// Preference INSERT
+				else
+				{
+					sqlstatements.add(makeStatement_InsertDescription(p));
+					sqlstatements.add(makeStatement_InsertUserDescription(user.getUniqueID().toString(), p.getUniqueID().toString()));
+				}
+			}
+			// Preference DELETE
+			for (String id : preferenceids)
+			{
+				sqlstatements.add(makeStatement_DeleteDescription(id));
+				sqlstatements.add(makeStatement_DeleteUserDescription(id));
+			}
+
+			try
+			{
+				connect();
+				int rowsaffected = 0;
+				for (String statement : sqlstatements)
+				{
+					//System.out.println(statement);
+					rowsaffected += sta.executeUpdate(statement);
+				}
+				if (rowsaffected == (user.getPreferences().size() * 2) + (preferenceids.size() * 2) + 2)
+				{
+					result = true;
+				}
+			}
+			catch(Exception ex)
+			{
+				ex.printStackTrace();
+			}
+			finally
+			{
+				disconnect();
+				return result;
+			}
 		}
 		
 		return result;
 	}
-    
-    private boolean createUser(User user)
+	
+	private String makeStatement_InsertUser(User user)
 	{
-		boolean result = false;
+		StringBuilder sb = new StringBuilder();
 		
-        StringBuilder sb1 = new StringBuilder();
-        StringBuilder sb2 = new StringBuilder();
-        StringBuilder sb3 = new StringBuilder();
-        StringBuilder sb4 = new StringBuilder();
-        
-        sb1.append("INSERT INTO user (u_id, email, username, "
-                + "password, firstname, lastname, birthday, "
-                + "location_latitude, location_longitude, location_timestamp, "
-                + ") VALUES (");
-        sb1.append("'")	.append(user.getUniqueID())									.append("', ");
-        sb1.append("'")	.append(user.getEmail())									.append("', ");
-        sb1.append("'")	.append(user.getUsername())									.append("', ");
-        sb1.append("'")	.append(user.getPassword())									.append("', ");
-        sb1.append("'")	.append(user.getFirstName())								.append("', ");
-        sb1.append("'")	.append(user.getLastName())									.append("', ");
-        sb1				.append(Toolbelt.DateToUTS(user.getBirthday()))				.append(", ");
-        sb1				.append(user.getLocation().getLatitude())					.append(", ");
-        sb1				.append(user.getLocation().getLongitude())					.append(", ");
-        sb1				.append(Toolbelt.DateToUTS(user.getLocation().getTimeStamp())).append(");");
-        
-        sb2.append("INSERT INTO description (d_id, timestamp, age, age_max, "
-                + "gender, sexuality, region, smoking, drinking) VALUES (");
-        sb2.append("'")	.append(user.getDescription().getUniqueID())				.append("', ");
-        sb2				.append(user.getDescription().getAge().getMin())			.append(", ");
-        sb2				.append(user.getDescription().getAge().getMax())			.append(", ");
-        sb2.append("'")	.append(user.getDescription().getGender().toString())		.append("', ");
-        sb2.append("'")	.append(user.getDescription().getSexuality().toString())	.append("', ");
-        sb2.append("'")	.append(user.getDescription().getArea().toString())			.append("', ");
-        sb2.append("'")	.append(user.getDescription().getSmoking().toString())		.append("', ");
-        sb2.append("'")	.append(user.getDescription().getDrinking().toString())		.append("');");
+		sb.append("INSERT INTO user (u_id, email, username, "
+				+ "password, firstname, lastname, birthday, "
+				+ "loc_lat, loc_lon, loc_tim"
+				+ ") VALUES (");
+		sb.append("'")	.append(user.getUniqueID())										.append("', ");
+		sb.append("'")	.append(user.getEmail())										.append("', ");
+		sb.append("'")	.append(user.getUsername())										.append("', ");
+		sb.append("'")	.append(user.getPassword())										.append("', ");
+		sb.append("'")	.append(user.getFirstName())									.append("', ");
+		sb.append("'")	.append(user.getLastName())										.append("', ");
+		sb				.append(Tools.DateToUTS(user.getBirthday()))					.append(", ");
+		sb				.append(user.getLocation().getLatitude())						.append(", ");
+		sb				.append(user.getLocation().getLongitude())						.append(", ");
+		sb				.append(Tools.DateToUTS(user.getLocation().getTimeStamp()))		.append(");");
 		
-        sb3.append("INSERT INTO description (d_id, timestamp, age, age_max, "
-                + "gender, sexuality, region, smoking, drinking) VALUES (");
-        sb3.append("'")	.append(user.getPreference(0).getUniqueID())				.append("', ");
-        sb3				.append(user.getPreference(0).getAge().getMin())			.append(", ");
-        sb3				.append(user.getPreference(0).getAge().getMax())			.append(", ");
-        sb3.append("'")	.append(user.getPreference(0).getGender().toString())		.append("', ");
-        sb3.append("'")	.append(user.getPreference(0).getSexuality().toString())	.append("', ");
-        sb3.append("'")	.append(user.getPreference(0).getArea().toString())			.append("', ");
-        sb3.append("'")	.append(user.getPreference(0).getSmoking().toString())		.append("', ");
-        sb3.append("'")	.append(user.getPreference(0).getDrinking().toString())		.append("');");
-		
-        sb4.append("INSERT INTO userdescription (u_id, d_id) VALUES (");
-        sb4.append("'")	.append(user.getUniqueID())									.append("', ");
-        sb4.append("'")	.append(user.getPreference(0).getUniqueID())				.append("');");
-		
-        try
-		{
-            connect();
-			int rowsaffected = 0;
-            System.out.println(sb1.toString());
-            System.out.println(sb2.toString());
-            System.out.println(sb3.toString());
-            System.out.println(sb4.toString());
-            rowsaffected += sta.executeUpdate(sb1.toString());
-            rowsaffected += sta.executeUpdate(sb2.toString());
-            rowsaffected += sta.executeUpdate(sb3.toString());
-            rowsaffected += sta.executeUpdate(sb4.toString());
-			if (rowsaffected == 4)
-			{
-				result = true;
-			}
-        }
-        catch(Exception ex)
-		{
-            ex.printStackTrace();
-        }
-        finally
-		{
-            disconnect();
-			return result;
-        }
-    }
-    
-    private boolean updateUser(User user)
+		return sb.toString();
+	}
+	
+	private String makeStatement_UpdateUser(User user)
 	{
-		boolean result = false;
+		StringBuilder sb = new StringBuilder();
 		
-        StringBuilder sb1 = new StringBuilder();
-        StringBuilder sb2 = new StringBuilder();
-        StringBuilder sb3 = new StringBuilder();
-        
-        sb1.append("UPDATE user SET ");
-        sb1.append("email='")		.append(user.getEmail())										.append("',");
-        sb1.append("username='")	.append(user.getUsername())										.append("',");
-        sb1.append("password='")	.append(user.getPassword())										.append("',");
-        sb1.append("firstname='")	.append(user.getFirstName())									.append("',");
-        sb1.append("lastname='")	.append(user.getLastName())										.append("',");
-        sb1.append("birthday='")	.append(Toolbelt.DateToUTS(user.getBirthday()))					.append("',");
-        sb1.append("loc_lat='")		.append(user.getLocation().getLatitude())						.append("',");
-        sb1.append("loc_lon='")		.append(user.getLocation().getLongitude())						.append("',");
-        sb1.append("loc_tim='")		.append(Toolbelt.DateToUTS(user.getLocation().getTimeStamp()))	.append("' ");
-        sb1.append("WHERE u_id = '").append(user.getUniqueID())										.append("'");
+		sb.append("UPDATE user SET ");
+		sb.append("email='")		.append(user.getEmail())										.append("',");
+		sb.append("username='")		.append(user.getUsername())										.append("',");
+		sb.append("password='")		.append(user.getPassword())										.append("',");
+		sb.append("firstname='")	.append(user.getFirstName())									.append("',");
+		sb.append("lastname='")		.append(user.getLastName())										.append("',");
+		sb.append("birthday=")		.append(Tools.DateToUTS(user.getBirthday()))					.append(",");
+		sb.append("loc_lat=")		.append(user.getLocation().getLatitude())						.append(",");
+		sb.append("loc_lon=")		.append(user.getLocation().getLongitude())						.append(",");
+		sb.append("loc_tim=")		.append(Tools.DateToUTS(user.getLocation().getTimeStamp()))		.append(" ");
+		sb.append("WHERE u_id = '")	.append(user.getUniqueID())										.append("';");
 		
-        sb2.append("UPDATE description SET ");
-        sb2.append("timestamp='")	.append(user.getDescription().getTimeStamp())					.append("',");
-        sb2.append("age='")			.append(user.getDescription().getAge().getMin())				.append("',");
-        sb2.append("agemax='")		.append(user.getDescription().getAge().getMax())				.append("',");
-        sb2.append("gender='")		.append(user.getDescription().getGender().toString())			.append("',");
-        sb2.append("sexuality='")	.append(user.getDescription().getSexuality().toString())		.append("',");
-        sb2.append("region='")		.append(user.getDescription().getArea().toString())				.append("',");
-        sb2.append("smoking='")		.append(user.getDescription().getSmoking().toString())			.append("',");
-        sb2.append("drinking='")	.append(user.getDescription().getDrinking().toString())			.append("',");
-        sb2.append("WHERE d_id = '").append(user.getDescription().getUniqueID())					.append("'");
+		return sb.toString();
+	}
+	
+	private String makeStatement_InsertDescription(Description desc)
+	{
+		StringBuilder sb = new StringBuilder();
 		
-        sb3.append("UPDATE description SET ");
-        sb3.append("timestamp='")	.append(user.getPreference(0).getTimeStamp())					.append("',");
-        sb3.append("age='")			.append(user.getPreference(0).getAge().getMin())				.append("',");
-        sb3.append("agemax='")		.append(user.getPreference(0).getAge().getMax())				.append("',");
-        sb3.append("gender='")		.append(user.getPreference(0).getGender().toString())			.append("',");
-        sb3.append("sexuality='")	.append(user.getPreference(0).getSexuality().toString())		.append("',");
-        sb3.append("region='")		.append(user.getPreference(0).getArea().toString())				.append("',");
-        sb3.append("smoking='")		.append(user.getPreference(0).getSmoking().toString())			.append("',");
-        sb3.append("drinking='")	.append(user.getPreference(0).getDrinking().toString())			.append("',");
-        sb3.append("WHERE d_id = '").append(user.getPreference(0).getUniqueID())					.append("'");
+		sb.append("INSERT INTO description (d_id, timestamp, title, age, age_max, "
+				+ "gender, sexuality, region, smoking, drinking) VALUES (");
+		sb.append("'")	.append(desc.getUniqueID())							.append("', ");
+		sb				.append(Tools.DateToUTS(desc.getTimeStamp()))		.append(", ");
+		sb.append("'")	.append(desc.getTitle())							.append("', ");
+		sb				.append(desc.getAge().getMin())						.append(", ");
+		sb				.append(desc.getAge().getMax())						.append(", ");
+		sb.append("'")	.append(desc.getGender().toString())				.append("', ");
+		sb.append("'")	.append(desc.getSexuality().toString())				.append("', ");
+		sb.append("'")	.append(desc.getArea().toString())					.append("', ");
+		sb.append("'")	.append(desc.getSmoking().toString())				.append("', ");
+		sb.append("'")	.append(desc.getDrinking().toString())				.append("');");
 		
-        try
-		{
-            connect();
-			int rowsaffected = 0;
-            System.out.println(sb1.toString());
-            System.out.println(sb2.toString());
-            System.out.println(sb3.toString());
-            rowsaffected += sta.executeUpdate(sb1.toString());
-            rowsaffected += sta.executeUpdate(sb2.toString());
-            rowsaffected += sta.executeUpdate(sb3.toString());
-			if (rowsaffected == 3)
-			{
-				result = true;
-			}
-        }
-        catch(Exception ex)
-		{
-            ex.printStackTrace();
-        }
-        finally
-		{
-            disconnect();
-			return result;
-        }
-    }
-    
-    public boolean deleteUser(String uuid)
+		return sb.toString();
+	}
+	
+	private String makeStatement_UpdateDescription(Description desc)
+	{
+		StringBuilder sb = new StringBuilder();
+		
+		sb.append("UPDATE description SET ");
+		sb.append("title='").append(desc.getTitle()).append("',");
+		sb.append("timestamp=").append(Tools.DateToUTS(desc.getTimeStamp())).append(",");
+		sb.append("age=").append(desc.getAge().getMin()).append(",");
+		sb.append("age_max=").append(desc.getAge().getMax()).append(",");
+		sb.append("gender='").append(desc.getGender().toString()).append("',");
+		sb.append("sexuality='").append(desc.getSexuality().toString()).append("',");
+		sb.append("region='").append(desc.getArea().toString()).append("',");
+		sb.append("smoking='").append(desc.getSmoking().toString()).append("',");
+		sb.append("drinking='").append(desc.getDrinking().toString()).append("' ");
+		sb.append("WHERE d_id = '").append(desc.getUniqueID()).append("';");
+		
+		return sb.toString();
+	}
+	
+	private String makeStatement_DeleteDescription(String d_id)
+	{
+		StringBuilder sb = new StringBuilder();
+		
+		sb.append("DELETE FROM description WHERE ");
+		sb.append("d_id = '").append(d_id).append("';");
+		
+		return sb.toString();
+	}
+	
+	private String makeStatement_InsertUserDescription(String u_id, String d_id)
+	{
+		StringBuilder sb = new StringBuilder();
+		
+		sb.append("INSERT INTO userdescription (u_id, d_id) VALUES (");
+		sb.append("'").append(u_id.toString()).append("', ");
+		sb.append("'").append(d_id.toString()).append("');");
+		
+		return sb.toString();
+	}
+	
+	private String makeStatement_DeleteUserDescription(String d_id)
+	{
+		StringBuilder sb = new StringBuilder();
+		
+		sb.append("DELETE FROM userdescription WHERE ");
+		sb.append("d_id = '").append(d_id).append("';");
+		
+		return sb.toString();
+	}
+	
+	/**
+	 * Deletes a user from the database
+	 * @param uuid The ID of the user to delete
+	 * @return true on success
+	 */
+	public boolean deleteUser(String uuid)
 	{
 		boolean result = false;
 		
@@ -321,7 +304,7 @@ public class UserMapper
 
 		sb1.append("DELETE FROM description WHERE ");
 		sb1.append("d_id = '").append(uuid).append("'");
-		sb2.append("DELETE pref.* FROM description AS pref");
+		sb2.append("DELETE pref.* FROM description AS pref ");
 		sb2.append("INNER JOIN userdescription AS ud ON pref.d_id = ud.d_id ");
 		sb2.append("WHERE ud.u_id = '").append(uuid).append("'");
 		sb3.append("DELETE FROM userdescription WHERE ");
@@ -337,7 +320,7 @@ public class UserMapper
 			rowsaffected += sta.executeUpdate(sb2.toString());
 			rowsaffected += sta.executeUpdate(sb3.toString());
 			rowsaffected += sta.executeUpdate(sb4.toString());
-			if (rowsaffected == 4)
+			if (rowsaffected >= 2)
 			{
 				result = true;
 			}
@@ -351,156 +334,225 @@ public class UserMapper
 			disconnect();
 			return result;
 		}
-    }
+	}
 	
-    public User getUser(String uuid)
+	/**
+	 * Fetches a single User from the database
+	 * @param uuid ID of the user to fetch
+	 * @return User as string
+	 */
+	public String getUser(String uuid)
 	{
-		try 
+		User user = new User(UUID.fromString(uuid));
+		
+		StringBuilder sb1 = new StringBuilder();
+		StringBuilder sb2 = new StringBuilder();
+		// SELECT all fields in user
+		sb1.append("SELECT user.*, ");
+		// SELECT all but d_id from description
+		sb1.append("dscr.timestamp, dscr.title, dscr.age, dscr.age_max, dscr.gender, ");
+		sb1.append("dscr.sexuality, dscr.region, dscr.smoking, dscr.drinking ");
+		// FROM user table
+		sb1.append("FROM user ");
+		sb1.append("INNER JOIN description AS dscr ON user.u_id = dscr.d_id ");
+		sb1.append("WHERE user.u_id = '").append(uuid).append("' ");
+		
+		// SELECT all fields in user
+		sb2.append("SELECT ud.u_id, pref.* FROM description AS pref ");
+		sb2.append("INNER JOIN userdescription AS ud ON pref.d_id = ud.d_id ");
+		sb2.append("WHERE ud.u_id = '").append(uuid).append("' ");
+		
+		try
 		{
-			User user = null;
-			StringBuilder sb = new StringBuilder();
-			// SELECT all fields in user
-			sb.append("SELECT user.*, ");
-			// SELECT all but d_id from description
-			sb.append("dscr.timestamp, dscr.title, dscr.age, dscr.age_max, dscr.gender, ");
-			sb.append("dscr.sexuality, dscr.region, dscr.smoking, dscr.drinking, ");
-			// SELECT all (with alias) from "preference"
-			sb.append("pref.d_id AS p_id, pref.timestamp AS p_timestamp, pref.title AS p_title, ");
-			sb.append("pref.age AS p_age, pref.age_max AS p_agemax, ");
-			sb.append("pref.gender AS p_gender, pref.sexuality AS p_sexuality, ");
-			sb.append("pref.region AS p_region, ");
-			sb.append("pref.smoking AS p_smoking, pref.drinking AS p_drinking ");
-			// FROM user table
-			sb.append("FROM user ");
-			sb.append("INNER JOIN description AS dscr ON user.u_id = dscr.d_id ");
-			sb.append("INNER JOIN userdescription AS ud ON user.u_id = ud.u_id ");
-			sb.append("INNER JOIN description AS pref ON ud.d_id = pref.d_id ");
-			sb.append("WHERE u_id = '").append(uuid).append("' "); 
+			connect();
+			ResultSet rs = sta.executeQuery(sb1.toString());
+			rs.first();
+			
+			Description desc = new Description(UUID.fromString(rs.getString("u_id")));
+			desc.setTitle(rs.getString("title"));
+			desc.setTimeStamp(new Date(rs.getLong("timestamp")));
+			desc.getAge().set(rs.getInt("age"), rs.getInt("age_max"));
+			desc.getGender().loadString(rs.getString("gender"));
+			desc.getSexuality().loadString(rs.getString("sexuality"));
+			desc.getArea().loadString(rs.getString("region"));
+			desc.getSmoking().loadString(rs.getString("smoking"));
+			desc.getDrinking().loadString(rs.getString("drinking"));
 
-			try
+			GeoLocation loc = new GeoLocation(
+				rs.getFloat("loc_lat"), 
+				rs.getFloat("loc_lon"), 
+				new Date(rs.getLong("loc_tim"))
+			);
+
+			user.setUsername(rs.getString("username")); 
+			user.setPassword(rs.getString("password"));
+			user.setFirstName(rs.getString("firstname"));
+			user.setLastName(rs.getString("lastname"));
+			user.setBirthday(Tools.UTStoDate(rs.getInt("birthday"))); 
+			user.setEmail(rs.getString("email"));
+			user.setDescription(desc);
+			user.setLocation(loc);
+			
+			rs = sta.executeQuery(sb2.toString());
+			while (rs.next())
 			{
-				connect();
-				ResultSet rs = sta.executeQuery(sb.toString());
-				rs.first();
-				
-				user = new User(UUID.fromString(rs.getString("u_id")));
-				user.setEmail(rs.getString("email"));
-				user.setUsername(rs.getString("username"));
-				user.setPassword(rs.getString("password"));
-				user.setFirstName(rs.getString("firstname"));
-				user.setLastName(rs.getString("lastname"));
-				user.setBirthday(Toolbelt.UTStoDate(rs.getInt("birthdate")));
-				user.setLocation(new GeoLocation(rs.getFloat("loc_lat"), 
-						rs.getFloat("loc_lon"),
-						new Date(rs.getLong("loc_tim"))));
-
-				Description desc = new Description(UUID.fromString(rs.getString("u_id")));
-				desc.setAge(new Range(rs.getInt("age"), rs.getInt("agemax")));
-				desc.setGender(GenderList.FromString(rs.getString("gender")));
-				desc.setSexuality(SexualityList.FromString(rs.getString("sexuality")));
-				desc.setArea(AreaList.FromString(rs.getString("region")));
-				desc.setSmoking(SmokingList.FromString(rs.getString("smoking")));
-				desc.setDrinking(DrinkingList.FromString(rs.getString("drinking")));
-				user.setDescription(desc);
-
-				Description pref = new Description(UUID.fromString(rs.getString("p_id")));
-				pref.setAge(new Range(rs.getInt("p_age"), rs.getInt("p_agemax")));
-				pref.setGender(GenderList.FromString(rs.getString("p_gender")));
-				pref.setSexuality(SexualityList.FromString(rs.getString("p_sexuality")));
-				pref.setArea(AreaList.FromString(rs.getString("p_region")));
-				pref.setSmoking(SmokingList.FromString(rs.getString("p_smoking")));
-				pref.setDrinking(DrinkingList.FromString(rs.getString("p_drinking")));
+				Description pref = new Description(UUID.fromString(rs.getString("d_id")));
+				pref.setTitle(rs.getString("title"));
+				pref.setTimeStamp(new Date(rs.getLong("timestamp")));
+				pref.getAge().set(rs.getInt("age"), rs.getInt("age_max"));
+				pref.getGender().loadString(rs.getString("gender"));
+				pref.getSexuality().loadString(rs.getString("sexuality"));
+				pref.getArea().loadString(rs.getString("region"));
+				pref.getSmoking().loadString(rs.getString("smoking"));
+				pref.getDrinking().loadString(rs.getString("drinking"));
 				user.getPreferences().add(pref);
-			}
-			catch(Exception ex)
-			{
-				ex.printStackTrace();
-			}
-			finally
-			{
-				disconnect();
-				return user;
 			}
 		}
-        catch(Exception ex)
+		catch(Exception ex)
 		{
-            ex.printStackTrace();
-        }
-        finally
+			return "Exception: " + ex.getMessage();
+			//ex.printStackTrace();
+		}
+		finally
 		{
-            disconnect();
-            return null;
-        }
-    }
+			disconnect();
+			return Tools.UserToString(user, true);
+		}
+	}
 	
-    public ArrayList<User> getUsers(String username)
+	/**
+	 * Fetches a list of users from the database
+	 * @param uuid ID of user to exclude
+	 * @return Users as strings in array
+	 */
+	public String[] getUsers(String uuid)
 	{
-        ArrayList<User> users = new ArrayList();
-        StringBuilder sb = new StringBuilder();
+		ArrayList<User> users = new ArrayList();
+		
+		StringBuilder sb1 = new StringBuilder();
+		StringBuilder sb2 = new StringBuilder();
+		
 		// SELECT all fields in user
-        sb.append("SELECT user.*, ");
+		sb1.append("SELECT user.*, ");
 		// SELECT all but d_id from description
-		sb.append("dscr.timestamp, dscr.title, dscr.age, dscr.age_max, dscr.gender, ");
-		sb.append("dscr.sexuality, dscr.region, dscr.smoking, dscr.drinking, ");
-		// SELECT all (with alias) from "preference"
-		sb.append("pref.d_id AS p_id, pref.timestamp AS p_timestamp, pref.title AS p_title, ");
-		sb.append("pref.age AS p_age, pref.age_max AS p_agemax, ");
-		sb.append("pref.gender AS p_gender, pref.sexuality AS p_sexuality, ");
-		sb.append("pref.region AS p_region, ");
-		sb.append("pref.smoking AS p_smoking, pref.drinking AS p_drinking ");
+		sb1.append("dscr.timestamp, dscr.title, dscr.age, dscr.age_max, dscr.gender, ");
+		sb1.append("dscr.sexuality, dscr.region, dscr.smoking, dscr.drinking ");
 		// FROM user table
-		sb.append("FROM user ");
-        sb.append("INNER JOIN description AS dscr ON user.u_id = dscr.d_id ");
-        sb.append("INNER JOIN userdescription AS ud ON user.u_id = ud.u_id ");
-        sb.append("INNER JOIN description AS pref ON ud.d_id = pref.d_id ");
-        if (!username.isEmpty()) { sb.append("WHERE username <> '").append(username).append("' "); }
-        
-        try
+		sb1.append("FROM user ");
+		sb1.append("INNER JOIN description AS dscr ON user.u_id = dscr.d_id ");
+		if (uuid != "") { sb1.append("WHERE user.u_id <> '").append(uuid).append("' "); }
+
+		// SELECT each users preferences
+		sb2.append("SELECT ud.u_id, pref.* FROM description as pref ");
+		sb2.append("INNER JOIN userdescription AS ud ON pref.d_id = ud.d_id ");
+		sb2.append("WHERE ud.u_id = ");
+		
+		try
 		{
-            connect();
-            ResultSet rs = sta.executeQuery(sb.toString());
-            while(rs.next())
+			connect();
+			//System.out.println(sb1.toString());
+			ResultSet rs = sta.executeQuery(sb1.toString());
+			while(rs.next())
 			{
+				Description desc = new Description(UUID.fromString(rs.getString("u_id")));
+				desc.setTitle(rs.getString("title"));
+				desc.setTimeStamp(new Date(rs.getLong("timestamp")));
+				desc.getAge().set(rs.getInt("age"), rs.getInt("age_max"));
+				desc.getGender().loadString(rs.getString("gender"));
+				desc.getSexuality().loadString(rs.getString("sexuality"));
+				desc.getArea().loadString(rs.getString("region"));
+				desc.getSmoking().loadString(rs.getString("smoking"));
+				desc.getDrinking().loadString(rs.getString("drinking"));
+
+				GeoLocation loc = new GeoLocation(
+					rs.getFloat("loc_lat"), 
+					rs.getFloat("loc_lon"), 
+					new Date(rs.getLong("loc_tim"))
+				);
+
 				User user = new User(UUID.fromString(rs.getString("u_id")));
-				user.setEmail(rs.getString("email"));
-				user.setUsername(rs.getString("username"));
+				user.setUsername(rs.getString("username")); 
 				user.setPassword(rs.getString("password"));
 				user.setFirstName(rs.getString("firstname"));
 				user.setLastName(rs.getString("lastname"));
-				user.setBirthday(Toolbelt.UTStoDate(rs.getInt("birthdate")));
-				user.setLocation(new GeoLocation(rs.getFloat("loc_lat"), 
-						rs.getFloat("loc_lon"),
-						new Date(rs.getLong("loc_tim"))));
-
-				Description desc = new Description(UUID.fromString(rs.getString("u_id")));
-				desc.setAge(new Range(rs.getInt("age"), rs.getInt("agemax")));
-				desc.setGender(GenderList.FromString(rs.getString("gender")));
-				desc.setSexuality(SexualityList.FromString(rs.getString("sexuality")));
-				desc.setArea(AreaList.FromString(rs.getString("region")));
-				desc.setSmoking(SmokingList.FromString(rs.getString("smoking")));
-				desc.setDrinking(DrinkingList.FromString(rs.getString("drinking")));
+				user.setBirthday(Tools.UTStoDate(rs.getInt("birthday"))); 
+				user.setEmail(rs.getString("email"));
 				user.setDescription(desc);
-
-				Description pref = new Description(UUID.fromString(rs.getString("p_id")));
-				pref.setAge(new Range(rs.getInt("p_age"), rs.getInt("p_agemax")));
-				pref.setGender(GenderList.FromString(rs.getString("p_gender")));
-				pref.setSexuality(SexualityList.FromString(rs.getString("p_sexuality")));
-				pref.setArea(AreaList.FromString(rs.getString("p_region")));
-				pref.setSmoking(SmokingList.FromString(rs.getString("p_smoking")));
-				pref.setDrinking(DrinkingList.FromString(rs.getString("p_drinking")));
-				user.getPreferences().add(pref);
-
+				user.setLocation(loc);
+				
 				users.add(user);
-            }
-        }
-        catch(Exception ex)
+			}
+			
+			for (User u : users)
+			{
+				String statement = sb2.toString() + "'" + u.getUniqueID().toString() + "'";
+				//System.out.println(statement);
+				rs = sta.executeQuery(statement);
+				while(rs.next())
+				{
+					Description pref = new Description(UUID.fromString(rs.getString("d_id")));
+					pref.setTitle(rs.getString("title"));
+					pref.setTimeStamp(new Date(rs.getLong("timestamp")));
+					pref.getAge().set(rs.getInt("age"), rs.getInt("age_max"));
+					pref.getGender().loadString(rs.getString("gender"));
+					pref.getSexuality().loadString(rs.getString("sexuality"));
+					pref.getArea().loadString(rs.getString("region"));
+					pref.getSmoking().loadString(rs.getString("smoking"));
+					pref.getDrinking().loadString(rs.getString("drinking"));
+					u.getPreferences().add(pref);
+				}
+			}
+		}
+		catch(Exception ex)
 		{
-            ex.printStackTrace();
-        }
-        finally
+			ex.printStackTrace();
+		}
+		finally
 		{
-            disconnect();
-            return users;
-        }
-    }
+			disconnect();
+			String[] result = new String[users.size()];
+			for (int i = 0; i < result.length; i++)
+			{
+				result[i] = Tools.UserToString(users.get(i), true);
+			}
+			return result;
+		}
+	}
+	
+	/**
+	 * Verifies a users login
+	 * @param username The username of the user
+	 * @param password The Password of the user
+	 * @return true on success
+	 */
+	public boolean verifyLogin(String username, String password)
+	{
+		boolean passwordMatch = false;
+		
+		StringBuilder sb = new StringBuilder();
+		sb.append("SELECT COUNT(u_id) AS number FROM user WHERE ");
+		sb.append("username = '").append(username).append("' AND ");
+		sb.append("password = '").append(password).append("'");
+		
+		try
+		{
+			connect();
+			ResultSet rs = sta.executeQuery(sb.toString());
+			rs.first();
+			
+			if(rs.getInt("number") == 1)
+			{
+				passwordMatch = true;
+			}
+		}
+		catch(Exception ex)
+		{
+			ex.printStackTrace();
+		}
+		finally
+		{
+			disconnect();
+			return passwordMatch;
+		}
+	}
 }

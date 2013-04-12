@@ -1,0 +1,85 @@
+<?xml version='1.0' encoding='UTF-8'?><!-- Published by JAX-WS RI at http://jax-ws.dev.java.net. RI's version is Metro/2.2.0-1 (tags/2.2.0u1-7139; 2012-06-02T10:55:19+0000) JAXWS-RI/2.2.6-2 JAXWS/2.2 svn-revision#unknown. --><xs:schema xmlns:tns="http://jrpg.easj/" xmlns:xs="http://www.w3.org/2001/XMLSchema" version="1.0" targetNamespace="http://jrpg.easj/">
+
+<xs:element name="deleteUser" type="tns:deleteUser"/>
+
+<xs:element name="deleteUserResponse" type="tns:deleteUserResponse"/>
+
+<xs:element name="getUser" type="tns:getUser"/>
+
+<xs:element name="getUserResponse" type="tns:getUserResponse"/>
+
+<xs:element name="getUsers" type="tns:getUsers"/>
+
+<xs:element name="getUsersResponse" type="tns:getUsersResponse"/>
+
+<xs:element name="saveUser" type="tns:saveUser"/>
+
+<xs:element name="saveUserResponse" type="tns:saveUserResponse"/>
+
+<xs:element name="verifyLogin" type="tns:verifyLogin"/>
+
+<xs:element name="verifyLoginResponse" type="tns:verifyLoginResponse"/>
+
+<xs:complexType name="verifyLogin">
+<xs:sequence>
+<xs:element name="user" type="xs:string" minOccurs="0"/>
+<xs:element name="pass" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="verifyLoginResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:boolean"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getUser">
+<xs:sequence>
+<xs:element name="id" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getUserResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getUsers">
+<xs:sequence>
+<xs:element name="id" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getUsersResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:string" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="deleteUser">
+<xs:sequence>
+<xs:element name="user" type="xs:string" minOccurs="0"/>
+<xs:element name="pass" type="xs:string" minOccurs="0"/>
+<xs:element name="id" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="deleteUserResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:boolean"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="saveUser">
+<xs:sequence>
+<xs:element name="user" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="saveUserResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:boolean"/>
+</xs:sequence>
+</xs:complexType>
+</xs:schema>
