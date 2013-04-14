@@ -37,6 +37,10 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Web.Services" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -48,7 +52,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\Enumerators.cs" />
-    <Compile Include="Classes\Toolbelt.cs" />
+    <Compile Include="Classes\Tools.cs" />
+    <Compile Include="Classes\WSconnect.cs" />
     <Compile Include="Controls\EnumSelector.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -84,6 +89,11 @@
     <Compile Include="Forms\UserForm.Designer.cs">
       <DependentUpon>UserForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Web References\dk.iensenfirippu.jrpg\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Controls\EnumSelector.resx">
       <DependentUpon>EnumSelector.cs</DependentUpon>
     </EmbeddedResource>
@@ -110,6 +120,12 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="Web References\dk.iensenfirippu.jrpg\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Web References\dk.iensenfirippu.jrpg\WS.wsdl" />
+    <None Include="Web References\dk.iensenfirippu.jrpg\WS.xsd" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -131,6 +147,25 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\information.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WebReferences Include="Web References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WebReferenceUrl Include="http://jrpg.iensenfirippu.dk:8080/Stalkr/WS%3fWSDL">
+      <UrlBehavior>Dynamic</UrlBehavior>
+      <RelPath>Web References\dk.iensenfirippu.jrpg\</RelPath>
+      <UpdateFromURL>http://jrpg.iensenfirippu.dk:8080/Stalkr/WS%3fWSDL</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>StalkrAdminTool_dk_iensenfirippu_jrpg_WS</CachedSettingsPropName>
+    </WebReferenceUrl>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

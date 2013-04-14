@@ -548,11 +548,13 @@
 			this.date_birth.Name = "date_birth";
 			this.date_birth.Size = new System.Drawing.Size(308, 20);
 			this.date_birth.TabIndex = 7;
+			this.date_birth.ValueChanged += new System.EventHandler(this.date_birth_ValueChanged);
 			// 
 			// date_location
 			// 
 			this.date_location.CustomFormat = "dd/MM/yy HH:mm";
 			this.date_location.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.date_location.Enabled = false;
 			this.date_location.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
 			this.date_location.Location = new System.Drawing.Point(103, 171);
 			this.date_location.Name = "date_location";

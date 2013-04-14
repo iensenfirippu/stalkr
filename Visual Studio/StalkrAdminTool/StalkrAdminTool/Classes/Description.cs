@@ -28,22 +28,26 @@ namespace StalkrAdminTool
 		private Dictionary<String, bool> _alteredfields;
 
 		// Constructors
-		public Description() : this(Guid.NewGuid())
+		public Description() : this(Guid.NewGuid()) { }
+		public Description(Guid guid)
 		{
+			_uniqueid = guid;
 			_timestamp = DateTime.Now;
 			_title = "";
-			_age = new Range(18, 0);
+			_age = new Range(Range.Type.AGE);
 			_gender = (GenderType)0;
 			_sexuality = (SexualityType)0;
 			_area = (AreaType)0;
 			_smoking = (SmokingType)0;
 			_drinking = (DrinkingType)0;
-		}
-		public Description(Guid guid)
-		{
-			_uniqueid = guid;
-
 			_alteredfields = new Dictionary<string, bool>();
+			ResetAlteredFields();
+		}
+
+		// Methods
+		public void ResetAlteredFields()
+		{
+			_alteredfields.Clear();
 			_alteredfields.Add("uniqueid", false);
 			_alteredfields.Add("timestamp", false);
 			_alteredfields.Add("title", false);
@@ -53,6 +57,15 @@ namespace StalkrAdminTool
 			_alteredfields.Add("area", false);
 			_alteredfields.Add("smoking", false);
 			_alteredfields.Add("drinking", false);
+		}
+		public override String ToString()
+		{
+			String value = _title;
+			if (value == null || value == "")
+			{
+				value = DEFAULTNAME;
+			}
+			return value;
 		}
 
 		// Properties
@@ -100,17 +113,6 @@ namespace StalkrAdminTool
 		{
 			get { return _drinking; }
 			set { _alteredfields["drinking"] = true; _drinking = value; }
-		}
-
-		// Methods
-		public override String ToString()
-		{
-			String value = _title;
-			if (value == null || value == "")
-			{
-				value = DEFAULTNAME;
-			}
-			return value;
 		}
 	}
 }

@@ -26,18 +26,22 @@ namespace StalkrAdminTool
 		private Dictionary<String, bool> _alteredfields;
 
 		// Constructors
-		public User() : this(Guid.NewGuid())
-		{
-			_birthday = StalkrToolbelt.TStoDT(0);
-			_location = new GeoLocation();
-			_description = new Description();
-		}
+		public User() : this(Guid.NewGuid()) { }
 		public User(Guid guid)
 		{
 			_uniqueid = guid;
+			_birthday = DateTime.Now;
+			_location = new GeoLocation();
+			_description = new Description();
 			_preferences = new List<Description>();
-
 			_alteredfields = new Dictionary<string, bool>();
+			ResetAlteredFields();
+		}
+
+		// Methods
+		public void ResetAlteredFields()
+		{
+			_alteredfields.Clear();
 			_alteredfields.Add("uniqueid", false);
 			_alteredfields.Add("email", false);
 			_alteredfields.Add("username", false);

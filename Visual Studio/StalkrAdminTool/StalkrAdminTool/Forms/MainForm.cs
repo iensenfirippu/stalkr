@@ -16,6 +16,8 @@ namespace StalkrAdminTool
 
 		private static string CLOSEWARNING = "Your software is soon to close, if not safe data you lose. pwease be careful wiff yuz dataz.\nPress affirmative to okay, false to not okay.";
 		private static string CLOSETITLE = "You are about to close...";
+		private static string DELETEWARNING = "You are about to permanently delete the user \"{0}\".\nOnce deleted the user account cannot be recovered.\n\nAre you really sure you want to do this?";
+		private static string DELETETITLE = "USER DELETION";
 		private static string LOADSUCCESS = "{0} user objects successfully loaded from database";
 		private static string LOADFAIL = "Couldn't connect to database";
 		private static string USEROK = "User object \"{0}\" successfully changed";
@@ -25,29 +27,40 @@ namespace StalkrAdminTool
 		#endregion
 
 		// Class local variables
-		List<User> userlist;
+		private WSconnect _db = new WSconnect();
+		private List<User> _userlist;
 
 		// Constructor
 		public MainForm()
 		{
 			InitializeComponent();
 
-			DBConnect db = new DBConnect();
-			userlist = db.SelectAllUsers();
+			LoadUsers(true);
+		}
 
-			if (userlist.Count > 0)
+		#region Methods
+
+		/// <summary>
+		/// Loads all the users from the database
+		/// </summary>
+		private void LoadUsers(bool report)
+		{
+			_userlist = _db.GetUsers(Guid.Empty);
+
+			if (report)
 			{
-				status_label.Text = LOADSUCCESS.Replace("{0}", userlist.Count.ToString());
-			}
-			else
-			{
-				status_label.Text = LOADFAIL;
+				if (_userlist.Count > 0)
+				{
+					status_label.Text = LOADSUCCESS.Replace("{0}", _userlist.Count.ToString());
+				}
+				else
+				{
+					status_label.Text = LOADFAIL;
+				}
 			}
 
 			DrawUserTable();
 		}
-
-		#region Methods
 
 		/// <summary>
 		/// Draws a table of all the users
@@ -67,7 +80,7 @@ namespace StalkrAdminTool
 			dgv_main.Columns.Add("prefernces", "# of preferences");
 
 			// Fill out the table rows
-			foreach (User u in userlist)
+			foreach (User u in _userlist)
 			{
 				dgv_main.Rows.Add(null, u.Username, u.FullName, u.Birthday.ToShortDateString(), u.Preferences.Count);
 				dgv_main.Rows[dgv_main.Rows.Count - 1].Cells[0].Value = u.UniqueID;
@@ -93,7 +106,7 @@ namespace StalkrAdminTool
 					status_label.Text = USERCANCEL.Replace("{0}", user.Username);
 				}
 
-				DrawUserTable();
+				LoadUsers(false);
 			}
 			else
 			{
@@ -112,12 +125,12 @@ namespace StalkrAdminTool
 				// Finds the desired user object from the selected index in the gridview
 				Guid userid = (Guid)dgv_main.SelectedRows[0].Cells[0].Value;
 				User user = null;
-				for (int i = 0; i < userlist.Count; i++)
+				for (int i = 0; i < _userlist.Count; i++)
 				{
-					if (userlist[i].UniqueID == userid)
+					if (_userlist[i].UniqueID == userid)
 					{
-						user = userlist[i];
-						i = userlist.Count;
+						user = _userlist[i];
+						i = _userlist.Count;
 					}
 				}
 				return user;
@@ -152,7 +165,7 @@ namespace StalkrAdminTool
 		// Event fired when the "Create User" option is pressed
 		private void createNewUserToolStripMenuItem_MouseUp(object sender, MouseEventArgs e)
 		{
-			userlist.Add(new User());
+			_userlist.Add(new User());
 			DrawUserTable();
 			dgv_main.Rows[dgv_main.Rows.Count - 1].Selected = true;
 			StartEditUserForm();
@@ -165,8 +178,12 @@ namespace StalkrAdminTool
 			User user = GetSelectedUserObject();
 			if (user != null)
 			{
-				userlist.Remove(user);
-				DrawUserTable();
+				DialogResult dr = MessageBox.Show(DELETEWARNING.Replace("{0}", user.Username), DELETETITLE, MessageBoxButtons.OKCancel, MessageBoxIcon.Stop);
+				if (dr == DialogResult.OK)
+				{
+					bool result = _db.DeleteUser(user.UniqueID);
+					LoadUsers(false);
+				}
 			}
 			else
 			{

@@ -10,3 +10,6 @@ C:\Users\Philip\Documents\GitHub\stalkr\Visual Studio\StalkrAdminTool\StalkrAdmi
 C:\Users\Philip\Documents\GitHub\stalkr\Visual Studio\StalkrAdminTool\StalkrAdminTool\obj\Release\StalkrAdminTool.csproj.GenerateResource.Cache
 C:\Users\Philip\Documents\GitHub\stalkr\Visual Studio\StalkrAdminTool\StalkrAdminTool\obj\Release\StalkrAdminTool.exe
 C:\Users\Philip\Documents\GitHub\stalkr\Visual Studio\StalkrAdminTool\StalkrAdminTool\obj\Release\StalkrAdminTool.pdb
+C:\Users\Philip\Documents\GitHub\stalkr\Visual Studio\StalkrAdminTool\StalkrAdminTool\obj\Release\StalkrAdminTool.csprojResolveAssemblyReference.cache
+C:\Users\Philip\Documents\GitHub\stalkr\Visual Studio\StalkrAdminTool\StalkrAdminTool\bin\Release\StalkrAdminTool.XmlSerializers.dll
+C:\Users\Philip\Documents\GitHub\stalkr\Visual Studio\StalkrAdminTool\StalkrAdminTool\obj\Release\StalkrAdminTool.XmlSerializers.dll

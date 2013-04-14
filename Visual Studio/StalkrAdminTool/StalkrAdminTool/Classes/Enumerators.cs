@@ -18,47 +18,106 @@ namespace StalkrAdminTool
 	/// </summary>
 	public class Range
 	{
+		// Enum to easily define limit ranges
+		public enum Type { AGE }
+
+		// Range constants
+		private static int[] DEFAULTRANGE = { 0, 0 };
+		private static int[] AGERANGE = { 18, 99 };
+
 		// Class global variables
+		private Type _type;
 		private int _intmin;
 		private int _intmax;
 
 		// Constructors
-		public Range() : this(0) { }
-		public Range(int int1) : this(int1, 0) { }
-		public Range(int int1, int int2)
+		public Range(Type type)
 		{
-			if (int1 < int2 || int2 == 0)
+			_type = type;
+			_intmin = Bounds[0];
+			_intmax = Bounds[1];
+		}
+
+		// Methods
+		private void CheckFlip()
+		{
+			if (_intmin > _intmax)
 			{
-				_intmin = int1;
-				_intmax = int2;
+				int temp = _intmin;
+				_intmin = _intmax;
+				_intmax = temp;
 			}
-			else
-			{
-				_intmin = int2;
-				_intmax = int1;
-			}
+		}
+		public void Set(int int1)
+		{
+			Min = int1;
+			Max = int1;
+		}
+		public void Set(int int1, int int2)
+		{
+			Min = int1;
+			Max = int2;
+			CheckFlip();
 		}
 
 		// Properties
+		private int[] Bounds
+		{
+			get
+			{
+				int[] value = DEFAULTRANGE;
+				switch (_type)
+				{
+					case Type.AGE:
+						value = AGERANGE;
+						break;
+				}
+				return value;
+			}
+		}
 		public int Min
 		{
-			get { return _intmin; }
-			set { _intmin = value; }
+			get
+			{
+				CheckFlip();
+				return _intmin;
+			}
+			set
+			{
+				if (value >= Bounds[0] && value <= Bounds[1])
+				{
+					_intmin = value;
+				}
+				else
+				{
+					_intmin = Bounds[0];
+				}
+			}
 		}
 		public int Max
 		{
-			get { return _intmax; }
-			set { _intmax = value; }
+			get
+			{
+				CheckFlip();
+				return _intmax;
+			}
+			set
+			{
+				if (value >= Bounds[0] && value <= Bounds[1])
+				{
+					_intmax = value;
+				}
+				else
+				{
+					_intmin = Bounds[1];
+				}
+			}
 		}
 
 		// implicit converters
 		public static implicit operator int(Range a)
 		{
 			return a._intmin;
-		}
-		public static implicit operator Range(int i)
-		{
-			return new Range(i);
 		}
 	}
 	#endregion

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<DiscoveryClientResultsFile xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Results>
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="http://jrpg.iensenfirippu.dk:8080/Stalkr/WS?xsd=1" filename="WS.xsd" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.ContractReference" url="http://jrpg.iensenfirippu.dk:8080/Stalkr/WS?WSDL" filename="WS.wsdl" />
+  </Results>
+</DiscoveryClientResultsFile>

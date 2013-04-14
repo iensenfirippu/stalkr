@@ -22,6 +22,7 @@ namespace StalkrAdminTool
 		#region Class global variables
 
 		private User _user;
+		private User _original;
 
 		#endregion
 
@@ -29,6 +30,11 @@ namespace StalkrAdminTool
 		public UserForm(User user)
 		{
 			InitializeComponent();
+
+			DateTime now = DateTime.Now;
+			date_birth.MinDate = new DateTime(now.Year - 99, now.Month, now.Day);
+			date_birth.MaxDate = new DateTime(now.Year - 18, now.Month, now.Day);
+
 			_user = user;
 
 			txt_guid.Text = _user.UniqueID.ToString().ToUpper();
@@ -37,7 +43,14 @@ namespace StalkrAdminTool
 			txt_pass.Text = _user.Password;
 			txt_firstname.Text = _user.FirstName;
 			txt_lastname.Text = _user.LastName;
-			date_birth.Value = _user.Birthday;
+			if (_user.Birthday > date_birth.MaxDate || _user.Birthday < date_birth.MinDate)
+			{
+				date_birth.Value = date_birth.MaxDate;
+			}
+			else
+			{
+				date_birth.Value = _user.Birthday;
+			}
 
 			if (_user.Location != null)
 			{
@@ -105,6 +118,14 @@ namespace StalkrAdminTool
 
 		#region Events
 
+		private void date_birth_ValueChanged(object sender, EventArgs e)
+		{
+			if (_user != null)
+			{
+				_user.Description.Age.Set(DateTime.Now.Year - date_birth.Value.Year);
+			}
+		}
+
 		private void btn_desc_add_Click(object sender, EventArgs e)
 		{
 			// Never enabled, doesn't do anything
@@ -159,6 +180,7 @@ namespace StalkrAdminTool
 		private void button_cancel_Click(object sender, EventArgs e)
 		{
 			this.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+
 			this.Close();
 		}
 
@@ -170,7 +192,13 @@ namespace StalkrAdminTool
 			_user.FirstName = txt_firstname.Text;
 			_user.LastName = txt_lastname.Text;
 			_user.Birthday = date_birth.Value;
-			_user.Location = new GeoLocation(Convert.ToSingle(num_lat.Value), Convert.ToSingle(num_lon.Value), date_location.Value);
+			
+			float lat = Convert.ToSingle(num_lat.Value);
+			float lon = Convert.ToSingle(num_lon.Value);
+			if (lat != _user.Location.Latitude || lon != _user.Location.Longitude)
+			{
+				_user.Location = new GeoLocation(lat, lon);
+			}
 
 			this.DialogResult = System.Windows.Forms.DialogResult.OK;
 			this.Close();

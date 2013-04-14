@@ -55,7 +55,7 @@ namespace StalkrAdminTool
 			//_description.UniqueID = new Guid(txt_guid.Text);
 			_description.TimeStamp = DateTime.Now;
 			_description.Title = txt_title.Text;
-			_description.Age = new Range(Convert.ToInt32(num_age.Value), Convert.ToInt32(num_agemax.Value));
+			_description.Age.Set(Convert.ToInt32(num_age.Value), Convert.ToInt32(num_agemax.Value));
 			_description.Gender = enum_gender.Value;
 			_description.Sexuality = enum_sexuality.Value;
 			_description.Area = enum_region.Value;

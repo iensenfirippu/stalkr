@@ -109,14 +109,14 @@ namespace StalkrAdminTool
 					u.FirstName = dataReader["firstname"].ToString();
 					u.LastName = dataReader["lastname"].ToString();
 					u.Password = dataReader["password"].ToString();
-					u.Birthday = StalkrToolbelt.TStoDT(Convert.ToDouble(dataReader["birthday"]));
+					u.Birthday = Tools.DTfromTS(Convert.ToDouble(dataReader["birthday"]));
 					u.Email = dataReader["email"].ToString();
-					u.Location = new GeoLocation(Convert.ToSingle(dataReader["loc_lat"]), Convert.ToSingle(dataReader["loc_lon"]), StalkrToolbelt.TStoDT(Convert.ToDouble(dataReader["loc_tim"])));
+					u.Location = new GeoLocation(Convert.ToSingle(dataReader["loc_lat"]), Convert.ToSingle(dataReader["loc_lon"]), Tools.DTfromTS(Convert.ToDouble(dataReader["loc_tim"])));
 
 					u.Description = new Description(new Guid(dataReader[10].ToString()));
-					u.Description.TimeStamp = StalkrToolbelt.TStoDT(Convert.ToDouble(dataReader[11]));
+					u.Description.TimeStamp = Tools.DTfromTS(Convert.ToDouble(dataReader[11]));
 					u.Description.Title = dataReader[12].ToString();
-					u.Description.Age = new Range(Convert.ToInt32(dataReader[13].ToString()), Convert.ToInt32(dataReader[14].ToString()));
+					u.Description.Age.Set(Convert.ToInt32(dataReader[13].ToString()), Convert.ToInt32(dataReader[14].ToString()));
 					u.Description.Gender = EnumList<GenderType>.FromString(dataReader[15].ToString());
 					u.Description.Sexuality = EnumList<SexualityType>.FromString(dataReader[16].ToString());
 					//country = 17
@@ -126,9 +126,9 @@ namespace StalkrAdminTool
 					u.Description.Drinking = EnumList<DrinkingType>.FromString(dataReader[21].ToString());
 
 					u.Preferences.Add(new Description(new Guid(dataReader[24].ToString())));
-					u.Preferences[0].TimeStamp = StalkrToolbelt.TStoDT(Convert.ToDouble(dataReader[25]));
+					u.Preferences[0].TimeStamp = Tools.DTfromTS(Convert.ToDouble(dataReader[25]));
 					u.Preferences[0].Title = dataReader[26].ToString();
-					u.Preferences[0].Age = new Range(Convert.ToInt32(dataReader[27].ToString()), Convert.ToInt32(dataReader[28].ToString()));
+					u.Preferences[0].Age.Set(Convert.ToInt32(dataReader[27].ToString()), Convert.ToInt32(dataReader[28].ToString()));
 					u.Preferences[0].Gender = EnumList<GenderType>.FromString(dataReader[29].ToString());
 					u.Preferences[0].Sexuality = EnumList<SexualityType>.FromString(dataReader[30].ToString());
 					//country = 31
