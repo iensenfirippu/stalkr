@@ -13,14 +13,19 @@ import java.util.UUID;
  */
 public class Tools
 {
-	public static long DateToUTS(Date date)
+	public static long DTtoTS(Date date) { return DTtoTS(date, true); }
+	public static long DTtoTS(Date date, boolean timestampinmilis)
 	{
-		return (date.getTime() / 1000);
+		long value = date.getTime();
+		if (timestampinmilis) { value /= 1000; }
+		return value;
 	}
 	
-	public static Date UTStoDate(long uts)
+	public static Date DTfromTS(long uts) { return DTfromTS(uts, true); }
+	public static Date DTfromTS(long uts, boolean timestampinmilis)
 	{
-		return new Date(uts * 1000);
+		if (timestampinmilis) { uts *= 1000; }
+		return new Date(uts);
 	}
 	
 	public static String UserToString(User u, boolean admin)
@@ -38,11 +43,11 @@ public class Tools
 			if (admin) { sb.append(u.getPassword()); } sb							.append("|");
 			sb.append(u.getFirstName())												.append("|");
 			sb.append(u.getLastName())												.append("|");
-			sb.append(Long.toString(Tools.DateToUTS(u.getBirthday())))				.append("|");
+			sb.append(Long.toString(Tools.DTtoTS(u.getBirthday())))					.append("|");
 			sb.append(Float.toString(l.getLatitude()))								.append("|");
 			sb.append(Float.toString(l.getLongitude()))								.append("|");
-			sb.append(Long.toString(Tools.DateToUTS(l.getTimeStamp())))				.append("|");
-			sb.append(Long.toString(Tools.DateToUTS(d.getTimeStamp())))				.append("|");
+			sb.append(Long.toString(Tools.DTtoTS(l.getTimeStamp())))				.append("|");
+			sb.append(Long.toString(Tools.DTtoTS(d.getTimeStamp())))				.append("|");
 			sb.append(d.getTitle())													.append("|");
 			sb.append(Integer.toString(d.getAge().getMin()))						.append("|");
 			sb.append(Integer.toString(d.getAge().getMax()))						.append("|");
@@ -55,7 +60,7 @@ public class Tools
 			{
 				sb.append("{");
 				sb.append(p.getUniqueID().toString())								.append("|");
-				sb.append(Long.toString(Tools.DateToUTS(p.getTimeStamp())))			.append("|");
+				sb.append(Long.toString(Tools.DTtoTS(p.getTimeStamp())))			.append("|");
 				sb.append(p.getTitle())												.append("|");
 				sb.append(Integer.toString(p.getAge().getMin()))					.append("|");
 				sb.append(Integer.toString(p.getAge().getMax()))					.append("|");
@@ -90,14 +95,14 @@ public class Tools
 			u.setPassword(ss[3]);
 			u.setFirstName(ss[4]);
 			u.setLastName(ss[5]);
-			u.setBirthday(Tools.UTStoDate(Long.parseLong(ss[6])));
+			u.setBirthday(Tools.DTfromTS(Long.parseLong(ss[6])));
 			u.setLocation(new GeoLocation(
 				Float.parseFloat(ss[7]), 
 				Float.parseFloat(ss[8]), 
-				Tools.UTStoDate(Long.parseLong(ss[9]))
+				Tools.DTfromTS(Long.parseLong(ss[9]))
 			));
 			Description d = new Description(UUID.fromString(ss[0]));
-			d.setTimeStamp(Tools.UTStoDate(Long.parseLong(ss[10])));
+			d.setTimeStamp(Tools.DTfromTS(Long.parseLong(ss[10])));
 			d.setTitle(ss[11]);
 			d.getAge().set(Integer.parseInt(ss[12]), (Integer.parseInt(ss[13])));
 			d.getGender().loadString(ss[14]);
@@ -118,7 +123,7 @@ public class Tools
 					ss = parts[i].split("\\|");
 
 					Description p = new Description(UUID.fromString(ss[0]));
-					p.setTimeStamp(Tools.UTStoDate(Long.parseLong(ss[1])));
+					p.setTimeStamp(Tools.DTfromTS(Long.parseLong(ss[1])));
 					p.setTitle(ss[2]);
 					p.getAge().set(Integer.parseInt(ss[3]), (Integer.parseInt(ss[4])));
 					p.getGender().loadString(ss[5]);

@@ -20,10 +20,12 @@ public class UserMapper
 	private final String DRIVER = "com.mysql.jdbc.Driver";
 	private final String SERVER = "localhost:3306";
 	private final String DATABASE = "stalkr";
+	
 	private final String USERNAME = "stalkr";
 	private final String PASSWORD = "DatabasePassword1";
 //	private final String USERNAME = "root";
 //	private final String PASSWORD = "";
+	
 	private Connection con;
 	private Statement sta;
 	
@@ -191,10 +193,10 @@ public class UserMapper
 		sb.append("'")	.append(user.getPassword())										.append("', ");
 		sb.append("'")	.append(user.getFirstName())									.append("', ");
 		sb.append("'")	.append(user.getLastName())										.append("', ");
-		sb				.append(Tools.DateToUTS(user.getBirthday()))					.append(", ");
+		sb				.append(Tools.DTtoTS(user.getBirthday()))					.append(", ");
 		sb				.append(user.getLocation().getLatitude())						.append(", ");
 		sb				.append(user.getLocation().getLongitude())						.append(", ");
-		sb				.append(Tools.DateToUTS(user.getLocation().getTimeStamp()))		.append(");");
+		sb				.append(Tools.DTtoTS(user.getLocation().getTimeStamp()))		.append(");");
 		
 		return sb.toString();
 	}
@@ -209,10 +211,10 @@ public class UserMapper
 		sb.append("password='")		.append(user.getPassword())										.append("',");
 		sb.append("firstname='")	.append(user.getFirstName())									.append("',");
 		sb.append("lastname='")		.append(user.getLastName())										.append("',");
-		sb.append("birthday=")		.append(Tools.DateToUTS(user.getBirthday()))					.append(",");
+		sb.append("birthday=")		.append(Tools.DTtoTS(user.getBirthday()))					.append(",");
 		sb.append("loc_lat=")		.append(user.getLocation().getLatitude())						.append(",");
 		sb.append("loc_lon=")		.append(user.getLocation().getLongitude())						.append(",");
-		sb.append("loc_tim=")		.append(Tools.DateToUTS(user.getLocation().getTimeStamp()))		.append(" ");
+		sb.append("loc_tim=")		.append(Tools.DTtoTS(user.getLocation().getTimeStamp()))		.append(" ");
 		sb.append("WHERE u_id = '")	.append(user.getUniqueID())										.append("';");
 		
 		return sb.toString();
@@ -225,7 +227,7 @@ public class UserMapper
 		sb.append("INSERT INTO description (d_id, timestamp, title, age, age_max, "
 				+ "gender, sexuality, region, smoking, drinking) VALUES (");
 		sb.append("'")	.append(desc.getUniqueID())							.append("', ");
-		sb				.append(Tools.DateToUTS(desc.getTimeStamp()))		.append(", ");
+		sb				.append(Tools.DTtoTS(desc.getTimeStamp()))		.append(", ");
 		sb.append("'")	.append(desc.getTitle())							.append("', ");
 		sb				.append(desc.getAge().getMin())						.append(", ");
 		sb				.append(desc.getAge().getMax())						.append(", ");
@@ -244,7 +246,7 @@ public class UserMapper
 		
 		sb.append("UPDATE description SET ");
 		sb.append("title='").append(desc.getTitle()).append("',");
-		sb.append("timestamp=").append(Tools.DateToUTS(desc.getTimeStamp())).append(",");
+		sb.append("timestamp=").append(Tools.DTtoTS(desc.getTimeStamp())).append(",");
 		sb.append("age=").append(desc.getAge().getMin()).append(",");
 		sb.append("age_max=").append(desc.getAge().getMax()).append(",");
 		sb.append("gender='").append(desc.getGender().toString()).append("',");
@@ -370,7 +372,7 @@ public class UserMapper
 			
 			Description desc = new Description(UUID.fromString(rs.getString("u_id")));
 			desc.setTitle(rs.getString("title"));
-			desc.setTimeStamp(new Date(rs.getLong("timestamp")));
+			desc.setTimeStamp(Tools.DTfromTS(rs.getLong("timestamp")));
 			desc.getAge().set(rs.getInt("age"), rs.getInt("age_max"));
 			desc.getGender().loadString(rs.getString("gender"));
 			desc.getSexuality().loadString(rs.getString("sexuality"));
@@ -381,14 +383,14 @@ public class UserMapper
 			GeoLocation loc = new GeoLocation(
 				rs.getFloat("loc_lat"), 
 				rs.getFloat("loc_lon"), 
-				new Date(rs.getLong("loc_tim"))
+				Tools.DTfromTS(rs.getLong("loc_tim"))
 			);
 
 			user.setUsername(rs.getString("username")); 
 			user.setPassword(rs.getString("password"));
 			user.setFirstName(rs.getString("firstname"));
 			user.setLastName(rs.getString("lastname"));
-			user.setBirthday(Tools.UTStoDate(rs.getInt("birthday"))); 
+			user.setBirthday(Tools.DTfromTS(rs.getInt("birthday"))); 
 			user.setEmail(rs.getString("email"));
 			user.setDescription(desc);
 			user.setLocation(loc);
@@ -398,7 +400,7 @@ public class UserMapper
 			{
 				Description pref = new Description(UUID.fromString(rs.getString("d_id")));
 				pref.setTitle(rs.getString("title"));
-				pref.setTimeStamp(new Date(rs.getLong("timestamp")));
+				pref.setTimeStamp(Tools.DTfromTS(rs.getLong("timestamp")));
 				pref.getAge().set(rs.getInt("age"), rs.getInt("age_max"));
 				pref.getGender().loadString(rs.getString("gender"));
 				pref.getSexuality().loadString(rs.getString("sexuality"));
@@ -456,7 +458,7 @@ public class UserMapper
 			{
 				Description desc = new Description(UUID.fromString(rs.getString("u_id")));
 				desc.setTitle(rs.getString("title"));
-				desc.setTimeStamp(new Date(rs.getLong("timestamp")));
+				desc.setTimeStamp(Tools.DTfromTS(rs.getLong("timestamp")));
 				desc.getAge().set(rs.getInt("age"), rs.getInt("age_max"));
 				desc.getGender().loadString(rs.getString("gender"));
 				desc.getSexuality().loadString(rs.getString("sexuality"));
@@ -467,7 +469,7 @@ public class UserMapper
 				GeoLocation loc = new GeoLocation(
 					rs.getFloat("loc_lat"), 
 					rs.getFloat("loc_lon"), 
-					new Date(rs.getLong("loc_tim"))
+					Tools.DTfromTS(rs.getLong("loc_tim"))
 				);
 
 				User user = new User(UUID.fromString(rs.getString("u_id")));
@@ -475,7 +477,7 @@ public class UserMapper
 				user.setPassword(rs.getString("password"));
 				user.setFirstName(rs.getString("firstname"));
 				user.setLastName(rs.getString("lastname"));
-				user.setBirthday(Tools.UTStoDate(rs.getInt("birthday"))); 
+				user.setBirthday(Tools.DTfromTS(rs.getInt("birthday"))); 
 				user.setEmail(rs.getString("email"));
 				user.setDescription(desc);
 				user.setLocation(loc);
@@ -492,7 +494,7 @@ public class UserMapper
 				{
 					Description pref = new Description(UUID.fromString(rs.getString("d_id")));
 					pref.setTitle(rs.getString("title"));
-					pref.setTimeStamp(new Date(rs.getLong("timestamp")));
+					pref.setTimeStamp(Tools.DTfromTS(rs.getLong("timestamp")));
 					pref.getAge().set(rs.getInt("age"), rs.getInt("age_max"));
 					pref.getGender().loadString(rs.getString("gender"));
 					pref.getSexuality().loadString(rs.getString("sexuality"));
