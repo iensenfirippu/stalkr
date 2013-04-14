@@ -97,7 +97,7 @@ namespace StalkrAdminTool
 				UserForm userform = new UserForm(user);
 				DialogResult dr = userform.ShowDialog();
 
-				if (dr == DialogResult.OK)
+				if (dr == DialogResult.OK && _db.SaveUser(user))
 				{
 					status_label.Text = USEROK.Replace("{0}", user.Username);
 				}

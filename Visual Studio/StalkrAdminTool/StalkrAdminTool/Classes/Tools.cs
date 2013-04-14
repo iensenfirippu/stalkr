@@ -16,8 +16,8 @@ namespace StalkrAdminTool
 		/// </summary>
 		public static double DTtoTS(DateTime dateTime)
 		{
-			DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0, 0).ToLocalTime();
-			TimeSpan span = (dateTime.ToLocalTime() - epoch);
+			DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0, 0);
+			TimeSpan span = (dateTime - epoch);
 			return span.TotalSeconds;
 		}
 
@@ -28,7 +28,7 @@ namespace StalkrAdminTool
 		{
 			// Unix timestamp is seconds past epoch
 			System.DateTime dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0);
-			dtDateTime = dtDateTime.AddSeconds(unixTimeStamp).ToLocalTime();
+			dtDateTime = dtDateTime.AddSeconds(unixTimeStamp);
 			return dtDateTime;
 		}
 
