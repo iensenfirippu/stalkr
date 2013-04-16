@@ -20,8 +20,8 @@
     </target>
     <target name="wsimport-client-WS" depends="wsimport-init">
         <mkdir dir="${build.generated.dir}/jax-wsCache/WS"/>
-        <property name="wsdl-WS" location="xml-resources/web-service-references/WS/wsdl/jrpg.iensenfirippu.dk_8080/Stalkr/WS.wsdl"/>
-        <wsimport sourcedestdir="${build.generated.dir}/jax-wsCache/WS" destdir="${build.generated.dir}/jax-wsCache/WS" wsdl="${wsdl-WS}" catalog="catalog.xml" extension="true" verbose="true" wsdlLocation="http://jrpg.iensenfirippu.dk:8080/Stalkr/WS?WSDL" xnocompile="true" xendorsed="true" package="javalibtest">
+        <property name="wsdl-WS" location="xml-resources/web-service-references/WS/wsdl/jrpg.iensenfirippu.dk_8080/StalkrTest/WS.wsdl"/>
+        <wsimport sourcedestdir="${build.generated.dir}/jax-wsCache/WS" destdir="${build.generated.dir}/jax-wsCache/WS" wsdl="${wsdl-WS}" catalog="catalog.xml" extension="true" verbose="true" wsdlLocation="http://jrpg.iensenfirippu.dk:8080/StalkrTest/WS?WSDL" xnocompile="true" xendorsed="true">
             <depends file="${wsdl-WS}"/>
             <produces dir="${build.generated.dir}/jax-wsCache/WS"/>
         </wsimport>
@@ -33,7 +33,7 @@
     </target>
     <target name="wsimport-client-clean-WS" depends="-init-project">
         <delete dir="${build.generated.dir}/jax-wsCache/WS"/>
-        <delete dir="${build.generated.sources.dir}/jax-ws/javalibtest"/>
+        <delete dir="${build.generated.sources.dir}/jax-ws/easj/jrpg"/>
     </target>
     <target name="wsimport-client-generate" depends="wsimport-client-WS"/>
 </project>

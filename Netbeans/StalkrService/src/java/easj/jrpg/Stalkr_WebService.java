@@ -19,13 +19,6 @@ public class Stalkr_WebService
 		return um.verifyLogin(user, pass);
 	}
 	
-	@WebMethod(operationName = "saveUser")
-	public boolean saveUser(@WebParam(name = "user") String userasstring)
-	{
-		UserMapper um = new UserMapper();
-		return um.saveUser(userasstring);
-	}
-	
 	@WebMethod(operationName = "getUser")
 	public String getUser(@WebParam(name = "id") String id)
 	{
@@ -39,6 +32,13 @@ public class Stalkr_WebService
 		UserMapper um = new UserMapper();
 		return um.getUsers(id);
 	}
+	
+	@WebMethod(operationName = "saveUser")
+	public boolean saveUser(@WebParam(name = "user") String userasstring)
+	{
+		UserMapper um = new UserMapper();
+		return um.saveUser(userasstring);
+	}
 
 	@WebMethod(operationName = "deleteUser")
 	public boolean deleteUser(@WebParam(name = "user") String user, @WebParam(name = "pass") String pass, @WebParam(name = "id") String id)
@@ -50,5 +50,12 @@ public class Stalkr_WebService
 			result = um.deleteUser(id);
 		}
 		return result;
+	}
+
+	@WebMethod(operationName = "getMatches")
+	public String[] getMatches(@WebParam(name = "id") String id)
+	{
+		UserMapper um = new UserMapper();
+		return um.getMatches(um.getUser(id));
 	}
 }

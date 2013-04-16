@@ -4,6 +4,10 @@
 
 <xs:element name="deleteUserResponse" type="tns:deleteUserResponse"/>
 
+<xs:element name="getMatches" type="tns:getMatches"/>
+
+<xs:element name="getMatchesResponse" type="tns:getMatchesResponse"/>
+
 <xs:element name="getUser" type="tns:getUser"/>
 
 <xs:element name="getUserResponse" type="tns:getUserResponse"/>
@@ -52,6 +56,18 @@
 </xs:complexType>
 
 <xs:complexType name="getUsersResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:string" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getMatches">
+<xs:sequence>
+<xs:element name="id" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getMatchesResponse">
 <xs:sequence>
 <xs:element name="return" type="xs:string" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
 </xs:sequence>

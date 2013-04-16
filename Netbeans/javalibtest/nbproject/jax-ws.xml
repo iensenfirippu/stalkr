@@ -3,9 +3,9 @@
   <services/>
   <clients>
     <client name="WS">
-      <wsdl-url>http://jrpg.iensenfirippu.dk:8080/Stalkr/WS?WSDL</wsdl-url>
-      <local-wsdl-file>jrpg.iensenfirippu.dk_8080/Stalkr/WS.wsdl</local-wsdl-file>
-      <package-name forceReplace="true">javalibtest</package-name>
+      <wsdl-url>http://jrpg.iensenfirippu.dk:8080/StalkrTest/WS?WSDL</wsdl-url>
+      <local-wsdl-file>jrpg.iensenfirippu.dk_8080/StalkrTest/WS.wsdl</local-wsdl-file>
+      <package-name>easj.jrpg</package-name>
       <catalog-file>catalog.xml</catalog-file>
       <wsimport-options>
         <wsimport-option>
@@ -18,7 +18,7 @@
         </wsimport-option>
         <wsimport-option>
           <wsimport-option-name>wsdlLocation</wsimport-option-name>
-          <wsimport-option-value>http://jrpg.iensenfirippu.dk:8080/Stalkr/WS?WSDL</wsimport-option-value>
+          <wsimport-option-value>http://jrpg.iensenfirippu.dk:8080/StalkrTest/WS?WSDL</wsimport-option-value>
         </wsimport-option>
         <wsimport-option>
           <wsimport-option-name>xnocompile</wsimport-option-name>
@@ -27,10 +27,6 @@
         <wsimport-option>
           <wsimport-option-name>xendorsed</wsimport-option-name>
           <wsimport-option-value>true</wsimport-option-value>
-        </wsimport-option>
-        <wsimport-option>
-          <wsimport-option-name>package</wsimport-option-name>
-          <wsimport-option-value>javalibtest</wsimport-option-value>
         </wsimport-option>
       </wsimport-options>
     </client>
