@@ -47,6 +47,9 @@ public class Description
 		resetAlteredFields();
 	}
 	
+	/**
+	* Jonaz: Resets all the fields that has been altered
+	*/
 	public void resetAlteredFields()
 	{
 		_alteredfields.clear();

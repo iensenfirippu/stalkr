@@ -71,6 +71,11 @@ public class EnumList<T extends Enum>
 		return list;
 	}
 	
+	/**
+	* Jonaz: Adds a new enum to the list
+	* @param the original amount
+	* @param the amount to add
+	*/
 	public ArrayList<String> toStringList()
 	{
 		ArrayList<String> list = new ArrayList<String>();

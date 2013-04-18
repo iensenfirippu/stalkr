@@ -28,6 +28,9 @@ public class Tools
 		return new Date(uts);
 	}
 	
+	/**
+	* Jonaz: Initiates a stringbuilder and makes a String, containing a user.
+	*/
 	public static String UserToString(User u, boolean admin)
 	{
 		StringBuilder sb = new StringBuilder();
@@ -81,6 +84,9 @@ public class Tools
 		}
 	}
 	
+	/**
+	* Jonaz: The form for the user to fill out when creating a new profile.
+	*/
 	public static User UserFromString(String s)
 	{
 		User u = null;
