@@ -4,7 +4,6 @@
  */
 package easj.jrpg.stalkrlib;
 
-import easj.jrpg.stalkrlib.EnumList.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -69,11 +68,19 @@ public class User
 		}
 	}
 	
-	@Override
-	public String toString()
-	{
-		return _username;
-	}
+	@Override public String toString() { return _username; }
+
+	// isChanged methods
+	public boolean isChangedUniqueID() { return _alteredfields.get("uniqueid"); }
+	public boolean isChangedEmail() { return _alteredfields.get("email"); }
+	public boolean isChangedUsername() { return _alteredfields.get("username"); }
+	public boolean isChangedPassword() { return _alteredfields.get("password"); }
+	public boolean isChangedFirstName() { return _alteredfields.get("firstname"); }
+	public boolean isChangedLastName() { return _alteredfields.get("lastname"); }
+	public boolean isChangedBirthday() { return _alteredfields.get("birthday"); }
+	public boolean isChangedLocation() { return _alteredfields.get("location"); }
+	public boolean isChangedDescription() { return _alteredfields.get("description"); }
+	public boolean isChangedPreferences() { return _alteredfields.get("preferences"); }
 
 	// Accessor methods
 	public UUID getUniqueID() { return _uniqueid; }
@@ -102,8 +109,6 @@ public class User
 	public String getFullName() { return _lastname + ", " + _firstname; }
 	
 	// Deprecated fields
-	@Deprecated
-	public Description getPreference(int index) { return _preferences.get(index); }
-	@Deprecated
-	public void setPreference(Description value) { /*_alteredfields.put("preference", true);*/ _preferences.clear(); _preferences.add(value); }
+	@Deprecated public Description getPreference(int index) { return _preferences.get(index); }
+	@Deprecated public void setPreference(Description value) { _alteredfields.put("preference", true); _preferences.clear(); _preferences.add(value); }
 }

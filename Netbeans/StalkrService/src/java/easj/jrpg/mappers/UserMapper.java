@@ -1,20 +1,17 @@
 package easj.jrpg.mappers;
 
 import easj.jrpg.Match;
+import easj.jrpg.stalkrlib.Tools;
 import java.sql.Connection;
-import java.util.Date;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.UUID;
-import easj.jrpg.stalkrlib.*;
-import easj.jrpg.stalkrlib.EnumList.*;
+import java.util.Date;
 
 /**
  *
- * @author Philip
  */
 public class UserMapper
 {
@@ -23,8 +20,20 @@ public class UserMapper
 	private final String DATABASE = "stalkr";
 	private final String USERNAME = "stalkr";
 	private final String PASSWORD = "DatabasePassword1";
-	//private final String USERNAME = "root";
-	//private final String PASSWORD = "";
+	//private final String USERNAME = "root";	// For local testing
+	//private final String PASSWORD = "";		// For local testing
+	
+	private final boolean DEBUG = false;	// For extended error messages
+	
+	// Error codes
+	private final String ERRNULL = "E00";	// null or empty resultset
+	private final String ERRFALS = "E01";	// boolean false
+	private final String ERRTRUE = "E10";	// boolean true
+	private final String ERRPERM = "E25";	// insufficient permissions
+	private final String ERRINVA = "E42";	// invalid userstring
+	private final String ERRSQL  = "E90";	// SQL error
+	private final String ERRUNKN = "E99";	// unidentified runtime error
+	
 	private Connection con;
 	private Statement sta;
 	
@@ -39,9 +48,9 @@ public class UserMapper
 			con = DriverManager.getConnection("jdbc:mysql://" + SERVER + "/" + DATABASE + "?user=" + USERNAME + "&password=" + PASSWORD);
 			sta = con.createStatement();
 		}
-		catch(Exception e)
+		catch (Exception e)
 		{
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 	}
 	
@@ -57,9 +66,9 @@ public class UserMapper
 			con.close();
 			con = null;
 		}
-		catch(Exception e)
+		catch (Exception e)
 		{
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 	}
 
@@ -67,11 +76,11 @@ public class UserMapper
 	 * Verifies a users login
 	 * @param username The username of the user
 	 * @param password The Password of the user
-	 * @return true on success
+	 * @return Error code string (E01 on success).
 	 */
-	public boolean verifyLogin(String username, String password)
+	public String verifyLogin(String username, String password)
 	{
-		boolean passwordMatch = false;
+		String result = ERRFALS;
 		
 		StringBuilder sb = new StringBuilder();
 		sb.append("SELECT COUNT(u_id) AS number FROM user WHERE ");
@@ -86,34 +95,83 @@ public class UserMapper
 			
 			if(rs.getInt("number") == 1)
 			{
-				passwordMatch = true;
+				result = ERRTRUE;
 			}
 		}
-		catch(Exception ex)
+		catch (SQLException ex)
 		{
-			ex.printStackTrace();
+			result = ERRSQL;
+		}
+		catch (Exception ex)
+		{
+			result = ERRUNKN;
 		}
 		finally
 		{
 			disconnect();
-			return passwordMatch;
 		}
+		
+		return result;
+	}
+
+	/**
+	 * Verifies an administrators login
+	 * @param username The username of the administrator
+	 * @param password The Password of the administrator
+	 * @return permission string
+	 */
+	public String verifyAdminLogin(String username, String password)
+	{
+		String result = "000000";
+		
+		if (!username.equals("") && !password.equals(""))
+		{
+			StringBuilder sb = new StringBuilder();
+			sb.append("SELECT permission FROM admin WHERE ");
+			sb.append("username = '").append(username).append("' AND ");
+			sb.append("password = '").append(password).append("'");
+
+			try
+			{
+				connect();
+				ResultSet rs = sta.executeQuery(sb.toString());
+
+				while (rs.next())
+				{
+					result = rs.getString("permission");
+				}
+			}
+			//catch (SQLException ex) { result = ERRSQL; }
+			catch (Exception ex) { /*result = ERRUNKN;*/ }
+			finally
+			{
+				disconnect();
+			}
+		}
+		
+		return result;
 	}
 	
 	/**
 	 * Fetches a single User from the database
+	 * @param username The username of the user
+	 * @param password The Password of the user
 	 * @param uuid ID of the user to fetch
 	 * @return User as string
 	 */
-	public String getUser(String uuid)
+	public String getUser(String username, String password, String uuid)
 	{
-		User user = new User(UUID.fromString(uuid));
+		//String adminpermissions = verifyAdminLogin(username, password);
+		String result = ERRNULL;
 		
 		StringBuilder sb1 = new StringBuilder();
 		StringBuilder sb2 = new StringBuilder();
-		// SELECT all fields in user
-		sb1.append("SELECT user.*, ");
-		// SELECT all but d_id from description
+		
+		// SELECT all but password in user
+		sb1.append("SELECT user.u_id, user.email, user.username, ");
+		sb1.append("user.firstname, user.lastname, user.birthday, ");
+		sb1.append("user.loc_lat, user.loc_lon, user.loc_tim, ");
+		// SELECT all but id in description
 		sb1.append("dscr.timestamp, dscr.title, dscr.age, dscr.age_max, dscr.gender, ");
 		sb1.append("dscr.sexuality, dscr.region, dscr.smoking, dscr.drinking ");
 		// FROM user table
@@ -130,75 +188,86 @@ public class UserMapper
 		{
 			connect();
 			ResultSet rs = sta.executeQuery(sb1.toString());
+			StringBuilder user = new StringBuilder();
 			rs.first();
 			
-			Description desc = new Description(UUID.fromString(rs.getString("u_id")));
-			desc.setTitle(rs.getString("title"));
-			desc.setTimeStamp(Tools.DTfromTS(rs.getLong("timestamp")));
-			desc.getAge().set(rs.getInt("age"), rs.getInt("age_max"));
-			desc.getGender().loadString(rs.getString("gender"));
-			desc.getSexuality().loadString(rs.getString("sexuality"));
-			desc.getArea().loadString(rs.getString("region"));
-			desc.getSmoking().loadString(rs.getString("smoking"));
-			desc.getDrinking().loadString(rs.getString("drinking"));
-
-			GeoLocation loc = new GeoLocation(
-				rs.getFloat("loc_lat"), 
-				rs.getFloat("loc_lon"), 
-				Tools.DTfromTS(rs.getLong("loc_tim"))
-			);
-
-			user.setUsername(rs.getString("username")); 
-			user.setPassword(rs.getString("password"));
-			user.setFirstName(rs.getString("firstname"));
-			user.setLastName(rs.getString("lastname"));
-			user.setBirthday(Tools.DTfromTS(rs.getInt("birthday"))); 
-			user.setEmail(rs.getString("email"));
-			user.setDescription(desc);
-			user.setLocation(loc);
+			// USER
+			user.append(rs.getString("u_id"))					.append("|");
+			user.append(rs.getString("email"))					.append("|");
+			user.append(rs.getString("username"))				.append("|");
+			/*user.append(rs.getString("password"))	*/user		.append("|");
+			user.append(rs.getString("firstname"))				.append("|");
+			user.append(rs.getString("lastname"))				.append("|");
+			user.append(Long.toString(rs.getLong("birthday")))	.append("|");
+			
+			// LOCATION
+			user.append(Float.toString(rs.getFloat("loc_lat")))	.append("|");
+			user.append(Float.toString(rs.getFloat("loc_lon")))	.append("|");
+			user.append(Long.toString(rs.getLong("loc_tim")))	.append("|");
+			
+			// DESCRIPTION
+			user.append(rs.getLong("timestamp"))				.append("|");
+			user.append(rs.getString("title"))					.append("|");
+			user.append(rs.getInt("age"))						.append("|");
+			user.append(rs.getInt("age_max"))					.append("|");
+			user.append(rs.getString("gender"))					.append("|");
+			user.append(rs.getString("sexuality"))				.append("|");
+			user.append(rs.getString("region"))					.append("|");
+			user.append(rs.getString("smoking"))				.append("|");
+			user.append(rs.getString("drinking"))				;
 			
 			rs = sta.executeQuery(sb2.toString());
 			while (rs.next())
 			{
-				Description pref = new Description(UUID.fromString(rs.getString("d_id")));
-				pref.setTitle(rs.getString("title"));
-				pref.setTimeStamp(Tools.DTfromTS(rs.getLong("timestamp")));
-				pref.getAge().set(rs.getInt("age"), rs.getInt("age_max"));
-				pref.getGender().loadString(rs.getString("gender"));
-				pref.getSexuality().loadString(rs.getString("sexuality"));
-				pref.getArea().loadString(rs.getString("region"));
-				pref.getSmoking().loadString(rs.getString("smoking"));
-				pref.getDrinking().loadString(rs.getString("drinking"));
-				user.getPreferences().add(pref);
+				// PREFERENCE
+				user.append("{");
+				user.append(rs.getString("d_id"))				.append("|");
+				user.append(rs.getLong("timestamp"))			.append("|");
+				user.append(rs.getString("title"))				.append("|");
+				user.append(rs.getInt("age"))					.append("|");
+				user.append(rs.getInt("age_max"))				.append("|");
+				user.append(rs.getString("gender"))				.append("|");
+				user.append(rs.getString("sexuality"))			.append("|");
+				user.append(rs.getString("region"))				.append("|");
+				user.append(rs.getString("smoking"))			.append("|");
+				user.append(rs.getString("drinking"))			;
 			}
+			
+			result = user.toString();
 		}
-		catch(Exception ex)
-		{
-			return "Exception: " + ex.getMessage();
-			//ex.printStackTrace();
-		}
+		catch (SQLException ex)	{ result = ERRSQL; }
+		catch (Exception ex)	{ result = ERRUNKN; }
 		finally
 		{
 			disconnect();
-			return Tools.UserToString(user, true);
+			if (Tools.ValidateUserString(result) == 0f) { result = ERRINVA; }
 		}
+		
+		return result;
 	}
 	
 	/**
 	 * Fetches a list of users from the database
+	 * @param username The username of the user
+	 * @param password The Password of the user
 	 * @param uuid ID of user to exclude
 	 * @return Users as strings in array
 	 */
-	public String[] getUsers(String uuid)
+	public String[] getUsers(String username, String password, String uuid)
 	{
-		ArrayList<User> users = new ArrayList();
+		//String adminpermissions = verifyAdminLogin(username, password);
+		String[] result = new String[1];
+		// result[0] = ERRNULL;
+		ArrayList<StringBuilder> users = new ArrayList<StringBuilder>();
 		
 		StringBuilder sb1 = new StringBuilder();
 		StringBuilder sb2 = new StringBuilder();
 		
-		// SELECT all fields in user
-		sb1.append("SELECT user.*, ");
-		// SELECT all but d_id from description
+		// SELECT all but password in user
+		sb1.append("SELECT user.u_id, user.email, user.username, ");
+		sb1.append("user.firstname, user.lastname, user.birthday, ");
+		sb1.append("user.loc_lat, user.loc_lon, user.loc_tim, ");
+		// SELECT all but id in description
 		sb1.append("dscr.timestamp, dscr.title, dscr.age, dscr.age_max, dscr.gender, ");
 		sb1.append("dscr.sexuality, dscr.region, dscr.smoking, dscr.drinking ");
 		// FROM user table
@@ -216,259 +285,346 @@ public class UserMapper
 			connect();
 			//System.out.println(sb1.toString());
 			ResultSet rs = sta.executeQuery(sb1.toString());
+			
 			while(rs.next())
 			{
-				Description desc = new Description(UUID.fromString(rs.getString("u_id")));
-				desc.setTitle(rs.getString("title"));
-				desc.setTimeStamp(Tools.DTfromTS(rs.getLong("timestamp")));
-				desc.getAge().set(rs.getInt("age"), rs.getInt("age_max"));
-				desc.getGender().loadString(rs.getString("gender"));
-				desc.getSexuality().loadString(rs.getString("sexuality"));
-				desc.getArea().loadString(rs.getString("region"));
-				desc.getSmoking().loadString(rs.getString("smoking"));
-				desc.getDrinking().loadString(rs.getString("drinking"));
-
-				GeoLocation loc = new GeoLocation(
-					rs.getFloat("loc_lat"), 
-					rs.getFloat("loc_lon"), 
-					Tools.DTfromTS(rs.getLong("loc_tim"))
-				);
-
-				User user = new User(UUID.fromString(rs.getString("u_id")));
-				user.setUsername(rs.getString("username")); 
-				user.setPassword(rs.getString("password"));
-				user.setFirstName(rs.getString("firstname"));
-				user.setLastName(rs.getString("lastname"));
-				user.setBirthday(Tools.DTfromTS(rs.getInt("birthday"))); 
-				user.setEmail(rs.getString("email"));
-				user.setDescription(desc);
-				user.setLocation(loc);
+				StringBuilder user = new StringBuilder();
 				
+				// USER
+				user.append(rs.getString("u_id"))						.append("|");
+				user.append(rs.getString("email"))						.append("|");
+				user.append(rs.getString("username"))					.append("|");
+				/*result.append(rs.getString("password"))*/user			.append("|");
+				user.append(rs.getString("firstname"))					.append("|");
+				user.append(rs.getString("lastname"))					.append("|");
+				user.append(Long.toString(rs.getLong("birthday")))		.append("|");
+
+				// LOCATION
+				user.append(Float.toString(rs.getFloat("loc_lat")))		.append("|");
+				user.append(Float.toString(rs.getFloat("loc_lon")))		.append("|");
+				user.append(Long.toString(rs.getLong("loc_tim")))		.append("|");
+
+				// DESCRIPTION
+				user.append(rs.getLong("timestamp"))					.append("|");
+				user.append(rs.getString("title"))						.append("|");
+				user.append(rs.getInt("age"))							.append("|");
+				user.append(rs.getInt("age_max"))						.append("|");
+				user.append(rs.getString("gender"))						.append("|");
+				user.append(rs.getString("sexuality"))					.append("|");
+				user.append(rs.getString("region"))						.append("|");
+				user.append(rs.getString("smoking"))					.append("|");
+				user.append(rs.getString("drinking"))					;
+
 				users.add(user);
 			}
 			
-			for (User u : users)
+			for (StringBuilder u : users)
 			{
-				String statement = sb2.toString() + "'" + u.getUniqueID().toString() + "'";
-				//System.out.println(statement);
+				String statement = sb2.toString() + "'" + u.substring(0, 36) + "'";
 				rs = sta.executeQuery(statement);
-				while(rs.next())
+				
+				while (rs.next())
 				{
-					Description pref = new Description(UUID.fromString(rs.getString("d_id")));
-					pref.setTitle(rs.getString("title"));
-					pref.setTimeStamp(Tools.DTfromTS(rs.getLong("timestamp")));
-					pref.getAge().set(rs.getInt("age"), rs.getInt("age_max"));
-					pref.getGender().loadString(rs.getString("gender"));
-					pref.getSexuality().loadString(rs.getString("sexuality"));
-					pref.getArea().loadString(rs.getString("region"));
-					pref.getSmoking().loadString(rs.getString("smoking"));
-					pref.getDrinking().loadString(rs.getString("drinking"));
-					u.getPreferences().add(pref);
+					// PREFERENCE
+					u.append("{");
+					u.append(rs.getString("d_id"))						.append("|");
+					u.append(rs.getLong("timestamp"))					.append("|");
+					u.append(rs.getString("title"))						.append("|");
+					u.append(rs.getInt("age"))							.append("|");
+					u.append(rs.getInt("age_max"))						.append("|");
+					u.append(rs.getString("gender"))					.append("|");
+					u.append(rs.getString("sexuality"))					.append("|");
+					u.append(rs.getString("region"))					.append("|");
+					u.append(rs.getString("smoking"))					.append("|");
+					u.append(rs.getString("drinking"))					;
 				}
 			}
+
+			result = new String[users.size()];
+			for (int i = 0; i < result.length; i++)
+			{
+				result[i] = users.get(i).toString();
+				if (Tools.ValidateUserString(result[i]) == 0f) { result[i] = ERRINVA; }
+			}
 		}
-		catch(Exception ex)
-		{
-			ex.printStackTrace();
-		}
+		catch (SQLException ex) { result[0] = ERRSQL; }
+		catch (Exception ex) { result[0] = ERRUNKN; }
 		finally
 		{
 			disconnect();
-			String[] result = new String[users.size()];
-			for (int i = 0; i < result.length; i++)
-			{
-				result[i] = Tools.UserToString(users.get(i), true);
-			}
-			return result;
 		}
+		
+		return result;
 	}
 	
 	/**
 	 * Saves a user to the database
+	 * @param username The username of the user
+	 * @param password The Password of the user
 	 * @param userasstring The user as a string
 	 * @return true on success
 	 */
-	public boolean saveUser(String userasstring) {
-		boolean result = false;
+	public String saveUser(String username, String password, String userasstring)
+	{
+		String result = ERRINVA;
 		
-		boolean userexists = false;
-		boolean descriptionexists = false;
-		ArrayList<String> preferenceids = new ArrayList<String>();
-		User user = Tools.UserFromString(userasstring);
-		
-		if (user != null)
+		if (Tools.ValidateUserString(userasstring) > 0f)
 		{
+			result = ERRFALS;
+			String adminpermissions = verifyAdminLogin(username, password);
+
+			boolean allowed = false;
+			boolean userexists = false;
+			boolean descriptionexists = false;
+			ArrayList<String> preferenceids = new ArrayList<String>();
+
+			String[] parts = userasstring.split("\\{");
+			String uid = parts[0].substring(0, 36);
+
 			StringBuilder sb1 = new StringBuilder();
 			StringBuilder sb2 = new StringBuilder();
 			StringBuilder sb3 = new StringBuilder();
-			
+			StringBuilder sb4 = new StringBuilder();
+
 			sb1.append("SELECT count(u_id) AS users FROM user ");
-			sb1.append("WHERE u_id = '").append(user.getUniqueID().toString()).append("';");
-			
-			sb2.append("SELECT count(d_id) AS descriptions FROM description ");
-			sb2.append("WHERE d_id = '").append(user.getUniqueID().toString()).append("';");
-			
-			sb3.append("SELECT d_id AS p_id FROM userdescription ");
-			sb3.append("WHERE u_id = '").append(user.getUniqueID().toString()).append("';");
+			sb1.append("WHERE u_id = '").append(uid).append("' ");
+			sb1.append("AND username = '").append(username).append("' ");
+			sb1.append("AND password = '").append(password).append("';");
+
+			sb2.append("SELECT count(u_id) AS users FROM user ");
+			sb2.append("WHERE u_id = '").append(uid).append("';");
+
+			sb3.append("SELECT count(d_id) AS descriptions FROM description ");
+			sb3.append("WHERE d_id = '").append(uid).append("';");
+
+			sb4.append("SELECT d_id AS p_id FROM userdescription ");
+			sb4.append("WHERE u_id = '").append(uid).append("';");
 
 			try
 			{
 				connect();
-				ResultSet rs = sta.executeQuery(sb1.toString());
-				rs.first();
-				if (rs.getInt("users") == 1) { userexists = true; }
-				rs = sta.executeQuery(sb2.toString());
-				rs.first();
-				if (rs.getInt("descriptions") == 1) { descriptionexists = true; }
-				rs = sta.executeQuery(sb3.toString());
-				while (rs.next())
-				{
-					preferenceids.add(rs.getString("p_id"));
-				}
-			}
-			catch(Exception ex)
-			{
-				ex.printStackTrace();
-			}
-			finally
-			{
-				disconnect();
-			}
+				ResultSet rs;
 
-			int expectedrows = 2;
-			ArrayList<String> sqlstatements = new ArrayList<String>();
-			
-			// user UPDATE
-			if (userexists)			{ sqlstatements.add(makeStatement_UpdateUser(user)); }
-			// user INSERT
-			else					{ sqlstatements.add(makeStatement_InsertUser(user)); }
-			
-			// Description UPDATE
-			if (descriptionexists)	{ sqlstatements.add(makeStatement_UpdateDescription(user.getDescription())); }
-			// Description INSERT
-			else					{ sqlstatements.add(makeStatement_InsertDescription(user.getDescription())); }
-			
-			for (Description p : user.getPreferences())
-			{
-				// Preference UPDATE
-				if (preferenceids.contains(p.getUniqueID().toString()))
+				if (adminpermissions.charAt(4) == '1')
 				{
-					expectedrows += 1;
-					sqlstatements.add(makeStatement_UpdateDescription(p));
-					preferenceids.remove(p.getUniqueID().toString());
+					allowed = true;
 				}
-				// Preference INSERT
 				else
 				{
-					expectedrows += 2;
-					sqlstatements.add(makeStatement_InsertDescription(p));
-					sqlstatements.add(makeStatement_InsertUserDescription(user.getUniqueID().toString(), p.getUniqueID().toString()));
+					rs = sta.executeQuery(sb1.toString());
+					rs.first();
+					if (rs.getInt("users") == 1) { allowed = true; }
 				}
-			}
-			// Preference DELETE
-			for (String id : preferenceids)
-			{
-				expectedrows += 1;
-				sqlstatements.add(makeStatement_DeleteDescription(id));
-				sqlstatements.add(makeStatement_DeleteUserDescription(id));
-			}
 
-			try
-			{
-				connect();
-				int rowsaffected = 0;
-				for (String statement : sqlstatements)
+				if (allowed)
 				{
-					//System.out.println(statement);
-					rowsaffected += sta.executeUpdate(statement);
-				}
-				if (rowsaffected == expectedrows)
-				{
-					result = true;
+					rs = sta.executeQuery(sb2.toString());
+					rs.first();
+					if (rs.getInt("users") == 1) { userexists = true; }
+
+					rs = sta.executeQuery(sb3.toString());
+					rs.first();
+					if (rs.getInt("descriptions") == 1) { descriptionexists = true; }
+
+					rs = sta.executeQuery(sb4.toString());
+					while (rs.next())
+					{
+						preferenceids.add(rs.getString("p_id"));
+					}
 				}
 			}
-			catch(Exception ex)
-			{
-				ex.printStackTrace();
-			}
+			catch (Exception ex) { /* do nothing */ }
 			finally
 			{
 				disconnect();
-				return result;
+			}
+
+			if (allowed)
+			{
+				int expectedrows = 0;
+				ArrayList<String> sqlstatements = new ArrayList<String>();
+
+				// user UPDATE
+				if (userexists)
+				{
+					String statement = makeStatement_UpdateUser(parts[0]);
+					if (!statement.equals(""))
+					{
+						expectedrows++;
+						sqlstatements.add(statement);
+					}
+				}
+				// user INSERT
+				else
+				{
+					expectedrows++;
+					sqlstatements.add(makeStatement_InsertUser(parts[0]));
+				}
+
+				// Description UPDATE
+				if (descriptionexists)
+				{
+					String statement = makeStatement_UpdateDescription(parts[0]);
+					if (!statement.equals(""))
+					{
+						expectedrows++;
+						sqlstatements.add(statement);
+					}
+				}
+				// Description INSERT
+				else
+				{
+					expectedrows++;
+					sqlstatements.add(makeStatement_InsertDescription(parts[0]));
+				}
+				
+				for (int i = 1; i < parts.length; i++)
+				{
+					String pid = parts[i].substring(0, 36);
+
+					// Preference UPDATE
+					if (preferenceids.contains(pid))
+					{
+						String statement = makeStatement_UpdatePreference(parts[i]);
+						if (!statement.equals(""))
+						{
+							expectedrows++;
+							sqlstatements.add(statement);
+						}
+						preferenceids.remove(pid);
+					}
+					// Preference INSERT
+					else
+					{
+						expectedrows += 2;
+						sqlstatements.add(makeStatement_InsertPreference(parts[i]));
+						sqlstatements.add(makeStatement_InsertUserDescription(uid, pid));
+					}
+				}
+				// Preference DELETE
+				for (String id : preferenceids)
+				{
+					expectedrows += 2;
+					sqlstatements.add(makeStatement_DeleteDescription(id));
+					sqlstatements.add(makeStatement_DeleteUserDescription(id));
+				}
+
+				try
+				{
+					connect();
+					int rowsaffected = 0;
+
+					for (String statement : sqlstatements)
+					{
+						if (DEBUG) { result = statement; }
+						rowsaffected += sta.executeUpdate(statement);
+					}
+
+					if (rowsaffected == expectedrows)
+					{
+						result = ERRTRUE;
+					}
+				}
+				catch (SQLException ex)
+				{
+						if (DEBUG)	{ result = ERRSQL + ": " + result; }
+						else		{ result = ERRSQL; }
+				}
+				catch (Exception ex)
+				{
+						if (DEBUG)	{ result = ERRUNKN + ": " + ex.getMessage(); }
+						else		{ result = ERRUNKN; }
+				}
+				finally
+				{
+					disconnect();
+				}
+			}
+			else
+			{
+				result = ERRPERM;
 			}
 		}
 		
 		return result;
 	}
-	private String makeStatement_InsertUser(User user) {
+	private String makeStatement_InsertUser(String user) {
+		String[] values = user.split("\\|", -1);
 		StringBuilder sb = new StringBuilder();
 		
 		sb.append("INSERT INTO user (u_id, email, username, "
 				+ "password, firstname, lastname, birthday, "
 				+ "loc_lat, loc_lon, loc_tim"
 				+ ") VALUES (");
-		sb.append("'")	.append(user.getUniqueID())										.append("', ");
-		sb.append("'")	.append(user.getEmail())										.append("', ");
-		sb.append("'")	.append(user.getUsername())										.append("', ");
-		sb.append("'")	.append(user.getPassword())										.append("', ");
-		sb.append("'")	.append(user.getFirstName())									.append("', ");
-		sb.append("'")	.append(user.getLastName())										.append("', ");
-		sb				.append(Tools.DTtoTS(user.getBirthday()))					.append(", ");
-		sb				.append(user.getLocation().getLatitude())						.append(", ");
-		sb				.append(user.getLocation().getLongitude())						.append(", ");
-		sb				.append(Tools.DTtoTS(user.getLocation().getTimeStamp()))		.append(");");
+		sb.append("'")	.append(values[0])	.append("', ");
+		sb.append("'")	.append(values[1])	.append("', ");
+		sb.append("'")	.append(values[2])	.append("', ");
+		sb.append("'")	.append(values[3])	.append("', ");
+		sb.append("'")	.append(values[4])	.append("', ");
+		sb.append("'")	.append(values[5])	.append("', ");
+		sb				.append(values[6])	.append( ", ");
+		sb				.append(values[7])	.append( ", ");
+		sb				.append(values[8])	.append( ", ");
+		sb				.append(values[9])	.append(");");
 		
 		return sb.toString();
 	}
-	private String makeStatement_UpdateUser(User user) {
+	private String makeStatement_UpdateUser(String user) {
+		String[] values = user.split("\\|", -1);
 		StringBuilder sb = new StringBuilder();
+		int i = 0;
 		
 		sb.append("UPDATE user SET ");
-		sb.append("email='")		.append(user.getEmail())										.append("',");
-		sb.append("username='")		.append(user.getUsername())										.append("',");
-		sb.append("password='")		.append(user.getPassword())										.append("',");
-		sb.append("firstname='")	.append(user.getFirstName())									.append("',");
-		sb.append("lastname='")		.append(user.getLastName())										.append("',");
-		sb.append("birthday=")		.append(Tools.DTtoTS(user.getBirthday()))					.append(",");
-		sb.append("loc_lat=")		.append(user.getLocation().getLatitude())						.append(",");
-		sb.append("loc_lon=")		.append(user.getLocation().getLongitude())						.append(",");
-		sb.append("loc_tim=")		.append(Tools.DTtoTS(user.getLocation().getTimeStamp()))		.append(" ");
-		sb.append("WHERE u_id = '")	.append(user.getUniqueID())										.append("';");
+		if (!values[1].equals("")) { i++;							sb.append("email='")		.append(values[1]).append("'"); }
+		if (!values[2].equals("")) { if(i>0){sb.append(", ");}i++;	sb.append("username='")		.append(values[2]).append("'"); }
+		if (!values[3].equals("")) { if(i>0){sb.append(", ");}i++;	sb.append("password='")		.append(values[3]).append("'"); }
+		if (!values[4].equals("")) { if(i>0){sb.append(", ");}i++;	sb.append("firstname='")	.append(values[4]).append("'"); }
+		if (!values[5].equals("")) { if(i>0){sb.append(", ");}i++;	sb.append("lastname='")		.append(values[5]).append("'"); }
+		if (!values[6].equals("")) { if(i>0){sb.append(", ");}i++;	sb.append("birthday=")		.append(values[6]); }
+		if (!values[7].equals("")) { if(i>0){sb.append(", ");}i++;	sb.append("loc_lat=")		.append(values[7]); }
+		if (!values[8].equals("")) { if(i>0){sb.append(", ");}i++;	sb.append("loc_lon=")		.append(values[8]); }
+		if (!values[9].equals("")) { if(i>0){sb.append(", ");}i++;	sb.append("loc_tim=")		.append(values[9]); }
+		sb.append(" WHERE u_id = '")	.append(values[0])	.append("';");
 		
 		return sb.toString();
 	}
-	private String makeStatement_InsertDescription(Description desc) {
+	private String makeStatement_InsertDescription(String user) {
+		String[] values = user.split("\\|", -1);
 		StringBuilder sb = new StringBuilder();
 		
 		sb.append("INSERT INTO description (d_id, timestamp, title, age, age_max, "
 				+ "gender, sexuality, region, smoking, drinking) VALUES (");
-		sb.append("'")	.append(desc.getUniqueID())							.append("', ");
-		sb				.append(Tools.DTtoTS(desc.getTimeStamp()))		.append(", ");
-		sb.append("'")	.append(desc.getTitle())							.append("', ");
-		sb				.append(desc.getAge().getMin())						.append(", ");
-		sb				.append(desc.getAge().getMax())						.append(", ");
-		sb.append("'")	.append(desc.getGender().toString())				.append("', ");
-		sb.append("'")	.append(desc.getSexuality().toString())				.append("', ");
-		sb.append("'")	.append(desc.getArea().toString())					.append("', ");
-		sb.append("'")	.append(desc.getSmoking().toString())				.append("', ");
-		sb.append("'")	.append(desc.getDrinking().toString())				.append("');");
+		sb.append("'")	.append(values[0])	.append("', ");
+		sb				.append(values[10])	.append( ", ");
+		sb.append("'")	.append(values[11])	.append("', ");
+		sb				.append(values[12])	.append( ", ");
+		sb				.append(values[13])	.append( ", ");
+		sb.append("'")	.append(values[14])	.append("', ");
+		sb.append("'")	.append(values[15])	.append("', ");
+		sb.append("'")	.append(values[16])	.append("', ");
+		sb.append("'")	.append(values[17])	.append("', ");
+		sb.append("'")	.append(values[18])	.append("');");
 		
 		return sb.toString();
 	}
-	private String makeStatement_UpdateDescription(Description desc) {
+	private String makeStatement_UpdateDescription(String desc) {
+		String[] values = desc.split("\\|", -1);
 		StringBuilder sb = new StringBuilder();
+		int i = 0;
 		
 		sb.append("UPDATE description SET ");
-		sb.append("title='").append(desc.getTitle()).append("',");
-		sb.append("timestamp=").append(Tools.DTtoTS(desc.getTimeStamp())).append(",");
-		sb.append("age=").append(desc.getAge().getMin()).append(",");
-		sb.append("age_max=").append(desc.getAge().getMax()).append(",");
-		sb.append("gender='").append(desc.getGender().toString()).append("',");
-		sb.append("sexuality='").append(desc.getSexuality().toString()).append("',");
-		sb.append("region='").append(desc.getArea().toString()).append("',");
-		sb.append("smoking='").append(desc.getSmoking().toString()).append("',");
-		sb.append("drinking='").append(desc.getDrinking().toString()).append("' ");
-		sb.append("WHERE d_id = '").append(desc.getUniqueID()).append("';");
+		if(!values[10].equals("")) { i++;							sb.append("timestamp=")		.append(values[10]); }
+		if(!values[11].equals("")) { if(i>0){sb.append(", ");}i++;	sb.append("title='")		.append(values[11]).append("'"); }
+		if(!values[12].equals("")) { if(i>0){sb.append(", ");}i++;	sb.append("age=")			.append(values[12]); }
+		if(!values[13].equals("")) { if(i>0){sb.append(", ");}i++;	sb.append("age_max=")		.append(values[13]); }
+		if(!values[14].equals("")) { if(i>0){sb.append(", ");}i++;	sb.append("gender='")		.append(values[14]).append("'"); }
+		if(!values[15].equals("")) { if(i>0){sb.append(", ");}i++;	sb.append("sexuality='")	.append(values[15]).append("'"); }
+		if(!values[16].equals("")) { if(i>0){sb.append(", ");}i++;	sb.append("region='")		.append(values[16]).append("'"); }
+		if(!values[17].equals("")) { if(i>0){sb.append(", ");}i++;	sb.append("smoking='")		.append(values[17]).append("'"); }
+		if(!values[18].equals("")) { if(i>0){sb.append(", ");}i++;	sb.append("drinking='")		.append(values[18]).append("'"); }
+		sb.append(" WHERE d_id = '")	.append(values[0]).append("';");
+		
+		if (i == 0) { sb = new StringBuilder(); }
 		
 		return sb.toString();
 	}
@@ -477,6 +633,46 @@ public class UserMapper
 		
 		sb.append("DELETE FROM description WHERE ");
 		sb.append("d_id = '").append(d_id).append("';");
+		
+		return sb.toString();
+	}
+	private String makeStatement_InsertPreference(String desc) {
+		String[] values = desc.split("\\|", -1);
+		StringBuilder sb = new StringBuilder();
+		
+		sb.append("INSERT INTO description (d_id, timestamp, title, age, age_max, "
+				+ "gender, sexuality, region, smoking, drinking) VALUES (");
+		sb.append("'")	.append(values[0])	.append("', ");
+		sb				.append(values[1])	.append( ", ");
+		sb.append("'")	.append(values[2])	.append("', ");
+		sb				.append(values[3])	.append( ", ");
+		sb				.append(values[4])	.append( ", ");
+		sb.append("'")	.append(values[5])	.append("', ");
+		sb.append("'")	.append(values[6])	.append("', ");
+		sb.append("'")	.append(values[7])	.append("', ");
+		sb.append("'")	.append(values[8])	.append("', ");
+		sb.append("'")	.append(values[9])	.append("');");
+		
+		return sb.toString();
+	}
+	private String makeStatement_UpdatePreference(String desc) {
+		String[] values = desc.split("\\|", -1);
+		StringBuilder sb = new StringBuilder();
+		int i = 0;
+		
+		sb.append("UPDATE description SET ");
+		if(!values[1].equals("")) { i++;							sb.append("timestamp=")		.append(values[1]); }
+		if(!values[2].equals("")) { if(i>0){sb.append(", ");}i++;	sb.append("title='")		.append(values[2]).append("'"); }
+		if(!values[3].equals("")) { if(i>0){sb.append(", ");}i++;	sb.append("age=")			.append(values[3]); }
+		if(!values[4].equals("")) { if(i>0){sb.append(", ");}i++;	sb.append("age_max=")		.append(values[4]); }
+		if(!values[5].equals("")) { if(i>0){sb.append(", ");}i++;	sb.append("gender='")		.append(values[5]).append("'"); }
+		if(!values[6].equals("")) { if(i>0){sb.append(", ");}i++;	sb.append("sexuality='")	.append(values[6]).append("'"); }
+		if(!values[7].equals("")) { if(i>0){sb.append(", ");}i++;	sb.append("region='")		.append(values[7]).append("'"); }
+		if(!values[8].equals("")) { if(i>0){sb.append(", ");}i++;	sb.append("smoking='")		.append(values[8]).append("'"); }
+		if(!values[9].equals("")) { if(i>0){sb.append(", ");}i++;	sb.append("drinking='")		.append(values[9]).append("'"); }
+		sb.append(" WHERE d_id = '")	.append(values[0]).append("';");
+		
+		if (i == 0) { sb = new StringBuilder(); }
 		
 		return sb.toString();
 	}
@@ -500,79 +696,114 @@ public class UserMapper
 	
 	/**
 	 * Deletes a user from the database
+	 * @param username The username of the user
+	 * @param password The Password of the user
 	 * @param uuid The ID of the user to delete
-	 * @return true on success
+	 * @return Error code string ("E01" on success)
 	 */
-	public boolean deleteUser(String uuid)
+	public String deleteUser(String username, String password, String uuid)
 	{
-		boolean result = false;
+		String adminpermissions = verifyAdminLogin(username, password);
+		String result = ERRFALS;
+		boolean allowed = false;
 		
 		StringBuilder sb1 = new StringBuilder();
 		StringBuilder sb2 = new StringBuilder();
 		StringBuilder sb3 = new StringBuilder();
 		StringBuilder sb4 = new StringBuilder();
+		StringBuilder sb5 = new StringBuilder();
+		
+		sb1.append("SELECT count(u_id) AS rows FROM user ");
+		sb1.append("WHERE u_id = '").append(uuid).append("'");
+		sb1.append("AND username = '").append(username).append("' ");
+		sb1.append("AND password = '").append(password).append("' ");
 
-		sb1.append("DELETE FROM description WHERE ");
-		sb1.append("d_id = '").append(uuid).append("'");
 		sb2.append("DELETE pref.* FROM description AS pref ");
 		sb2.append("INNER JOIN userdescription AS ud ON pref.d_id = ud.d_id ");
 		sb2.append("WHERE ud.u_id = '").append(uuid).append("'");
-		sb3.append("DELETE FROM userdescription WHERE ");
-		sb3.append("u_id = '").append(uuid).append("'");
-		sb4.append("DELETE FROM user WHERE ");
+
+		sb3.append("DELETE FROM description ");
+		sb3.append("WHERE d_id = '").append(uuid).append("' ");
+
+		sb4.append("DELETE FROM userdescription WHERE ");
 		sb4.append("u_id = '").append(uuid).append("'");
+
+		sb5.append("DELETE FROM user ");
+		sb5.append("WHERE u_id = '").append(uuid).append("'");
 
 		try
 		{
 			connect();
-			int rowsaffected = 0;
-			rowsaffected += sta.executeUpdate(sb1.toString());
-			rowsaffected += sta.executeUpdate(sb2.toString());
-			rowsaffected += sta.executeUpdate(sb3.toString());
-			rowsaffected += sta.executeUpdate(sb4.toString());
-			if (rowsaffected >= 2)
+			
+			if (adminpermissions.charAt(5) == '1')
 			{
-				result = true;
+				allowed = true;
+			}
+			else
+			{
+				ResultSet rs = sta.executeQuery(sb1.toString());
+				rs.first();
+				if (rs.getInt("rows") == 1) { allowed = true; }
+			}
+			
+			if (allowed)
+			{
+				int rowsaffected = 0;
+				rowsaffected += sta.executeUpdate(sb2.toString());
+				rowsaffected += sta.executeUpdate(sb3.toString());
+				rowsaffected += sta.executeUpdate(sb4.toString());
+				rowsaffected += sta.executeUpdate(sb5.toString());
+
+				if (rowsaffected >= 2)
+				{
+					result = ERRTRUE;
+				}
+			}
+			else
+			{
+				result = ERRPERM;
 			}
 		}
-		catch(Exception ex)
-		{
-			ex.printStackTrace();
-		}
+		catch (SQLException ex) { result = ERRSQL; }
+		catch (Exception ex) { result = ERRUNKN; }
 		finally
 		{
 			disconnect();
-			return result;
 		}
+		
+		return result;
 	}
 	
 	/**
 	 * Returns the IDs and match-percentages of the other potential matches (within proximity, later)
+	 * @param username The username of the user
+	 * @param password The Password of the user
 	 * @param userasstring A string-formatted user object
 	 * @return String containing the id, username and match-percentage separated by | (pipe)
 	 */
-	public String[] getMatches(String userasstring)
+	public String[] getMatches(String username, String password, String userasstring)
 	{
+		String[] result = new String[1];
 		ArrayList<Match> matches = new ArrayList<Match>();
 		ArrayList<String> statements = new ArrayList<String>();
-		User user = Tools.UserFromString(userasstring);
+		String[] parts = userasstring.split("\\{");
+		String[] values = parts[0].split("\\|", -1);
 		
 		float vicinity = 100f;
-		long timeto = Tools.DTtoTS(new Date());
-		long timefrom = timeto - (((365 * 24) * 60) * 60);
+		long timefrom = Tools.DTtoTS(new Date()) - (((365 * 24) * 60) * 60);
 		
 		int count = 0;
 		
-		for (Description p : user.getPreferences())
+		for (int i = 1; i< parts.length; i++)
 		{
 			StringBuilder sb = new StringBuilder();
 			
 			// SELECT ID, username and location from user
 			sb.append("SELECT user.u_id, user.username, ");
-			//sb.append("user.loc_lat, user.loc_lon, user.loc_tim, ");
+				//sb.append("user.loc_lat, user.loc_lon, user.loc_tim, ");
 			// SELECT all but d_id, timestamp, title and age_max from description
-			//sb.append("dscr.age, dscr.gender, dscr.sexuality, ");
-			//sb.append("dscr.region, dscr.smoking, dscr.drinking, ");
+				//sb.append("dscr.age, dscr.gender, dscr.sexuality, ");
+				//sb.append("dscr.region, dscr.smoking, dscr.drinking, ");
 			// SELECT all but d_id, timestamp, title from each preference (description)
 			sb.append("pref.age AS p_age, pref.age_max AS p_age_max, ");
 			sb.append("pref.gender AS p_gender, pref.sexuality AS p_sexuality, ");
@@ -584,57 +815,62 @@ public class UserMapper
 			sb.append("INNER JOIN description AS pref ON ud.d_id = pref.d_id ");
 
 			// Exclude self
-			sb	.append("WHERE user.u_id <> '").append(user.getUniqueID()).append("'");
-
-			// Search AGE
-			sb	.append(" AND dscr.age BETWEEN ").append(p.getAge().getMin())
-				.append(" AND ").append(p.getAge().getMax());
+			sb	.append("WHERE user.u_id <> '").append(values[0]).append("'");
 
 			// Search LOCATION
-			sb	.append(" AND user.loc_lat BETWEEN ").append(Float.toString(user.getLocation().getLatitude() - vicinity))
-				.append(" AND ").append(Float.toString(user.getLocation().getLatitude() + vicinity))
-				.append(" AND user.loc_lat BETWEEN ").append(Float.toString(user.getLocation().getLongitude() - vicinity))
-				.append(" AND ").append(Float.toString(user.getLocation().getLongitude() + vicinity))
-				.append(" AND user.loc_tim BETWEEN ").append(timefrom).append(" AND ").append(timeto);
+			sb	.append(" AND user.loc_lat BETWEEN ").append(Float.toString(Float.parseFloat(values[8]) - vicinity))
+				.append(" AND ").append(Float.toString(Float.parseFloat(values[8]) + vicinity))
+				.append(" AND user.loc_lat BETWEEN ").append(Float.toString(Float.parseFloat(values[9]) - vicinity))
+				.append(" AND ").append(Float.toString(Float.parseFloat(values[9]) + vicinity))
+				.append(" AND user.loc_tim >= ").append(timefrom);
+
+			// Search AGE
+			sb	.append(" AND dscr.age BETWEEN ").append(values[12])
+				.append(" AND ").append(values[13]);
 
 			// Search GENDER
-			count = p.getGender().toList().size();
+			count = 0;
+			for (char c : values[14].toCharArray()) { if (c == '1') { count++; } }
 			if (count > 0)
 			{
-				if (count == 1)	{ sb.append(" AND dscr.gender = '").append(p.getGender().toString()).append("'"); }
-				else			{ sb.append(" AND dscr.gender LIKE '").append(p.getGender().toString().replaceAll("1", "%")).append("'"); }
+				if (count == 1)	{ sb.append(" AND dscr.gender = '").append(values[14]).append("'"); }
+				else			{ sb.append(" AND dscr.gender LIKE '").append(values[14].replaceAll("1", "%")).append("'"); }
 			}
 
 			// Search SEXUALITY
-			count = p.getSexuality().toList().size();
+			count = 0;
+			for (char c : values[15].toCharArray()) { if (c == '1') { count++; } }
 			if (count > 0)
 			{
-				if (count == 1)	{ sb.append(" AND dscr.sexuality = '").append(p.getSexuality().toString()).append("'"); }
-				else			{ sb.append(" AND dscr.sexuality LIKE '").append(p.getSexuality().toString().replaceAll("1", "%")).append("'"); }
+				if (count == 1)	{ sb.append(" AND dscr.sexuality = '").append(values[15]).append("'"); }
+				else			{ sb.append(" AND dscr.sexuality LIKE '").append(values[15].replaceAll("1", "%")).append("'"); }
 			}
 
 			// Search AREA
-			count = p.getArea().toList().size();
+			count = 0;
+			for (char c : values[16].toCharArray()) { if (c == '1') { count++; } }
 			if (count > 0)
 			{
-				if (count == 1)	{ sb.append(" AND dscr.region = '").append(p.getArea().toString()).append("'"); }
-				else			{ sb.append(" AND dscr.region LIKE '").append(p.getArea().toString().replaceAll("1", "%")).append("'"); }
+				if (count == 1)	{ sb.append(" AND dscr.region = '").append(values[16]).append("'"); }
+				else			{ sb.append(" AND dscr.region LIKE '").append(values[16].replaceAll("1", "%")).append("'"); }
 			}
 
 			// Search SMOKING
-			count = p.getSmoking().toList().size();
+			count = 0;
+			for (char c : values[17].toCharArray()) { if (c == '1') { count++; } }
 			if (count > 0)
 			{
-				if (count == 1)	{ sb.append(" AND dscr.smoking = '").append(p.getSmoking().toString()).append("'"); }
-				else			{ sb.append(" AND dscr.smoking LIKE '").append(p.getSmoking().toString().replaceAll("1", "%")).append("'"); }
+				if (count == 1)	{ sb.append(" AND dscr.smoking = '").append(values[17]).append("'"); }
+				else			{ sb.append(" AND dscr.smoking LIKE '").append(values[17].replaceAll("1", "%")).append("'"); }
 			}
 
 			// Search DRINKING
-			count = p.getDrinking().toList().size();
+			count = 0;
+			for (char c : values[18].toCharArray()) { if (c == '1') { count++; } }
 			if (count > 0)
 			{
-				if (count == 1)	{ sb.append(" AND dscr.drinking = '").append(p.getDrinking().toString()).append("'"); }
-				else			{ sb.append(" AND dscr.drinking LIKE '").append(p.getDrinking().toString().replaceAll("1", "%")).append("'"); }
+				if (count == 1)	{ sb.append(" AND dscr.drinking = '").append(values[18]).append("'"); }
+				else			{ sb.append(" AND dscr.drinking LIKE '").append(values[18].replaceAll("1", "%")).append("'"); }
 			}
 			
 			sb.append(" ORDER BY u_id ASC;");
@@ -654,12 +890,12 @@ public class UserMapper
 					int matched = 0;
 					int outof = 0;
 					
-					int age =		user.getDescription().getAge().getMin();											outof++;
-					int gender =	((GenderType)user.getDescription().getGender().toList().get(0)).ordinal();			outof++;
-					int sexuality =	((SexualityType)user.getDescription().getSexuality().toList().get(0)).ordinal();	outof++;
-					int area =		((AreaType)user.getDescription().getArea().toList().get(0)).ordinal();				outof++;
-					int smoking =	((SmokingType)user.getDescription().getSmoking().toList().get(0)).ordinal();		outof++;
-					int drinking =	((DrinkingType)user.getDescription().getDrinking().toList().get(0)).ordinal();		outof++;
+					int age =		Integer.parseInt(values[12]);	outof++;
+					int gender =	values[14].indexOf("1");		outof++;
+					int sexuality =	values[15].indexOf("1");		outof++;
+					int area =		values[16].indexOf("1");		outof++;
+					int smoking =	values[17].indexOf("1");		outof++;
+					int drinking =	values[18].indexOf("1");		outof++;
 					
 					if (age >= rs.getInt("p_age") && age <= rs.getInt("p_age_max"))		{ matched++; }
 					if (rs.getString("p_gender").charAt(gender) == '1')					{ matched++; }
@@ -691,15 +927,8 @@ public class UserMapper
 				// Add the last match
 				if (match != null) { matches.add(match); }
 			}
-		}
-		catch(Exception ex)
-		{
-			ex.printStackTrace();
-		}
-		finally
-		{
-			disconnect();
-			String[] result = new String[matches.size()];
+			
+			result = new String[matches.size()];
 			for (int i = 0; i < result.length; i++)
 			{
 				result[i] = matches.get(i).toString();
@@ -709,7 +938,14 @@ public class UserMapper
 			{
 				result[i] = statements.get(i).toString();
 			}*/
-			return result;
 		}
+		catch (SQLException ex) { result[0] = ERRSQL; }
+		catch (Exception ex) { result[0] = ERRUNKN; }
+		finally
+		{
+			disconnect();
+		}
+		
+		return result;
 	}
 }

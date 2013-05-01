@@ -6,6 +6,8 @@ package easj.jrpg.stalkrlib;
 
 import java.util.Date;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  *
@@ -13,6 +15,11 @@ import java.util.UUID;
  */
 public class Tools
 {
+	// First version of the validation string
+	private static final String UVS01 = "[A-Fa-f0-9]{8}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{12}\\|[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}\\|[A-Za-z0-9]*\\|[A-Za-z0-9\\ ]*\\|[A-Za-z0-9\\ ]*\\|[A-Za-z0-9\\ ]*\\|[0-9]+\\|[0-9.]+\\|[0-9.]+\\|[0-9]+\\|[0-9]+\\|[A-Za-z0-9\\ ]*\\|[0-9]+\\|[0-9]+\\|[0-1]{5}\\|[0-1]{4}\\|[0-1]{5}\\|[0-1]{3}\\|[0-1]{2}(\\{[A-Fa-f0-9]{8}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{12}\\|[0-9]+\\|[A-Za-z0-9\\ ]*\\|[0-9]+\\|[0-9]+\\|[0-1]{5}\\|[0-1]{4}\\|[0-1]{5}\\|[0-1]{3}\\|[0-1]{2})*";
+	// Second version, added support for saving fields selectively
+	private static final String UVS02 = "[A-Fa-f0-9]{8}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{12}\\|([A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+(\\.[A-Za-z]{2,4}){1,2}){0,1}\\|[A-Za-z0-9]*\\|[A-Za-z0-9\\ ]*\\|[A-Za-z0-9\\ ]*\\|[A-Za-z0-9\\ ]*\\|[0-9]*\\|[0-9.]*\\|[0-9.]*\\|[0-9]*\\|[0-9]*\\|[A-Za-z0-9\\ ]*\\|[0-9]*\\|[0-9]*\\|([0-1]{5}){0,1}\\|([0-1]{4}){0,1}\\|([0-1]{5}){0,1}\\|([0-1]{3}){0,1}\\|([0-1]{2}){0,1}(\\{[A-Fa-f0-9]{8}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{12}\\|[0-9]*\\|[A-Za-z0-9\\ ]*\\|[0-9]*\\|[0-9]*\\|([0-1]{5}){0,1}\\|([0-1]{4}){0,1}\\|([0-1]{5}){0,1}\\|([0-1]{3}){0,1}\\|([0-1]{2}){0,1})*";
+	
 	public static long DTtoTS(Date date) { return DTtoTS(date, true); }
 	public static long DTtoTS(Date date, boolean timestampinmilis)
 	{
@@ -28,10 +35,37 @@ public class Tools
 		return new Date(uts);
 	}
 	
+	public static float ValidateUserString(String userasstring)
+	{
+		float result = 0f;
+		
+		// Regular expression matching
+		Pattern pattern = Pattern.compile(UVS02);
+		Matcher matcher = pattern.matcher(userasstring);
+		
+		// Try to validate the userstring against the newest version
+		if (matcher.matches()) { result = 0.2f; }
+		
+		// ...or try to validate the userstring against older versions
+		else
+		{
+			pattern = Pattern.compile(UVS01);
+			matcher = pattern.matcher(userasstring);
+			if (matcher.matches()) { result = 0.1f; }
+		}
+		
+		return result;
+	}
+	
 	/**
-	* Jonaz: Initiates a stringbuilder and makes a String, containing a user.
-	*/
+	 * Jonaz: Initiates a stringbuilder and makes a String, containing a user.
+	 */
 	public static String UserToString(User u, boolean admin)
+	{
+		return UserToStringV02(u, admin);
+	}
+	
+	private static String UserToStringV01(User u, boolean admin)
 	{
 		StringBuilder sb = new StringBuilder();
 		
@@ -84,10 +118,82 @@ public class Tools
 		}
 	}
 	
+	private static String UserToStringV02(User u, boolean full)
+	{
+		StringBuilder sb = new StringBuilder();
+		
+		try
+		{
+			GeoLocation l = u.getLocation();
+			Description d = u.getDescription();
+
+			sb.append(u.getUniqueID());																sb.append("|");
+			if (full || u.isChangedEmail())		{ sb.append(u.getEmail()); }						sb.append("|");
+			if (full || u.isChangedUsername())	{ sb.append(u.getUsername()); }						sb.append("|");
+			if (full || u.isChangedPassword())	{ sb.append(u.getPassword()); }						sb.append("|");
+			if (full || u.isChangedFirstName())	{ sb.append(u.getFirstName()); }					sb.append("|");
+			if (full || u.isChangedLastName())	{ sb.append(u.getLastName()); }						sb.append("|");
+			if (full || u.isChangedBirthday())
+				{ sb.append(Long.toString(Tools.DTtoTS(u.getBirthday()))); }						sb.append("|");
+			if (full || u.isChangedLocation()) {
+				sb.append(Float.toString(l.getLatitude()))											  .append("|");
+				sb.append(Float.toString(l.getLongitude()))											  .append("|");
+				sb.append(Long.toString(Tools.DTtoTS(l.getTimeStamp())))							  .append("|");
+			} else { sb.append("|||"); }
+			if (full || d.isChangedTimeStamp())
+				{ sb.append(Long.toString(Tools.DTtoTS(d.getTimeStamp()))); }						sb.append("|");
+			if (full || d.isChangedTitle())		{ sb.append(d.getTitle()); }						sb.append("|");
+			if (full || d.isChangedAge()) {
+				sb.append(Integer.toString(d.getAge().getMin()))									  .append("|");
+				sb.append(Integer.toString(d.getAge().getMax()))									  .append("|");
+			} else { sb.append("||"); }
+			if (full || d.isChangedGender())	{ sb.append(d.getGender().toString()); }			sb.append("|");
+			if (full || d.isChangedSexuality())	{ sb.append(d.getSexuality().toString()); }			sb.append("|");
+			if (full || d.isChangedArea())		{ sb.append(d.getArea().toString()); }				sb.append("|");
+			if (full || d.isChangedSmoking())	{ sb.append(d.getSmoking().toString()); }			sb.append("|");
+			if (full || d.isChangedDrinking())	{ sb.append(d.getDrinking().toString()); }
+			
+			for (Description p : u.getPreferences())
+			{
+				sb.append("{");
+				sb.append(p.getUniqueID().toString())												  .append("|");
+				if (full || p.isChangedTimeStamp())
+					{ sb.append(Long.toString(Tools.DTtoTS(d.getTimeStamp()))); }					sb.append("|");
+				if (full || p.isChangedTitle())		{ sb.append(d.getTitle()); }					sb.append("|");
+				if (full || p.isChangedAge()) {
+					sb.append(Integer.toString(d.getAge().getMin()))								  .append("|");
+					sb.append(Integer.toString(d.getAge().getMax()))								  .append("|");
+				} else { sb.append("||"); }
+				if (full || p.isChangedGender())	{ sb.append(d.getGender().toString()); }		sb.append("|");
+				if (full || p.isChangedSexuality())	{ sb.append(d.getSexuality().toString()); }		sb.append("|");
+				if (full || p.isChangedArea())		{ sb.append(d.getArea().toString()); }			sb.append("|");
+				if (full || p.isChangedSmoking())	{ sb.append(d.getSmoking().toString()); }		sb.append("|");
+				if (full || p.isChangedDrinking())	{ sb.append(d.getDrinking().toString()); }
+			}
+		}
+		catch (Exception e)
+		{
+			sb = new StringBuilder();
+		}
+		finally
+		{
+			return sb.toString();
+		}
+	}
+	
 	/**
-	* Jonaz: The form for the user to fill out when creating a new profile.
-	*/
+	 * Jonaz: The form for the user to fill out when creating a new profile.
+	 */
 	public static User UserFromString(String s)
+	{
+		User result = null;
+		float validation = ValidateUserString(s);
+		if		(validation >= 0.2f) { result = UserFromStringV02(s); }
+		else if	(validation >= 0.1f) { result = UserFromStringV01(s); }
+		return result;
+	}
+	
+	private static User UserFromStringV01(String s)
 	{
 		User u = null;
 		try
@@ -124,6 +230,67 @@ public class Tools
 				// Make sure the list is empty
 				//u.getPreferences().clear();
 			
+				for (int i = 1; i < parts.length; i++)
+				{
+					ss = parts[i].split("\\|");
+
+					Description p = new Description(UUID.fromString(ss[0]));
+					p.setTimeStamp(Tools.DTfromTS(Long.parseLong(ss[1])));
+					p.setTitle(ss[2]);
+					p.getAge().set(Integer.parseInt(ss[3]), (Integer.parseInt(ss[4])));
+					p.getGender().loadString(ss[5]);
+					p.getSexuality().loadString(ss[6]);
+					p.getArea().loadString(ss[7]);
+					p.getSmoking().loadString(ss[8]);
+					p.getDrinking().loadString(ss[9]);
+					u.getPreferences().add(p);
+				}
+			}
+		}
+		catch (Exception e)
+		{
+			u = null;
+		}
+		finally
+		{
+			return u;
+		}
+	}
+	
+	private static User UserFromStringV02(String s)
+	{
+		User u = null;
+		try
+		{
+			String[] parts = s.split("\\{");
+			String[] ss = parts[0].split("\\|");
+
+			u = new User(UUID.fromString(ss[0]));
+			u.setEmail(ss[1]);
+			u.setUsername(ss[2]);
+			u.setPassword(ss[3]);
+			u.setFirstName(ss[4]);
+			u.setLastName(ss[5]);
+			u.setBirthday(Tools.DTfromTS(Long.parseLong(ss[6])));
+			u.setLocation(new GeoLocation(
+				Float.parseFloat(ss[7]), 
+				Float.parseFloat(ss[8]), 
+				Tools.DTfromTS(Long.parseLong(ss[9]))
+			));
+			Description d = new Description(UUID.fromString(ss[0]));
+			d.setTimeStamp(Tools.DTfromTS(Long.parseLong(ss[10])));
+			d.setTitle(ss[11]);
+			d.getAge().set(Integer.parseInt(ss[12]), (Integer.parseInt(ss[13])));
+			d.getGender().loadString(ss[14]);
+			d.getSexuality().loadString(ss[15]);
+			d.getArea().loadString(ss[16]);
+			d.getSmoking().loadString(ss[17]);
+			d.getDrinking().loadString(ss[18]);
+			u.setDescription(d);
+
+			// Add preference descriptions if available
+			if (parts.length > 1)
+			{
 				for (int i = 1; i < parts.length; i++)
 				{
 					ss = parts[i].split("\\|");

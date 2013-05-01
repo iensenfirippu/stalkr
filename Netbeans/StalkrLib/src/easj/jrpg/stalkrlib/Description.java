@@ -41,6 +41,7 @@ public class Description
 		setAlteredFields();
 	}
 	
+	// Private methods
 	private void setAlteredFields()
 	{
 		_alteredfields = new HashMap<String, Boolean>();
@@ -48,8 +49,8 @@ public class Description
 	}
 	
 	/**
-	* Jonaz: Resets all the fields that has been altered
-	*/
+	 * Resets all the fields that has been altered
+	 */
 	public void resetAlteredFields()
 	{
 		_alteredfields.clear();
@@ -64,7 +65,21 @@ public class Description
 		_alteredfields.put("drinking", false);
 	}
 
-	// Accessor and Mutator methods
+	// Public methods
+	@Override public String toString() { return _title; }
+
+	// isChanged methods
+	public boolean isChangedUniqueID() { return _alteredfields.get("uniqueid"); }
+	public boolean isChangedTimeStamp() { return _alteredfields.get("timestamp"); }
+	public boolean isChangedTitle() { return _alteredfields.get("title"); }
+	public boolean isChangedAge() { return _alteredfields.get("age"); }
+	public boolean isChangedGender() { return _alteredfields.get("gender"); }
+	public boolean isChangedSexuality() { return _alteredfields.get("sexuality"); }
+	public boolean isChangedArea() { return _alteredfields.get("area"); }
+	public boolean isChangedSmoking() { return _alteredfields.get("smoking"); }
+	public boolean isChangedDrinking() { return _alteredfields.get("drinking"); }
+
+	// Accessor methods
 	public UUID getUniqueID() { return _uniqueid; }
 	public Date getTimeStamp() { return _timestamp; }
 	public String getTitle() { return _title; }
@@ -74,18 +89,14 @@ public class Description
 	public EnumList getArea() { return _area; }
 	public EnumList getSmoking() { return _smoking; }
 	public EnumList getDrinking() { return _drinking; }
+	
+	// Mutator methods
 	public void setTimeStamp(Date value) {_alteredfields.put("timestamp", true); _timestamp = value; }
 	public void setTitle(String value) { _alteredfields.put("title", true); _title = value; }
-	//public void setAge(Range value) { _alteredfields.put("age", true); _age = value; }
-	//public void setGender(EnumList value) { _alteredfields.put("gender", true); _gender = value; }
-	//public void setSexuality(EnumList value) { _alteredfields.put("sexuality", true); _sexuality = value; }
-	//public void setArea(EnumList value) { _alteredfields.put("area", true); _area = value; }
-	//public void setSmoking(EnumList value) { _alteredfields.put("smoking", true); _smoking = value; }
-	//public void setDrinking(EnumList value) { _alteredfields.put("drinking", true); _drinking = value; }
-
-	// Methods
-	public @Override String toString()
-	{
-		return _title;
-	}
+	public void setAge(Range value) { _alteredfields.put("age", true); _age = value; }
+	public void setGender(EnumList value) { _alteredfields.put("gender", true); _gender = value; }
+	public void setSexuality(EnumList value) { _alteredfields.put("sexuality", true); _sexuality = value; }
+	public void setArea(EnumList value) { _alteredfields.put("area", true); _area = value; }
+	public void setSmoking(EnumList value) { _alteredfields.put("smoking", true); _smoking = value; }
+	public void setDrinking(EnumList value) { _alteredfields.put("drinking", true); _drinking = value; }
 }

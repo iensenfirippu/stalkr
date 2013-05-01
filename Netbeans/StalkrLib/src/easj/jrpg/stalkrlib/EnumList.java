@@ -35,13 +35,12 @@ public class EnumList<T extends Enum>
 	}
 	
 	// Methods
-	@Override
-	public String toString() { return new String(_chars); }
+	@Override public String toString() { return new String(_chars); }
 	
-	public void add(T single) { _chars[single.ordinal()] = '1'; }
-	public void remove(T single) { _chars[single.ordinal()] = '0'; }
-	public void fill() { for (char c : _chars) { c = '1'; } }
-	public void clear() { for (char c : _chars) { c = '0'; } }
+	@Deprecated public void add(T single) { _chars[single.ordinal()] = '1'; }
+	@Deprecated public void remove(T single) { _chars[single.ordinal()] = '0'; }
+	@Deprecated public void fill() { for (char c : _chars) { c = '1'; } }
+	@Deprecated public void clear() { for (char c : _chars) { c = '0'; } }
 	public boolean contains(T t) { return _chars[t.ordinal()] == '1'; }
 	
 	public void loadString(String s) { if (s.length() == _chars.length) { _chars = s.toCharArray(); } }
@@ -72,10 +71,10 @@ public class EnumList<T extends Enum>
 	}
 	
 	/**
-	* Jonaz: Adds a new enum to the list
-	* @param the original amount
-	* @param the amount to add
-	*/
+	 * Jonaz: Adds a new enum to the list
+	 * @param the original amount
+	 * @param the amount to add
+	 */
 	public ArrayList<String> toStringList()
 	{
 		ArrayList<String> list = new ArrayList<String>();

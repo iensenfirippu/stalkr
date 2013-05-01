@@ -13,49 +13,57 @@ import javax.jws.WebParam;
 public class Stalkr_WebService
 {
 	@WebMethod(operationName = "verifyLogin")
-	public boolean verifyLogin(@WebParam(name = "user") String user, @WebParam(name = "pass") String pass)
+	public String verifyLogin(@WebParam(name = "username") String username, @WebParam(name = "password") String password)
 	{
 		UserMapper um = new UserMapper();
-		return um.verifyLogin(user, pass);
+		return um.verifyLogin(username, password);
+	}
+	
+	@WebMethod(operationName = "loginAdmin")
+	public String loginAdmin(@WebParam(name = "username") String username, @WebParam(name = "password") String password)
+	{
+		UserMapper um = new UserMapper();
+		return um.verifyAdminLogin(username, password);
 	}
 	
 	@WebMethod(operationName = "getUser")
-	public String getUser(@WebParam(name = "id") String id)
+	public String getUser(@WebParam(name = "username") String username, @WebParam(name = "password") String password, 
+							@WebParam(name = "id") String id)
 	{
 		UserMapper um = new UserMapper();
-		return um.getUser(id);
+		return um.getUser(username, password, id);
 	}
 
 	@WebMethod(operationName = "getUsers")
-	public String[] getUsers(@WebParam(name = "id") String id)
+	public String[] getUsers(@WebParam(name = "username") String username, @WebParam(name = "password") String password, 
+							@WebParam(name = "id") String id)
 	{
 		UserMapper um = new UserMapper();
-		return um.getUsers(id);
+		return um.getUsers(username, password, id);
 	}
 	
 	@WebMethod(operationName = "saveUser")
-	public boolean saveUser(@WebParam(name = "user") String userasstring)
+	public String saveUser(@WebParam(name = "username") String username, @WebParam(name = "password") String password, 
+							@WebParam(name = "user") String userasstring)
 	{
 		UserMapper um = new UserMapper();
-		return um.saveUser(userasstring);
+		return um.saveUser(username, password, userasstring);
 	}
 
 	@WebMethod(operationName = "deleteUser")
-	public boolean deleteUser(@WebParam(name = "user") String user, @WebParam(name = "pass") String pass, @WebParam(name = "id") String id)
+	public String deleteUser(@WebParam(name = "username") String username, @WebParam(name = "password") String password,	
+								@WebParam(name = "id") String id)
 	{
-		boolean result = false;
 		UserMapper um = new UserMapper();
-		if (um.verifyLogin(user, pass))
-		{
-			result = um.deleteUser(id);
-		}
-		return result;
+		return um.deleteUser(username, password, id);
 	}
 
 	@WebMethod(operationName = "getMatches")
-	public String[] getMatches(@WebParam(name = "id") String id)
+	public String[] getMatches(	@WebParam(name = "username") String username,
+									@WebParam(name = "password") String password,
+									@WebParam(name = "id") String id)
 	{
 		UserMapper um = new UserMapper();
-		return um.getMatches(um.getUser(id));
+		return um.getMatches(username, password, id);
 	}
 }
