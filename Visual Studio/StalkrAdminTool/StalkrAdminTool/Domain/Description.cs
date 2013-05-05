@@ -28,7 +28,10 @@ namespace StalkrAdminTool
 		private Dictionary<String, bool> _alteredfields;
 
 		// Constructors
-		public Description() : this(Guid.NewGuid()) { }
+		public Description() : this(Guid.NewGuid())
+		{
+			SetAlteredFields(true);
+		}
 		public Description(Guid guid)
 		{
 			_uniqueid = guid;
@@ -40,24 +43,31 @@ namespace StalkrAdminTool
 			_area = (AreaType)0;
 			_smoking = (SmokingType)0;
 			_drinking = (DrinkingType)0;
+
 			_alteredfields = new Dictionary<string, bool>();
-			ResetAlteredFields();
+			SetAlteredFields(false);
 		}
 
 		// Methods
-		public void ResetAlteredFields()
+		private void SetAlteredFields(bool value)
 		{
 			_alteredfields.Clear();
-			_alteredfields.Add("uniqueid", false);
-			_alteredfields.Add("timestamp", false);
-			_alteredfields.Add("title", false);
-			_alteredfields.Add("age", false);
-			_alteredfields.Add("gender", false);
-			_alteredfields.Add("sexuality", false);
-			_alteredfields.Add("area", false);
-			_alteredfields.Add("smoking", false);
-			_alteredfields.Add("drinking", false);
+			_alteredfields.Add("uniqueid", value);
+			_alteredfields.Add("timestamp", value);
+			_alteredfields.Add("title", value);
+			_alteredfields.Add("age", value);
+			_alteredfields.Add("gender", value);
+			_alteredfields.Add("sexuality", value);
+			_alteredfields.Add("area", value);
+			_alteredfields.Add("smoking", value);
+			_alteredfields.Add("drinking", value);
 		}
+
+		public void ResetAlteredFields()
+		{
+			SetAlteredFields(false);
+		}
+
 		public override String ToString()
 		{
 			String value = _title;
@@ -87,7 +97,17 @@ namespace StalkrAdminTool
 		public Range Age
 		{
 			get { return _age; }
-			set { _alteredfields["age"] = true; _age = value; }
+			//set { _alteredfields["age"] = true; _age = value; }
+		}
+		public void SetAge(int int1)
+		{
+			_alteredfields["age"] = true;
+			_age.Set(int1);
+		}
+		public void SetAge(int int1, int int2)
+		{
+			_alteredfields["age"] = true;
+			_age.Set(int1, int2);
 		}
 		public EnumList<GenderType> Gender
 		{
@@ -113,6 +133,19 @@ namespace StalkrAdminTool
 		{
 			get { return _drinking; }
 			set { _alteredfields["drinking"] = true; _drinking = value; }
+		}
+
+		public bool IsChanged(string field)
+		{
+			bool result = false;
+			if (_alteredfields.TryGetValue(field, out result))
+			{
+				return result;
+			}
+			else
+			{
+				throw new KeyNotFoundException("Key not found in Dictionary");
+			}
 		}
 	}
 }

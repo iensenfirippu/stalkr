@@ -21,8 +21,8 @@ namespace StalkrAdminTool
 
 		#region Class global variables
 
+		private WSconnect _db;
 		private User _user;
-		private User _original;
 
 		#endregion
 
@@ -31,11 +31,13 @@ namespace StalkrAdminTool
 		{
 			InitializeComponent();
 
+			_db = WSconnect.Instance;
 			DateTime now = DateTime.Now;
 			date_birth.MinDate = new DateTime(now.Year - 99, now.Month, now.Day);
 			date_birth.MaxDate = new DateTime(now.Year - 18, now.Month, now.Day);
 
-			_user = user;
+			if (user == null) { _user = new User(); }
+			else { _user = user; }
 
 			txt_guid.Text = _user.UniqueID.ToString().ToUpper();
 			txt_email.Text = _user.Email;
@@ -56,7 +58,7 @@ namespace StalkrAdminTool
 			{
 				num_lat.Value = Convert.ToDecimal(_user.Location.Latitude);
 				num_lon.Value = Convert.ToDecimal(_user.Location.Longitude);
-				date_location.Value = user.Location.TimeStamp;
+				date_location.Value = _user.Location.TimeStamp;
 			}
 
 			if (_user.Description != null)
@@ -72,8 +74,6 @@ namespace StalkrAdminTool
 				btn_desc_del.Enabled = false;
 				btn_desc_edit.Enabled = false;
 			}
-
-			RedrawPreferences();
 		}
 
 		#region Properties
@@ -117,6 +117,11 @@ namespace StalkrAdminTool
 		#endregion
 
 		#region Events
+
+		private void UserForm_Load(object sender, EventArgs e)
+		{
+			RedrawPreferences();
+		}
 
 		private void date_birth_ValueChanged(object sender, EventArgs e)
 		{
@@ -200,8 +205,25 @@ namespace StalkrAdminTool
 				_user.Location = new GeoLocation(lat, lon);
 			}
 
-			this.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.Close();
+			if (Tools.ValidateUserString(Tools.UserToString(_user, false)) >= 0.2f)
+			{
+				string response = _db.SaveUser(_user);
+
+				if (response.Equals("E10"))
+				{
+					this.DialogResult = System.Windows.Forms.DialogResult.OK;
+					this.Close();
+				}
+				else
+				{
+					System.Console.Beep(10000, 1000);
+					System.Console.Out.WriteLine(response);
+				}
+			}
+			else
+			{
+				System.Windows.Forms.MessageBox.Show(Tools.UserToString(_user, false), "Validation failed", MessageBoxButtons.OK, MessageBoxIcon.Information);
+			}
 		}
 
 		#endregion

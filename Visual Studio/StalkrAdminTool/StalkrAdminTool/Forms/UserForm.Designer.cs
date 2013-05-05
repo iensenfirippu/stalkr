@@ -265,7 +265,7 @@
 			this.tableLayoutPanel3.RowCount = 1;
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel3.Size = new System.Drawing.Size(314, 24);
-			this.tableLayoutPanel3.TabIndex = 18;
+			this.tableLayoutPanel3.TabIndex = 12;
 			// 
 			// btn_pref_add
 			// 
@@ -337,7 +337,7 @@
 			this.tableLayoutPanel4.RowCount = 1;
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel4.Size = new System.Drawing.Size(314, 24);
-			this.tableLayoutPanel4.TabIndex = 19;
+			this.tableLayoutPanel4.TabIndex = 11;
 			// 
 			// txt_description
 			// 
@@ -346,7 +346,8 @@
 			this.txt_description.Name = "txt_description";
 			this.txt_description.ReadOnly = true;
 			this.txt_description.Size = new System.Drawing.Size(236, 20);
-			this.txt_description.TabIndex = 12;
+			this.txt_description.TabIndex = 11;
+			this.txt_description.TabStop = false;
 			// 
 			// btn_desc_add
 			// 
@@ -404,7 +405,7 @@
 			this.table_name.RowCount = 1;
 			this.table_name.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
 			this.table_name.Size = new System.Drawing.Size(314, 24);
-			this.table_name.TabIndex = 20;
+			this.table_name.TabIndex = 5;
 			// 
 			// txt_firstname
 			// 
@@ -495,7 +496,7 @@
 			this.table_location.RowCount = 1;
 			this.table_location.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.table_location.Size = new System.Drawing.Size(314, 24);
-			this.table_location.TabIndex = 22;
+			this.table_location.TabIndex = 8;
 			// 
 			// lbl_lat
 			// 
@@ -523,18 +524,38 @@
 			// 
 			// num_lat
 			// 
-			this.num_lat.DecimalPlaces = 4;
+			this.num_lat.DecimalPlaces = 8;
 			this.num_lat.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.num_lat.Location = new System.Drawing.Point(27, 3);
+			this.num_lat.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
+			this.num_lat.Minimum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            -2147483648});
 			this.num_lat.Name = "num_lat";
 			this.num_lat.Size = new System.Drawing.Size(127, 20);
 			this.num_lat.TabIndex = 8;
 			// 
 			// num_lon
 			// 
-			this.num_lon.DecimalPlaces = 4;
+			this.num_lon.DecimalPlaces = 8;
 			this.num_lon.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.num_lon.Location = new System.Drawing.Point(184, 3);
+			this.num_lon.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
+			this.num_lon.Minimum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            -2147483648});
 			this.num_lon.Name = "num_lon";
 			this.num_lon.Size = new System.Drawing.Size(127, 20);
 			this.num_lon.TabIndex = 9;
@@ -575,6 +596,7 @@
 			this.Name = "UserForm";
 			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
 			this.Text = "Stalkr Admin Tool - User Form";
+			this.Load += new System.EventHandler(this.UserForm_Load);
 			this.table_buttons.ResumeLayout(false);
 			this.table_main.ResumeLayout(false);
 			this.table_main.PerformLayout();

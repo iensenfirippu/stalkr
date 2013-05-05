@@ -14,20 +14,21 @@ namespace StalkrAdminTool
 	{
 		#region Class constants
 
-		private static string CLOSEWARNING = "Your software is soon to close, if not safe data you lose. pwease be careful wiff yuz dataz.\nPress affirmative to okay, false to not okay.";
-		private static string CLOSETITLE = "You are about to close...";
+		//private static string CLOSEWARNING = "Your software is soon to close, if not safe data you lose. pwease be careful wiff yuz dataz.\nPress affirmative to okay, false to not okay.";
+		//private static string CLOSETITLE = "You are about to close...";
 		private static string DELETEWARNING = "You are about to permanently delete the user \"{0}\".\nOnce deleted the user account cannot be recovered.\n\nAre you really sure you want to do this?";
 		private static string DELETETITLE = "USER DELETION";
 		private static string LOADSUCCESS = "{0} user objects successfully loaded from database";
 		private static string LOADFAIL = "Couldn't connect to database";
-		private static string USEROK = "User object \"{0}\" successfully changed";
-		private static string USERCANCEL = "User edit for object \"{0}\" was cancelled";
+		private static string USEROK = "User object successfully changed";
+		private static string USERCANCEL = "User edit was cancelled";
 		private static string NOSELECTEDUSER = "No user object selected, please select or create a user object and try again.";
 
 		#endregion
 
 		// Class local variables
-		private WSconnect _db = new WSconnect();
+		private WSconnect _db;
+
 		private List<User> _userlist;
 
 		// Constructor
@@ -35,6 +36,9 @@ namespace StalkrAdminTool
 		{
 			InitializeComponent();
 
+			_db = WSconnect.Instance;
+			permissions_label.Text = _db.Permission;
+			
 			LoadUsers(true);
 		}
 
@@ -88,30 +92,23 @@ namespace StalkrAdminTool
 		}
 
 		// Self-explanatory...
-		private void StartEditUserForm()
+		private void StartEditUserForm(User user)
 		{
-			User user = GetSelectedUserObject();
-			if (user != null)
+			// Open the "Edit User" form with the corresponding user object in the list
+			UserForm userform = new UserForm(user);
+
+			DialogResult dr = userform.ShowDialog();
+
+			if (dr == DialogResult.OK)
 			{
-				// Open the "Edit User" form with the corresponding user object in the list
-				UserForm userform = new UserForm(user);
-				DialogResult dr = userform.ShowDialog();
-
-				if (dr == DialogResult.OK && _db.SaveUser(user))
-				{
-					status_label.Text = USEROK.Replace("{0}", user.Username);
-				}
-				else
-				{
-					status_label.Text = USERCANCEL.Replace("{0}", user.Username);
-				}
-
-				LoadUsers(false);
+				status_label.Text = USEROK;
 			}
 			else
 			{
-				status_label.Text = NOSELECTEDUSER;
+				status_label.Text = USERCANCEL;
 			}
+
+			LoadUsers(false);
 		}
 
 		/// <summary>
@@ -159,16 +156,16 @@ namespace StalkrAdminTool
 		private void dataGridView1_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
 		{
 			// Edit user shortcut
-			StartEditUserForm();
+			StartEditUserForm(GetSelectedUserObject());
 		}
 
 		// Event fired when the "Create User" option is pressed
 		private void createNewUserToolStripMenuItem_MouseUp(object sender, MouseEventArgs e)
 		{
-			_userlist.Add(new User());
-			DrawUserTable();
-			dgv_main.Rows[dgv_main.Rows.Count - 1].Selected = true;
-			StartEditUserForm();
+			//_userlist.Add(new User());
+			//DrawUserTable();
+			//dgv_main.Rows[dgv_main.Rows.Count - 1].Selected = true;
+			StartEditUserForm(null);
 		}
 
 		// Event fired when the "Delete User" option is pressed
@@ -181,7 +178,10 @@ namespace StalkrAdminTool
 				DialogResult dr = MessageBox.Show(DELETEWARNING.Replace("{0}", user.Username), DELETETITLE, MessageBoxButtons.OKCancel, MessageBoxIcon.Stop);
 				if (dr == DialogResult.OK)
 				{
-					bool result = _db.DeleteUser(user.UniqueID);
+					string result = _db.DeleteUser(user.UniqueID);
+
+					//TODO: handle errorcodes for delete
+
 					LoadUsers(false);
 				}
 			}
@@ -194,14 +194,19 @@ namespace StalkrAdminTool
 		// Event fired when the "Edit User" option is pressed
 		private void editThisUserToolStripMenuItem_MouseUp(object sender, MouseEventArgs e)
 		{
-			StartEditUserForm();
+			StartEditUserForm(GetSelectedUserObject());
 		}
 
 		// Event fired when the "About" option is pressed
 		private void aboutToolStripMenuItem1_Click(object sender, EventArgs e)
 		{
-			// TODO: show a proper about box
-			System.Windows.Forms.MessageBox.Show("This is an internal tool for managing the database of the Android app Codenamed \"Stalkr\"\nIt is to be used only by the creators themselves.", "About", MessageBoxButtons.OK, MessageBoxIcon.Information);
+			AboutBox aboutbox = new AboutBox();
+			aboutbox.ShowDialog();
+		}
+
+		private void reloadToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			LoadUsers(true);
 		}
 
 		// Event fired when the "Exit" option is pressed
@@ -214,12 +219,12 @@ namespace StalkrAdminTool
 		private void Form1_FormClosing(object sender, FormClosingEventArgs e)
 		{
 			// Ask the user to acknowledge the shutdown
-			DialogResult dr = System.Windows.Forms.MessageBox.Show(MainForm.CLOSEWARNING, MainForm.CLOSETITLE, MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
+			//DialogResult dr = System.Windows.Forms.MessageBox.Show(MainForm.CLOSEWARNING, MainForm.CLOSETITLE, MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
 
-			if (dr != DialogResult.OK)
-			{
-				e.Cancel = true;
-			}
+			//if (dr != DialogResult.OK)
+			//{
+			//	e.Cancel = true;
+			//}
 		}
 
 		// Event fired when the status label's text is changed
@@ -242,5 +247,10 @@ namespace StalkrAdminTool
 		}
 
 		#endregion
+
+		private void createRandomUserToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+
+		}
 	}
 }

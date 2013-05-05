@@ -8,26 +8,46 @@ namespace StalkrAdminTool
 {
 	public class WSconnect
 	{
+		// Singleton implementation
+		private static WSconnect _instance;
+		public static WSconnect Instance
+		{
+			get
+			{
+				if (_instance == null)
+				{
+					_instance = new WSconnect();
+				}
+				return _instance;
+			}
+		}
+
 		// Class local variables
 		private dk.iensenfirippu.jrpg.WS _ws;
+		private string _username;
+		private string _password;
+		private string _permission;
 
 		// Constructor
-		public WSconnect()
+		private WSconnect()
 		{
+			_username = "";
+			_password = "";
+			_permission = "";
 			_ws = new dk.iensenfirippu.jrpg.WS();
 		}
 
 		// Methods
 		public User GetUser(Guid userid)
 		{
-			return Tools.UserFromString(_ws.getUser(userid.ToString()));
+			return Tools.UserFromString(_ws.getUser(_username, _password, userid.ToString()));
 		}
 
 		public List<User> GetUsers(Guid exclude)
 		{
 			List<User> list = new List<User>();
 
-			string[] strings = _ws.getUsers(exclude.ToString());
+			string[] strings = _ws.getUsers(_username, _password, exclude.ToString());
 			foreach (string s in strings)
 			{
 				list.Add(Tools.UserFromString(s));
@@ -36,19 +56,45 @@ namespace StalkrAdminTool
 			return list;
 		}
 
-		public bool SaveUser(User user)
+		public string SaveUser(User user)
 		{
-			return _ws.saveUser(Tools.UserToString(user));
+			string result = "";
+			if (_permission[3] == '1' && _permission[4] == '1')
+			{
+				result = _ws.saveUser(_username, _password, Tools.UserToString(user, false));
+			}
+			return result;
 		}
 
-		public bool DeleteUser(Guid userid)
+		public string DeleteUser(Guid userid)
 		{
-			return _ws.deleteUser("Jonazzy", "9876", userid.ToString());
+			string result = "";
+			if (_permission[5] == '1')
+			{
+				result = _ws.deleteUser(_username, _password, userid.ToString());
+			}
+			return result;
 		}
 
-		public bool Login(string username, string password)
+		public void Login(string username, string password)
 		{
-			return _ws.verifyLogin(username, password);
+			_username = username;
+			_password = password;
+			_permission = _ws.loginAdmin(_username, _password);
+		}
+
+		// Properties
+		public string Username
+		{
+			get { return _username; }
+		}
+		public string Password
+		{
+			get { return _password; }
+		}
+		public string Permission
+		{
+			get { return _permission; }
 		}
 	}
 }

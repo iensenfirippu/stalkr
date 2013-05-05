@@ -16,7 +16,15 @@ namespace StalkrAdminTool
 		{
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
-			Application.Run(new MainForm());
+
+			LoginForm loginform = new LoginForm();
+			DialogResult dr = loginform.ShowDialog();
+
+			if (dr == System.Windows.Forms.DialogResult.OK)
+			{
+				Application.Run(new MainForm());
+			}
+
 
 			////TESTCODEHERE
 			//EnumList<GenderType> gl = EnumList<GenderType>.FromBooleanString("00010");

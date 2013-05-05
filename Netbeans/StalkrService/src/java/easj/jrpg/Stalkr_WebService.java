@@ -12,58 +12,70 @@ import javax.jws.WebParam;
 @WebService(serviceName = "WS")
 public class Stalkr_WebService
 {
-	@WebMethod(operationName = "verifyLogin")
-	public String verifyLogin(@WebParam(name = "username") String username, @WebParam(name = "password") String password)
+	@WebMethod(operationName = "login")
+	public String Login(	@WebParam(name = "username") String username,
+							@WebParam(name = "password") String password)
 	{
-		UserMapper um = new UserMapper();
-		return um.verifyLogin(username, password);
+		return UserMapper.userLogin(username, password);
 	}
 	
-	@WebMethod(operationName = "loginAdmin")
-	public String loginAdmin(@WebParam(name = "username") String username, @WebParam(name = "password") String password)
+	@WebMethod(operationName = "adminLogin")
+	public String AdminLogin(	@WebParam(name = "username") String username,
+								@WebParam(name = "password") String password)
 	{
-		UserMapper um = new UserMapper();
-		return um.verifyAdminLogin(username, password);
+		return UserMapper.adminLogin(username, password);
 	}
 	
 	@WebMethod(operationName = "getUser")
-	public String getUser(@WebParam(name = "username") String username, @WebParam(name = "password") String password, 
+	public String GetUser(	@WebParam(name = "username") String username,
+							@WebParam(name = "password") String password,
 							@WebParam(name = "id") String id)
 	{
-		UserMapper um = new UserMapper();
-		return um.getUser(username, password, id);
+		return UserMapper.userGetUser(username, password, id);
 	}
 
-	@WebMethod(operationName = "getUsers")
-	public String[] getUsers(@WebParam(name = "username") String username, @WebParam(name = "password") String password, 
-							@WebParam(name = "id") String id)
-	{
-		UserMapper um = new UserMapper();
-		return um.getUsers(username, password, id);
-	}
-	
-	@WebMethod(operationName = "saveUser")
-	public String saveUser(@WebParam(name = "username") String username, @WebParam(name = "password") String password, 
-							@WebParam(name = "user") String userasstring)
-	{
-		UserMapper um = new UserMapper();
-		return um.saveUser(username, password, userasstring);
-	}
-
-	@WebMethod(operationName = "deleteUser")
-	public String deleteUser(@WebParam(name = "username") String username, @WebParam(name = "password") String password,	
-								@WebParam(name = "id") String id)
-	{
-		UserMapper um = new UserMapper();
-		return um.deleteUser(username, password, id);
-	}
-
-	@WebMethod(operationName = "getMatches")
-	public String[] getMatches(	@WebParam(name = "username") String username,
+	@WebMethod(operationName = "adminGetUsers")
+	public String[] AdminGetUsers(	@WebParam(name = "username") String username,
 									@WebParam(name = "password") String password,
 									@WebParam(name = "id") String id)
 	{
-		UserMapper um = new UserMapper();
-		return um.getMatches(username, password, id);
+		return UserMapper.adminGetUsers(username, password, id);
+	}
+	
+	@WebMethod(operationName = "saveUser")
+	public String SaveUser(	@WebParam(name = "username") String username,
+								@WebParam(name = "password") String password,
+								@WebParam(name = "user") String userasstring)
+	{
+		return UserMapper.userSaveUser(username, password, userasstring);
+	}
+	
+	@WebMethod(operationName = "adminSaveUser")
+	public String AdminSaveUser(	@WebParam(name = "username") String username,
+									@WebParam(name = "password") String password,
+									@WebParam(name = "user") String userasstring)
+	{
+		return UserMapper.adminSaveUser(username, password, userasstring);
+	}
+
+	@WebMethod(operationName = "deleteUser")
+	public String DeleteUser(	@WebParam(name = "username") String username,
+								@WebParam(name = "password") String password)
+	{
+		return UserMapper.userDeleteUser(username, password);
+	}
+
+	@WebMethod(operationName = "adminDeleteUser")
+	public String AdminDeleteUser(	@WebParam(name = "username") String username,
+										@WebParam(name = "password") String password,
+										@WebParam(name = "id") String id)
+	{
+		return UserMapper.adminDeleteUser(username, password, id);
+	}
+
+	@WebMethod(operationName = "getMatches")
+	public String[] GetMatches(@WebParam(name = "user") String userasstring)
+	{
+		return UserMapper.userGetMatches(userasstring);
 	}
 }

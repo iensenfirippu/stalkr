@@ -14,7 +14,7 @@ namespace StalkrAdminTool
 	{
 		// Class global variables
 		private Description _description;
-		private Boolean _ispreference;
+		//private Boolean _ispreference;
 
 		// Contructor
 		public DescriptionForm(Description description, Boolean ispreference)
@@ -29,7 +29,7 @@ namespace StalkrAdminTool
 			else { txt_title.Enabled = false; } 
 			num_age.Value = _description.Age;
 			if (ispreference) { num_agemax.Value = _description.Age.Max; }
-			else { num_agemax.Enabled = false; }
+			else { num_age.Enabled = false; num_agemax.Enabled = false; }
 
 			enum_gender.SetValues(_description.Gender.EnumToStringList, _description.Gender, ispreference);
 			enum_sexuality.SetValues(_description.Sexuality.EnumToStringList, _description.Sexuality, ispreference);
@@ -55,7 +55,8 @@ namespace StalkrAdminTool
 			//_description.UniqueID = new Guid(txt_guid.Text);
 			_description.TimeStamp = DateTime.Now;
 			_description.Title = txt_title.Text;
-			_description.Age.Set(Convert.ToInt32(num_age.Value), Convert.ToInt32(num_agemax.Value));
+			if (num_agemax.Value == 0) { _description.SetAge(Convert.ToInt32(num_age.Value)); }
+			else { _description.SetAge(Convert.ToInt32(num_age.Value), Convert.ToInt32(num_agemax.Value)); }
 			_description.Gender = enum_gender.Value;
 			_description.Sexuality = enum_sexuality.Value;
 			_description.Area = enum_region.Value;

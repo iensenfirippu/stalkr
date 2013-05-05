@@ -15,38 +15,38 @@ import java.util.Date;
  */
 public class UserMapper
 {
-	private final String DRIVER = "com.mysql.jdbc.Driver";
-	private final String SERVER = "localhost:3306";
-	private final String DATABASE = "stalkr";
-	private final String USERNAME = "stalkr";
-	private final String PASSWORD = "DatabasePassword1";
-	//private final String USERNAME = "root";	// For local testing
-	//private final String PASSWORD = "";		// For local testing
+	private static final String DRIVER = "com.mysql.jdbc.Driver";
+	private static final String SERVER = "localhost:3306";
+	private static final String DATABASE = "stalkr";
+	private static final String USERNAME = "stalkr";
+	private static final String PASSWORD = "DatabasePassword1";
+	//private static final String USERNAME = "root";	// For local testing
+	//private static final String PASSWORD = "";		// For local testing
 	
-	private final boolean DEBUG = false;	// For extended error messages
+	private static final boolean DEBUG = false;			// For extended error messages
 	
 	// Error codes
-	private final String ERRNULL = "E00";	// null or empty resultset
-	private final String ERRFALS = "E01";	// boolean false
-	private final String ERRTRUE = "E10";	// boolean true
-	private final String ERRPERM = "E25";	// insufficient permissions
-	private final String ERRINVA = "E42";	// invalid userstring
-	private final String ERRSQL  = "E90";	// SQL error
-	private final String ERRUNKN = "E99";	// unidentified runtime error
+	private static final String ERRNULL = "E00";		// null or empty resultset
+	private static final String ERRFALS = "E01";		// boolean false
+	private static final String ERRTRUE = "E10";		// boolean true
+	private static final String ERRPERM = "E25";		// insufficient permissions
+	private static final String ERRINVA = "E42";		// invalid userstring
+	private static final String ERRSQL  = "E90";		// SQL error
+	private static final String ERRUNKN = "E99";		// unidentified runtime error
 	
-	private Connection con;
-	private Statement sta;
+	private static Connection _con;
+	private static Statement _sta;
 	
 	/**
 	 * Connects to the database
 	 */
-	private void connect()
+	private static void connect()
 	{
 		try
 		{
 			Class.forName(DRIVER);
-			con = DriverManager.getConnection("jdbc:mysql://" + SERVER + "/" + DATABASE + "?user=" + USERNAME + "&password=" + PASSWORD);
-			sta = con.createStatement();
+			_con = DriverManager.getConnection("jdbc:mysql://" + SERVER + "/" + DATABASE + "?user=" + USERNAME + "&password=" + PASSWORD);
+			_sta = _con.createStatement();
 		}
 		catch (Exception e)
 		{
@@ -57,14 +57,14 @@ public class UserMapper
 	/**
 	 * Closes the connection with the database
 	 */
-	private void disconnect()
+	private static void disconnect()
 	{
 		try
 		{
-			sta.close();
-			sta = null;
-			con.close();
-			con = null;
+			_sta.close();
+			_sta = null;
+			_con.close();
+			_con = null;
 		}
 		catch (Exception e)
 		{
@@ -78,7 +78,7 @@ public class UserMapper
 	 * @param password The Password of the user
 	 * @return Error code string (E01 on success).
 	 */
-	public String verifyLogin(String username, String password)
+	public static String userLogin(String username, String password)
 	{
 		String result = ERRFALS;
 		
@@ -90,7 +90,7 @@ public class UserMapper
 		try
 		{
 			connect();
-			ResultSet rs = sta.executeQuery(sb.toString());
+			ResultSet rs = _sta.executeQuery(sb.toString());
 			rs.first();
 			
 			if(rs.getInt("number") == 1)
@@ -120,7 +120,7 @@ public class UserMapper
 	 * @param password The Password of the administrator
 	 * @return permission string
 	 */
-	public String verifyAdminLogin(String username, String password)
+	public static String adminLogin(String username, String password)
 	{
 		String result = "000000";
 		
@@ -134,7 +134,7 @@ public class UserMapper
 			try
 			{
 				connect();
-				ResultSet rs = sta.executeQuery(sb.toString());
+				ResultSet rs = _sta.executeQuery(sb.toString());
 
 				while (rs.next())
 				{
@@ -159,9 +159,8 @@ public class UserMapper
 	 * @param uuid ID of the user to fetch
 	 * @return User as string
 	 */
-	public String getUser(String username, String password, String uuid)
+	public static String userGetUser(String username, String password, String uuid)
 	{
-		//String adminpermissions = verifyAdminLogin(username, password);
 		String result = ERRNULL;
 		
 		StringBuilder sb1 = new StringBuilder();
@@ -187,7 +186,7 @@ public class UserMapper
 		try
 		{
 			connect();
-			ResultSet rs = sta.executeQuery(sb1.toString());
+			ResultSet rs = _sta.executeQuery(sb1.toString());
 			StringBuilder user = new StringBuilder();
 			rs.first();
 			
@@ -216,7 +215,7 @@ public class UserMapper
 			user.append(rs.getString("smoking"))				.append("|");
 			user.append(rs.getString("drinking"))				;
 			
-			rs = sta.executeQuery(sb2.toString());
+			rs = _sta.executeQuery(sb2.toString());
 			while (rs.next())
 			{
 				// PREFERENCE
@@ -253,105 +252,112 @@ public class UserMapper
 	 * @param uuid ID of user to exclude
 	 * @return Users as strings in array
 	 */
-	public String[] getUsers(String username, String password, String uuid)
+	public static String[] adminGetUsers(String username, String password, String uuid)
 	{
-		//String adminpermissions = verifyAdminLogin(username, password);
+		String admin = adminLogin(username, password);
 		String[] result = new String[1];
-		// result[0] = ERRNULL;
-		ArrayList<StringBuilder> users = new ArrayList<StringBuilder>();
 		
-		StringBuilder sb1 = new StringBuilder();
-		StringBuilder sb2 = new StringBuilder();
-		
-		// SELECT all but password in user
-		sb1.append("SELECT user.u_id, user.email, user.username, ");
-		sb1.append("user.firstname, user.lastname, user.birthday, ");
-		sb1.append("user.loc_lat, user.loc_lon, user.loc_tim, ");
-		// SELECT all but id in description
-		sb1.append("dscr.timestamp, dscr.title, dscr.age, dscr.age_max, dscr.gender, ");
-		sb1.append("dscr.sexuality, dscr.region, dscr.smoking, dscr.drinking ");
-		// FROM user table
-		sb1.append("FROM user ");
-		sb1.append("INNER JOIN description AS dscr ON user.u_id = dscr.d_id ");
-		if (uuid != "") { sb1.append("WHERE user.u_id <> '").append(uuid).append("' "); }
-
-		// SELECT each users preferences
-		sb2.append("SELECT ud.u_id, pref.* FROM description as pref ");
-		sb2.append("INNER JOIN userdescription AS ud ON pref.d_id = ud.d_id ");
-		sb2.append("WHERE ud.u_id = ");
-		
-		try
+		if (admin.charAt(3) == '1' || admin.charAt(4) == '1' || admin.charAt(5) == '1')
 		{
-			connect();
-			//System.out.println(sb1.toString());
-			ResultSet rs = sta.executeQuery(sb1.toString());
-			
-			while(rs.next())
+			ArrayList<StringBuilder> users = new ArrayList<StringBuilder>();
+
+			StringBuilder sb1 = new StringBuilder();
+			StringBuilder sb2 = new StringBuilder();
+
+			// SELECT all but password in user
+			sb1.append("SELECT user.u_id, user.email, user.username, ");
+			sb1.append("user.firstname, user.lastname, user.birthday, ");
+			sb1.append("user.loc_lat, user.loc_lon, user.loc_tim, ");
+			// SELECT all but id in description
+			sb1.append("dscr.timestamp, dscr.title, dscr.age, dscr.age_max, dscr.gender, ");
+			sb1.append("dscr.sexuality, dscr.region, dscr.smoking, dscr.drinking ");
+			// FROM user table
+			sb1.append("FROM user ");
+			sb1.append("INNER JOIN description AS dscr ON user.u_id = dscr.d_id ");
+			if (uuid != "") { sb1.append("WHERE user.u_id <> '").append(uuid).append("' "); }
+
+			// SELECT each users preferences
+			sb2.append("SELECT ud.u_id, pref.* FROM description as pref ");
+			sb2.append("INNER JOIN userdescription AS ud ON pref.d_id = ud.d_id ");
+			sb2.append("WHERE ud.u_id = ");
+
+			try
 			{
-				StringBuilder user = new StringBuilder();
-				
-				// USER
-				user.append(rs.getString("u_id"))						.append("|");
-				user.append(rs.getString("email"))						.append("|");
-				user.append(rs.getString("username"))					.append("|");
-				/*result.append(rs.getString("password"))*/user			.append("|");
-				user.append(rs.getString("firstname"))					.append("|");
-				user.append(rs.getString("lastname"))					.append("|");
-				user.append(Long.toString(rs.getLong("birthday")))		.append("|");
+				connect();
+				//System.out.println(sb1.toString());
+				ResultSet rs = _sta.executeQuery(sb1.toString());
 
-				// LOCATION
-				user.append(Float.toString(rs.getFloat("loc_lat")))		.append("|");
-				user.append(Float.toString(rs.getFloat("loc_lon")))		.append("|");
-				user.append(Long.toString(rs.getLong("loc_tim")))		.append("|");
-
-				// DESCRIPTION
-				user.append(rs.getLong("timestamp"))					.append("|");
-				user.append(rs.getString("title"))						.append("|");
-				user.append(rs.getInt("age"))							.append("|");
-				user.append(rs.getInt("age_max"))						.append("|");
-				user.append(rs.getString("gender"))						.append("|");
-				user.append(rs.getString("sexuality"))					.append("|");
-				user.append(rs.getString("region"))						.append("|");
-				user.append(rs.getString("smoking"))					.append("|");
-				user.append(rs.getString("drinking"))					;
-
-				users.add(user);
-			}
-			
-			for (StringBuilder u : users)
-			{
-				String statement = sb2.toString() + "'" + u.substring(0, 36) + "'";
-				rs = sta.executeQuery(statement);
-				
-				while (rs.next())
+				while(rs.next())
 				{
-					// PREFERENCE
-					u.append("{");
-					u.append(rs.getString("d_id"))						.append("|");
-					u.append(rs.getLong("timestamp"))					.append("|");
-					u.append(rs.getString("title"))						.append("|");
-					u.append(rs.getInt("age"))							.append("|");
-					u.append(rs.getInt("age_max"))						.append("|");
-					u.append(rs.getString("gender"))					.append("|");
-					u.append(rs.getString("sexuality"))					.append("|");
-					u.append(rs.getString("region"))					.append("|");
-					u.append(rs.getString("smoking"))					.append("|");
-					u.append(rs.getString("drinking"))					;
+					StringBuilder user = new StringBuilder();
+
+					// USER
+					user.append(rs.getString("u_id"))						.append("|");
+					user.append(rs.getString("email"))						.append("|");
+					user.append(rs.getString("username"))					.append("|");
+					/*result.append(rs.getString("password"))*/user			.append("|");
+					user.append(rs.getString("firstname"))					.append("|");
+					user.append(rs.getString("lastname"))					.append("|");
+					user.append(Long.toString(rs.getLong("birthday")))		.append("|");
+
+					// LOCATION
+					user.append(Float.toString(rs.getFloat("loc_lat")))		.append("|");
+					user.append(Float.toString(rs.getFloat("loc_lon")))		.append("|");
+					user.append(Long.toString(rs.getLong("loc_tim")))		.append("|");
+
+					// DESCRIPTION
+					user.append(rs.getLong("timestamp"))					.append("|");
+					user.append(rs.getString("title"))						.append("|");
+					user.append(rs.getInt("age"))							.append("|");
+					user.append(rs.getInt("age_max"))						.append("|");
+					user.append(rs.getString("gender"))						.append("|");
+					user.append(rs.getString("sexuality"))					.append("|");
+					user.append(rs.getString("region"))						.append("|");
+					user.append(rs.getString("smoking"))					.append("|");
+					user.append(rs.getString("drinking"))					;
+
+					users.add(user);
+				}
+
+				for (StringBuilder u : users)
+				{
+					String statement = sb2.toString() + "'" + u.substring(0, 36) + "'";
+					rs = _sta.executeQuery(statement);
+
+					while (rs.next())
+					{
+						// PREFERENCE
+						u.append("{");
+						u.append(rs.getString("d_id"))						.append("|");
+						u.append(rs.getLong("timestamp"))					.append("|");
+						u.append(rs.getString("title"))						.append("|");
+						u.append(rs.getInt("age"))							.append("|");
+						u.append(rs.getInt("age_max"))						.append("|");
+						u.append(rs.getString("gender"))					.append("|");
+						u.append(rs.getString("sexuality"))					.append("|");
+						u.append(rs.getString("region"))					.append("|");
+						u.append(rs.getString("smoking"))					.append("|");
+						u.append(rs.getString("drinking"))					;
+					}
+				}
+
+				result = new String[users.size()];
+				for (int i = 0; i < result.length; i++)
+				{
+					result[i] = users.get(i).toString();
+					if (Tools.ValidateUserString(result[i]) == 0f) { result[i] = ERRINVA; }
 				}
 			}
-
-			result = new String[users.size()];
-			for (int i = 0; i < result.length; i++)
+			catch (SQLException ex) { result[0] = ERRSQL; }
+			catch (Exception ex) { result[0] = ERRUNKN; }
+			finally
 			{
-				result[i] = users.get(i).toString();
-				if (Tools.ValidateUserString(result[i]) == 0f) { result[i] = ERRINVA; }
+				disconnect();
 			}
 		}
-		catch (SQLException ex) { result[0] = ERRSQL; }
-		catch (Exception ex) { result[0] = ERRUNKN; }
-		finally
+		else
 		{
-			disconnect();
+			result[0] = ERRPERM;
 		}
 		
 		return result;
@@ -364,16 +370,77 @@ public class UserMapper
 	 * @param userasstring The user as a string
 	 * @return true on success
 	 */
-	public String saveUser(String username, String password, String userasstring)
+	public static String adminSaveUser(String username, String password, String userasstring)
+	{
+		String admin = adminLogin(username, password);
+		String result = ERRINVA;
+		
+		if (admin.charAt(4) == '1')
+		{
+			if (Tools.ValidateUserString(userasstring) >= 0.2f)
+			{
+				result = ERRFALS;
+
+				//boolean allowed = false;
+				boolean userexists = false;
+				boolean descriptionexists = false;
+				ArrayList<String> preferenceids = new ArrayList<String>();
+
+				String uid = userasstring.substring(0, 36);
+
+				StringBuilder sb1 = new StringBuilder();
+				StringBuilder sb2 = new StringBuilder();
+				StringBuilder sb3 = new StringBuilder();
+
+				sb1.append("SELECT count(u_id) AS users FROM user ");
+				sb1.append("WHERE u_id = '").append(uid).append("';");
+
+				sb2.append("SELECT count(d_id) AS descriptions FROM description ");
+				sb2.append("WHERE d_id = '").append(uid).append("';");
+
+				sb3.append("SELECT d_id AS p_id FROM userdescription ");
+				sb3.append("WHERE u_id = '").append(uid).append("';");
+
+				try
+				{
+					connect();
+					ResultSet rs;
+
+					rs = _sta.executeQuery(sb1.toString());
+					rs.first();
+					if (rs.getInt("users") == 1) { userexists = true; }
+
+					rs = _sta.executeQuery(sb2.toString());
+					rs.first();
+					if (rs.getInt("descriptions") == 1) { descriptionexists = true; }
+
+					rs = _sta.executeQuery(sb3.toString());
+					while (rs.next())
+					{
+						preferenceids.add(rs.getString("p_id"));
+					}
+				}
+				catch (Exception ex) { /* do nothing */ }
+				finally { disconnect(); }
+
+				result = saveUser(result, uid, userexists, descriptionexists, preferenceids, userasstring);
+			}
+		}
+		else
+		{
+			result = ERRPERM;
+		}
+		
+		return result;
+	}
+	public static String userSaveUser(String username, String password, String userasstring)
 	{
 		String result = ERRINVA;
 		
-		if (Tools.ValidateUserString(userasstring) > 0f)
+		if (Tools.ValidateUserString(userasstring) >= 0.2f)
 		{
 			result = ERRFALS;
-			String adminpermissions = verifyAdminLogin(username, password);
 
-			boolean allowed = false;
 			boolean userexists = false;
 			boolean descriptionexists = false;
 			ArrayList<String> preferenceids = new ArrayList<String>();
@@ -384,53 +451,35 @@ public class UserMapper
 			StringBuilder sb1 = new StringBuilder();
 			StringBuilder sb2 = new StringBuilder();
 			StringBuilder sb3 = new StringBuilder();
-			StringBuilder sb4 = new StringBuilder();
 
 			sb1.append("SELECT count(u_id) AS users FROM user ");
 			sb1.append("WHERE u_id = '").append(uid).append("' ");
 			sb1.append("AND username = '").append(username).append("' ");
 			sb1.append("AND password = '").append(password).append("';");
 
-			sb2.append("SELECT count(u_id) AS users FROM user ");
-			sb2.append("WHERE u_id = '").append(uid).append("';");
+			sb2.append("SELECT count(d_id) AS descriptions FROM description ");
+			sb2.append("WHERE d_id = '").append(uid).append("';");
 
-			sb3.append("SELECT count(d_id) AS descriptions FROM description ");
-			sb3.append("WHERE d_id = '").append(uid).append("';");
-
-			sb4.append("SELECT d_id AS p_id FROM userdescription ");
-			sb4.append("WHERE u_id = '").append(uid).append("';");
+			sb3.append("SELECT d_id AS p_id FROM userdescription ");
+			sb3.append("WHERE u_id = '").append(uid).append("';");
 
 			try
 			{
 				connect();
 				ResultSet rs;
 
-				if (adminpermissions.charAt(4) == '1')
-				{
-					allowed = true;
-				}
-				else
-				{
-					rs = sta.executeQuery(sb1.toString());
-					rs.first();
-					if (rs.getInt("users") == 1) { allowed = true; }
-				}
+				rs = _sta.executeQuery(sb1.toString());
+				rs.first();
+				if (rs.getInt("users") == 1) { userexists = true; }
 
-				if (allowed)
+				rs = _sta.executeQuery(sb2.toString());
+				rs.first();
+				if (rs.getInt("descriptions") == 1) { descriptionexists = true; }
+
+				rs = _sta.executeQuery(sb3.toString());
+				while (rs.next())
 				{
-					rs = sta.executeQuery(sb2.toString());
-					rs.first();
-					if (rs.getInt("users") == 1) { userexists = true; }
-
-					rs = sta.executeQuery(sb3.toString());
-					rs.first();
-					if (rs.getInt("descriptions") == 1) { descriptionexists = true; }
-
-					rs = sta.executeQuery(sb4.toString());
-					while (rs.next())
-					{
-						preferenceids.add(rs.getString("p_id"));
-					}
+					preferenceids.add(rs.getString("p_id"));
 				}
 			}
 			catch (Exception ex) { /* do nothing */ }
@@ -439,106 +488,9 @@ public class UserMapper
 				disconnect();
 			}
 
-			if (allowed)
+			if (userexists)
 			{
-				int expectedrows = 0;
-				ArrayList<String> sqlstatements = new ArrayList<String>();
-
-				// user UPDATE
-				if (userexists)
-				{
-					String statement = makeStatement_UpdateUser(parts[0]);
-					if (!statement.equals(""))
-					{
-						expectedrows++;
-						sqlstatements.add(statement);
-					}
-				}
-				// user INSERT
-				else
-				{
-					expectedrows++;
-					sqlstatements.add(makeStatement_InsertUser(parts[0]));
-				}
-
-				// Description UPDATE
-				if (descriptionexists)
-				{
-					String statement = makeStatement_UpdateDescription(parts[0]);
-					if (!statement.equals(""))
-					{
-						expectedrows++;
-						sqlstatements.add(statement);
-					}
-				}
-				// Description INSERT
-				else
-				{
-					expectedrows++;
-					sqlstatements.add(makeStatement_InsertDescription(parts[0]));
-				}
-				
-				for (int i = 1; i < parts.length; i++)
-				{
-					String pid = parts[i].substring(0, 36);
-
-					// Preference UPDATE
-					if (preferenceids.contains(pid))
-					{
-						String statement = makeStatement_UpdatePreference(parts[i]);
-						if (!statement.equals(""))
-						{
-							expectedrows++;
-							sqlstatements.add(statement);
-						}
-						preferenceids.remove(pid);
-					}
-					// Preference INSERT
-					else
-					{
-						expectedrows += 2;
-						sqlstatements.add(makeStatement_InsertPreference(parts[i]));
-						sqlstatements.add(makeStatement_InsertUserDescription(uid, pid));
-					}
-				}
-				// Preference DELETE
-				for (String id : preferenceids)
-				{
-					expectedrows += 2;
-					sqlstatements.add(makeStatement_DeleteDescription(id));
-					sqlstatements.add(makeStatement_DeleteUserDescription(id));
-				}
-
-				try
-				{
-					connect();
-					int rowsaffected = 0;
-
-					for (String statement : sqlstatements)
-					{
-						if (DEBUG) { result = statement; }
-						rowsaffected += sta.executeUpdate(statement);
-					}
-
-					if (rowsaffected == expectedrows)
-					{
-						result = ERRTRUE;
-					}
-				}
-				catch (SQLException ex)
-				{
-						if (DEBUG)	{ result = ERRSQL + ": " + result; }
-						else		{ result = ERRSQL; }
-				}
-				catch (Exception ex)
-				{
-						if (DEBUG)	{ result = ERRUNKN + ": " + ex.getMessage(); }
-						else		{ result = ERRUNKN; }
-				}
-				finally
-				{
-					disconnect();
-				}
+				result = saveUser(result, uid, userexists, descriptionexists, preferenceids, userasstring);
 			}
 			else
 			{
@@ -548,7 +500,111 @@ public class UserMapper
 		
 		return result;
 	}
-	private String makeStatement_InsertUser(String user) {
+	private static String saveUser(String result, String uid, boolean userexists, boolean descriptionexists, ArrayList<String> preferenceids, String userasstring)
+	{
+		String[] parts = userasstring.split("\\{");
+		int expectedrows = 0;
+		ArrayList<String> sqlstatements = new ArrayList<String>();
+
+		// user UPDATE
+		if (userexists)
+		{
+			String statement = makeStatement_UpdateUser(parts[0]);
+			if (!statement.equals("")) // If no fields were changed, ignore
+			{
+				expectedrows++;
+				sqlstatements.add(statement);
+			}
+		}
+		// user INSERT
+		else
+		{
+			expectedrows++;
+			sqlstatements.add(makeStatement_InsertUser(parts[0]));
+		}
+
+		// Description UPDATE
+		if (descriptionexists)
+		{
+			String statement = makeStatement_UpdateDescription(parts[0]);
+			if (!statement.equals("")) // If no fields were changed, ignore
+			{
+				expectedrows++;
+				sqlstatements.add(statement);
+			}
+		}
+		// Description INSERT
+		else
+		{
+			expectedrows++;
+			sqlstatements.add(makeStatement_InsertDescription(parts[0]));
+		}
+
+		for (int i = 1; i < parts.length; i++)
+		{
+			String pid = parts[i].substring(0, 36);
+
+			// Preference UPDATE
+			if (preferenceids.contains(pid))
+			{
+				String statement = makeStatement_UpdatePreference(parts[i]);
+				if (!statement.equals(""))
+				{
+					expectedrows++;
+					sqlstatements.add(statement);
+				}
+				preferenceids.remove(pid);
+			}
+			// Preference INSERT
+			else
+			{
+				expectedrows += 2;
+				sqlstatements.add(makeStatement_InsertPreference(parts[i]));
+				sqlstatements.add(makeStatement_InsertUserDescription(uid, pid));
+			}
+		}
+		// Preference DELETE
+		for (String id : preferenceids)
+		{
+			expectedrows += 2;
+			sqlstatements.add(makeStatement_DeleteDescription(id));
+			sqlstatements.add(makeStatement_DeleteUserDescription(id));
+		}
+
+		try
+		{
+			connect();
+			int rowsaffected = 0;
+
+			for (String statement : sqlstatements)
+			{
+				if (DEBUG) { result = statement; }
+				rowsaffected += _sta.executeUpdate(statement);
+			}
+
+			if (rowsaffected == expectedrows)
+			{
+				result = ERRTRUE;
+			}
+		}
+		catch (SQLException ex)
+		{
+				if (DEBUG)	{ result = ERRSQL + ": " + result; }
+				else		{ result = ERRSQL; }
+		}
+		catch (Exception ex)
+		{
+				if (DEBUG)	{ result = ERRUNKN + ": " + ex.getMessage(); }
+				else		{ result = ERRUNKN; }
+		}
+		finally
+		{
+			disconnect();
+		}
+
+		return result;
+	}
+	private static String makeStatement_InsertUser(String user) {
 		String[] values = user.split("\\|", -1);
 		StringBuilder sb = new StringBuilder();
 		
@@ -569,7 +625,7 @@ public class UserMapper
 		
 		return sb.toString();
 	}
-	private String makeStatement_UpdateUser(String user) {
+	private static String makeStatement_UpdateUser(String user) {
 		String[] values = user.split("\\|", -1);
 		StringBuilder sb = new StringBuilder();
 		int i = 0;
@@ -588,7 +644,7 @@ public class UserMapper
 		
 		return sb.toString();
 	}
-	private String makeStatement_InsertDescription(String user) {
+	private static String makeStatement_InsertDescription(String user) {
 		String[] values = user.split("\\|", -1);
 		StringBuilder sb = new StringBuilder();
 		
@@ -607,7 +663,7 @@ public class UserMapper
 		
 		return sb.toString();
 	}
-	private String makeStatement_UpdateDescription(String desc) {
+	private static String makeStatement_UpdateDescription(String desc) {
 		String[] values = desc.split("\\|", -1);
 		StringBuilder sb = new StringBuilder();
 		int i = 0;
@@ -628,7 +684,7 @@ public class UserMapper
 		
 		return sb.toString();
 	}
-	private String makeStatement_DeleteDescription(String d_id) {
+	private static String makeStatement_DeleteDescription(String d_id) {
 		StringBuilder sb = new StringBuilder();
 		
 		sb.append("DELETE FROM description WHERE ");
@@ -636,7 +692,7 @@ public class UserMapper
 		
 		return sb.toString();
 	}
-	private String makeStatement_InsertPreference(String desc) {
+	private static String makeStatement_InsertPreference(String desc) {
 		String[] values = desc.split("\\|", -1);
 		StringBuilder sb = new StringBuilder();
 		
@@ -655,7 +711,7 @@ public class UserMapper
 		
 		return sb.toString();
 	}
-	private String makeStatement_UpdatePreference(String desc) {
+	private static String makeStatement_UpdatePreference(String desc) {
 		String[] values = desc.split("\\|", -1);
 		StringBuilder sb = new StringBuilder();
 		int i = 0;
@@ -676,7 +732,7 @@ public class UserMapper
 		
 		return sb.toString();
 	}
-	private String makeStatement_InsertUserDescription(String u_id, String d_id) {
+	private static String makeStatement_InsertUserDescription(String u_id, String d_id) {
 		StringBuilder sb = new StringBuilder();
 		
 		sb.append("INSERT INTO userdescription (u_id, d_id) VALUES (");
@@ -685,7 +741,7 @@ public class UserMapper
 		
 		return sb.toString();
 	}
-	private String makeStatement_DeleteUserDescription(String d_id) {
+	private static String makeStatement_DeleteUserDescription(String d_id) {
 		StringBuilder sb = new StringBuilder();
 		
 		sb.append("DELETE FROM userdescription WHERE ");
@@ -696,16 +752,76 @@ public class UserMapper
 	
 	/**
 	 * Deletes a user from the database
+	 * @param username The username of the admin
+	 * @param password The Password of the admin
+	 * @param uuid The ID of the user to delete
+	 * @return Error code string ("E01" on success)
+	 */
+	public static String adminDeleteUser(String username, String password, String uuid)
+	{
+		String admin = adminLogin(username, password);
+		String result = ERRFALS;
+		
+		if (admin.charAt(5) == '1')
+		{
+			StringBuilder sb1 = new StringBuilder();
+			StringBuilder sb2 = new StringBuilder();
+			StringBuilder sb3 = new StringBuilder();
+			StringBuilder sb4 = new StringBuilder();
+
+			sb1.append("DELETE pref.* FROM description AS pref ");
+			sb1.append("INNER JOIN userdescription AS ud ON pref.d_id = ud.d_id ");
+			sb1.append("WHERE ud.u_id = '").append(uuid).append("'");
+
+			sb2.append("DELETE FROM description ");
+			sb2.append("WHERE d_id = '").append(uuid).append("' ");
+
+			sb3.append("DELETE FROM userdescription WHERE ");
+			sb3.append("u_id = '").append(uuid).append("'");
+
+			sb4.append("DELETE FROM user ");
+			sb4.append("WHERE u_id = '").append(uuid).append("'");
+
+			try
+			{
+				connect();
+
+				int rowsaffected = 0;
+				rowsaffected += _sta.executeUpdate(sb1.toString());
+				rowsaffected += _sta.executeUpdate(sb2.toString());
+				rowsaffected += _sta.executeUpdate(sb3.toString());
+				rowsaffected += _sta.executeUpdate(sb4.toString());
+
+				if (rowsaffected >= 2)
+				{
+					result = ERRTRUE;
+				}
+			}
+			catch (SQLException ex) { result = ERRSQL; }
+			catch (Exception ex) { result = ERRUNKN; }
+			finally
+			{
+				disconnect();
+			}
+		}
+		else
+		{
+			result = ERRPERM;
+		}
+		
+		return result;
+	}
+	
+	/**
+	 * Deletes a user from the database
 	 * @param username The username of the user
 	 * @param password The Password of the user
 	 * @param uuid The ID of the user to delete
 	 * @return Error code string ("E01" on success)
 	 */
-	public String deleteUser(String username, String password, String uuid)
+	public static String userDeleteUser(String username, String password)
 	{
-		String adminpermissions = verifyAdminLogin(username, password);
 		String result = ERRFALS;
-		boolean allowed = false;
 		
 		StringBuilder sb1 = new StringBuilder();
 		StringBuilder sb2 = new StringBuilder();
@@ -713,46 +829,43 @@ public class UserMapper
 		StringBuilder sb4 = new StringBuilder();
 		StringBuilder sb5 = new StringBuilder();
 		
-		sb1.append("SELECT count(u_id) AS rows FROM user ");
-		sb1.append("WHERE u_id = '").append(uuid).append("'");
-		sb1.append("AND username = '").append(username).append("' ");
+		sb1.append("SELECT u_id FROM user ");
+		sb1.append("WHERE username = '").append(username).append("' ");
 		sb1.append("AND password = '").append(password).append("' ");
 
 		sb2.append("DELETE pref.* FROM description AS pref ");
 		sb2.append("INNER JOIN userdescription AS ud ON pref.d_id = ud.d_id ");
-		sb2.append("WHERE ud.u_id = '").append(uuid).append("'");
+		sb2.append("WHERE ud.u_id = '");//.append(uuid).append("'");
 
 		sb3.append("DELETE FROM description ");
-		sb3.append("WHERE d_id = '").append(uuid).append("' ");
+		sb3.append("WHERE d_id = '");//.append(uuid).append("' ");
 
-		sb4.append("DELETE FROM userdescription WHERE ");
-		sb4.append("u_id = '").append(uuid).append("'");
+		sb4.append("DELETE FROM userdescription ");
+		sb4.append("WHERE u_id = '");//.append(uuid).append("'");
 
 		sb5.append("DELETE FROM user ");
-		sb5.append("WHERE u_id = '").append(uuid).append("'");
+		sb5.append("WHERE u_id = '");//.append(uuid).append("';");
 
 		try
 		{
 			connect();
 			
-			if (adminpermissions.charAt(5) == '1')
-			{
-				allowed = true;
-			}
-			else
-			{
-				ResultSet rs = sta.executeQuery(sb1.toString());
-				rs.first();
-				if (rs.getInt("rows") == 1) { allowed = true; }
-			}
+			ResultSet rs = _sta.executeQuery(sb1.toString());
+			rs.first();
+			String uuid = rs.getString("u_id");
 			
-			if (allowed)
-			{
+			if (!uuid.equals(""))
+			{	
+				sb2.append(uuid).append("';");
+				sb3.append(uuid).append("';");
+				sb4.append(uuid).append("';");
+				sb5.append(uuid).append("';");
+				
 				int rowsaffected = 0;
-				rowsaffected += sta.executeUpdate(sb2.toString());
-				rowsaffected += sta.executeUpdate(sb3.toString());
-				rowsaffected += sta.executeUpdate(sb4.toString());
-				rowsaffected += sta.executeUpdate(sb5.toString());
+				rowsaffected += _sta.executeUpdate(sb2.toString());
+				rowsaffected += _sta.executeUpdate(sb3.toString());
+				rowsaffected += _sta.executeUpdate(sb4.toString());
+				rowsaffected += _sta.executeUpdate(sb5.toString());
 
 				if (rowsaffected >= 2)
 				{
@@ -781,7 +894,7 @@ public class UserMapper
 	 * @param userasstring A string-formatted user object
 	 * @return String containing the id, username and match-percentage separated by | (pipe)
 	 */
-	public String[] getMatches(String username, String password, String userasstring)
+	public static String[] userGetMatches(String userasstring)
 	{
 		String[] result = new String[1];
 		ArrayList<Match> matches = new ArrayList<Match>();
@@ -792,7 +905,7 @@ public class UserMapper
 		float vicinity = 100f;
 		long timefrom = Tools.DTtoTS(new Date()) - (((365 * 24) * 60) * 60);
 		
-		int count = 0;
+		int count;
 		
 		for (int i = 1; i< parts.length; i++)
 		{
@@ -883,7 +996,7 @@ public class UserMapper
 			Match match = null;
 			for (String s : statements)
 			{
-				ResultSet rs = sta.executeQuery(s);
+				ResultSet rs = _sta.executeQuery(s);
 				
 				while (rs.next())
 				{	

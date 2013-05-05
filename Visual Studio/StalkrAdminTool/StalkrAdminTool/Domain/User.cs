@@ -26,7 +26,10 @@ namespace StalkrAdminTool
 		private Dictionary<String, bool> _alteredfields;
 
 		// Constructors
-		public User() : this(Guid.NewGuid()) { }
+		public User() : this(Guid.NewGuid())
+		{
+			SetAlteredFields(true);
+		}
 		public User(Guid guid)
 		{
 			_uniqueid = guid;
@@ -34,24 +37,30 @@ namespace StalkrAdminTool
 			_location = new GeoLocation();
 			_description = new Description();
 			_preferences = new List<Description>();
+
 			_alteredfields = new Dictionary<string, bool>();
-			ResetAlteredFields();
+			SetAlteredFields(false);
 		}
 
 		// Methods
-		public void ResetAlteredFields()
+		private void SetAlteredFields(bool value)
 		{
 			_alteredfields.Clear();
-			_alteredfields.Add("uniqueid", false);
-			_alteredfields.Add("email", false);
-			_alteredfields.Add("username", false);
-			_alteredfields.Add("password", false);
-			_alteredfields.Add("firstname", false);
-			_alteredfields.Add("lastname", false);
-			_alteredfields.Add("birthday", false);
-			_alteredfields.Add("location", false);
-			_alteredfields.Add("description", false);
-			_alteredfields.Add("preference", false);
+			_alteredfields.Add("uniqueid", value);
+			_alteredfields.Add("email", value);
+			_alteredfields.Add("username", value);
+			_alteredfields.Add("password", value);
+			_alteredfields.Add("firstname", value);
+			_alteredfields.Add("lastname", value);
+			_alteredfields.Add("birthday", value);
+			_alteredfields.Add("location", value);
+			_alteredfields.Add("description", value);
+			_alteredfields.Add("preference", value);
+		}
+
+		public void ResetAlteredFields()
+		{
+			SetAlteredFields(false);
 		}
 
 		// Properties
@@ -108,6 +117,19 @@ namespace StalkrAdminTool
 		{
 			get { return _preferences; }
 			set { _alteredfields["preference"] = true; _preferences = value; }
+		}
+
+		public bool IsChanged(string field)
+		{
+			bool result = false;
+			if (_alteredfields.TryGetValue(field, out result))
+			{
+				return result;
+			}
+			else
+			{
+				throw new KeyNotFoundException("Key not found in Dictionary");
+			}
 		}
 	}
 }

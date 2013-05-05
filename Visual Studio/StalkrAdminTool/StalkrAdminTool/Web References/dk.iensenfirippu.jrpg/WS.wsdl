@@ -5,6 +5,12 @@
       <xsd:import schemaLocation="http://jrpg.iensenfirippu.dk:8080/Stalkr/WS?xsd=1" namespace="http://jrpg.easj/" />
     </xsd:schema>
   </types>
+  <message name="getUsers">
+    <part name="parameters" element="tns:getUsers" />
+  </message>
+  <message name="getUsersResponse">
+    <part name="parameters" element="tns:getUsersResponse" />
+  </message>
   <message name="getUser">
     <part name="parameters" element="tns:getUser" />
   </message>
@@ -23,19 +29,29 @@
   <message name="saveUserResponse">
     <part name="parameters" element="tns:saveUserResponse" />
   </message>
-  <message name="getUsers">
-    <part name="parameters" element="tns:getUsers" />
-  </message>
-  <message name="getUsersResponse">
-    <part name="parameters" element="tns:getUsersResponse" />
-  </message>
   <message name="deleteUser">
     <part name="parameters" element="tns:deleteUser" />
   </message>
   <message name="deleteUserResponse">
     <part name="parameters" element="tns:deleteUserResponse" />
   </message>
+  <message name="getMatches">
+    <part name="parameters" element="tns:getMatches" />
+  </message>
+  <message name="getMatchesResponse">
+    <part name="parameters" element="tns:getMatchesResponse" />
+  </message>
+  <message name="loginAdmin">
+    <part name="parameters" element="tns:loginAdmin" />
+  </message>
+  <message name="loginAdminResponse">
+    <part name="parameters" element="tns:loginAdminResponse" />
+  </message>
   <portType name="Stalkr_WebService">
+    <operation name="getUsers">
+      <input wsam:Action="http://jrpg.easj/Stalkr_WebService/getUsersRequest" message="tns:getUsers" />
+      <output wsam:Action="http://jrpg.easj/Stalkr_WebService/getUsersResponse" message="tns:getUsersResponse" />
+    </operation>
     <operation name="getUser">
       <input wsam:Action="http://jrpg.easj/Stalkr_WebService/getUserRequest" message="tns:getUser" />
       <output wsam:Action="http://jrpg.easj/Stalkr_WebService/getUserResponse" message="tns:getUserResponse" />
@@ -48,17 +64,30 @@
       <input wsam:Action="http://jrpg.easj/Stalkr_WebService/saveUserRequest" message="tns:saveUser" />
       <output wsam:Action="http://jrpg.easj/Stalkr_WebService/saveUserResponse" message="tns:saveUserResponse" />
     </operation>
-    <operation name="getUsers">
-      <input wsam:Action="http://jrpg.easj/Stalkr_WebService/getUsersRequest" message="tns:getUsers" />
-      <output wsam:Action="http://jrpg.easj/Stalkr_WebService/getUsersResponse" message="tns:getUsersResponse" />
-    </operation>
     <operation name="deleteUser">
       <input wsam:Action="http://jrpg.easj/Stalkr_WebService/deleteUserRequest" message="tns:deleteUser" />
       <output wsam:Action="http://jrpg.easj/Stalkr_WebService/deleteUserResponse" message="tns:deleteUserResponse" />
     </operation>
+    <operation name="getMatches">
+      <input wsam:Action="http://jrpg.easj/Stalkr_WebService/getMatchesRequest" message="tns:getMatches" />
+      <output wsam:Action="http://jrpg.easj/Stalkr_WebService/getMatchesResponse" message="tns:getMatchesResponse" />
+    </operation>
+    <operation name="loginAdmin">
+      <input wsam:Action="http://jrpg.easj/Stalkr_WebService/loginAdminRequest" message="tns:loginAdmin" />
+      <output wsam:Action="http://jrpg.easj/Stalkr_WebService/loginAdminResponse" message="tns:loginAdminResponse" />
+    </operation>
   </portType>
   <binding name="Stalkr_WebServicePortBinding" type="tns:Stalkr_WebService">
     <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <operation name="getUsers">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
     <operation name="getUser">
       <soap:operation soapAction="" />
       <input>
@@ -86,7 +115,7 @@
         <soap:body use="literal" />
       </output>
     </operation>
-    <operation name="getUsers">
+    <operation name="deleteUser">
       <soap:operation soapAction="" />
       <input>
         <soap:body use="literal" />
@@ -95,7 +124,16 @@
         <soap:body use="literal" />
       </output>
     </operation>
-    <operation name="deleteUser">
+    <operation name="getMatches">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="loginAdmin">
       <soap:operation soapAction="" />
       <input>
         <soap:body use="literal" />
