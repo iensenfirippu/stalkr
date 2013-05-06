@@ -29,19 +29,23 @@ namespace StalkrAdminTool.dk.iensenfirippu.jrpg {
     [System.Web.Services.WebServiceBindingAttribute(Name="Stalkr_WebServicePortBinding", Namespace="http://jrpg.easj/")]
     public partial class WS : System.Web.Services.Protocols.SoapHttpClientProtocol {
         
-        private System.Threading.SendOrPostCallback getUsersOperationCompleted;
+        private System.Threading.SendOrPostCallback adminDeleteUserOperationCompleted;
         
         private System.Threading.SendOrPostCallback getUserOperationCompleted;
         
-        private System.Threading.SendOrPostCallback verifyLoginOperationCompleted;
-        
-        private System.Threading.SendOrPostCallback saveUserOperationCompleted;
-        
-        private System.Threading.SendOrPostCallback deleteUserOperationCompleted;
+        private System.Threading.SendOrPostCallback adminGetUsersOperationCompleted;
         
         private System.Threading.SendOrPostCallback getMatchesOperationCompleted;
         
-        private System.Threading.SendOrPostCallback loginAdminOperationCompleted;
+        private System.Threading.SendOrPostCallback loginOperationCompleted;
+        
+        private System.Threading.SendOrPostCallback saveUserOperationCompleted;
+        
+        private System.Threading.SendOrPostCallback adminSaveUserOperationCompleted;
+        
+        private System.Threading.SendOrPostCallback deleteUserOperationCompleted;
+        
+        private System.Threading.SendOrPostCallback adminLoginOperationCompleted;
         
         private bool useDefaultCredentialsSetExplicitly;
         
@@ -82,57 +86,63 @@ namespace StalkrAdminTool.dk.iensenfirippu.jrpg {
         }
         
         /// <remarks/>
-        public event getUsersCompletedEventHandler getUsersCompleted;
+        public event adminDeleteUserCompletedEventHandler adminDeleteUserCompleted;
         
         /// <remarks/>
         public event getUserCompletedEventHandler getUserCompleted;
         
         /// <remarks/>
-        public event verifyLoginCompletedEventHandler verifyLoginCompleted;
-        
-        /// <remarks/>
-        public event saveUserCompletedEventHandler saveUserCompleted;
-        
-        /// <remarks/>
-        public event deleteUserCompletedEventHandler deleteUserCompleted;
+        public event adminGetUsersCompletedEventHandler adminGetUsersCompleted;
         
         /// <remarks/>
         public event getMatchesCompletedEventHandler getMatchesCompleted;
         
         /// <remarks/>
-        public event loginAdminCompletedEventHandler loginAdminCompleted;
+        public event loginCompletedEventHandler loginCompleted;
+        
+        /// <remarks/>
+        public event saveUserCompletedEventHandler saveUserCompleted;
+        
+        /// <remarks/>
+        public event adminSaveUserCompletedEventHandler adminSaveUserCompleted;
+        
+        /// <remarks/>
+        public event deleteUserCompletedEventHandler deleteUserCompleted;
+        
+        /// <remarks/>
+        public event adminLoginCompletedEventHandler adminLoginCompleted;
         
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("", RequestNamespace="http://jrpg.easj/", ResponseNamespace="http://jrpg.easj/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-        [return: System.Xml.Serialization.XmlElementAttribute("return", Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=true)]
-        public string[] getUsers([System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)] string username, [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)] string password, [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)] string id) {
-            object[] results = this.Invoke("getUsers", new object[] {
+        [return: System.Xml.Serialization.XmlElementAttribute("return", Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string adminDeleteUser([System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)] string username, [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)] string password, [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)] string id) {
+            object[] results = this.Invoke("adminDeleteUser", new object[] {
                         username,
                         password,
                         id});
-            return ((string[])(results[0]));
+            return ((string)(results[0]));
         }
         
         /// <remarks/>
-        public void getUsersAsync(string username, string password, string id) {
-            this.getUsersAsync(username, password, id, null);
+        public void adminDeleteUserAsync(string username, string password, string id) {
+            this.adminDeleteUserAsync(username, password, id, null);
         }
         
         /// <remarks/>
-        public void getUsersAsync(string username, string password, string id, object userState) {
-            if ((this.getUsersOperationCompleted == null)) {
-                this.getUsersOperationCompleted = new System.Threading.SendOrPostCallback(this.OngetUsersOperationCompleted);
+        public void adminDeleteUserAsync(string username, string password, string id, object userState) {
+            if ((this.adminDeleteUserOperationCompleted == null)) {
+                this.adminDeleteUserOperationCompleted = new System.Threading.SendOrPostCallback(this.OnadminDeleteUserOperationCompleted);
             }
-            this.InvokeAsync("getUsers", new object[] {
+            this.InvokeAsync("adminDeleteUser", new object[] {
                         username,
                         password,
-                        id}, this.getUsersOperationCompleted, userState);
+                        id}, this.adminDeleteUserOperationCompleted, userState);
         }
         
-        private void OngetUsersOperationCompleted(object arg) {
-            if ((this.getUsersCompleted != null)) {
+        private void OnadminDeleteUserOperationCompleted(object arg) {
+            if ((this.adminDeleteUserCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
-                this.getUsersCompleted(this, new getUsersCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+                this.adminDeleteUserCompleted(this, new adminDeleteUserCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
         
@@ -172,33 +182,97 @@ namespace StalkrAdminTool.dk.iensenfirippu.jrpg {
         
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("", RequestNamespace="http://jrpg.easj/", ResponseNamespace="http://jrpg.easj/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [return: System.Xml.Serialization.XmlElementAttribute("return", Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=true)]
+        public string[] adminGetUsers([System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)] string username, [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)] string password, [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)] string id) {
+            object[] results = this.Invoke("adminGetUsers", new object[] {
+                        username,
+                        password,
+                        id});
+            return ((string[])(results[0]));
+        }
+        
+        /// <remarks/>
+        public void adminGetUsersAsync(string username, string password, string id) {
+            this.adminGetUsersAsync(username, password, id, null);
+        }
+        
+        /// <remarks/>
+        public void adminGetUsersAsync(string username, string password, string id, object userState) {
+            if ((this.adminGetUsersOperationCompleted == null)) {
+                this.adminGetUsersOperationCompleted = new System.Threading.SendOrPostCallback(this.OnadminGetUsersOperationCompleted);
+            }
+            this.InvokeAsync("adminGetUsers", new object[] {
+                        username,
+                        password,
+                        id}, this.adminGetUsersOperationCompleted, userState);
+        }
+        
+        private void OnadminGetUsersOperationCompleted(object arg) {
+            if ((this.adminGetUsersCompleted != null)) {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.adminGetUsersCompleted(this, new adminGetUsersCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+        
+        /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("", RequestNamespace="http://jrpg.easj/", ResponseNamespace="http://jrpg.easj/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [return: System.Xml.Serialization.XmlElementAttribute("return", Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=true)]
+        public string[] getMatches([System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)] string user) {
+            object[] results = this.Invoke("getMatches", new object[] {
+                        user});
+            return ((string[])(results[0]));
+        }
+        
+        /// <remarks/>
+        public void getMatchesAsync(string user) {
+            this.getMatchesAsync(user, null);
+        }
+        
+        /// <remarks/>
+        public void getMatchesAsync(string user, object userState) {
+            if ((this.getMatchesOperationCompleted == null)) {
+                this.getMatchesOperationCompleted = new System.Threading.SendOrPostCallback(this.OngetMatchesOperationCompleted);
+            }
+            this.InvokeAsync("getMatches", new object[] {
+                        user}, this.getMatchesOperationCompleted, userState);
+        }
+        
+        private void OngetMatchesOperationCompleted(object arg) {
+            if ((this.getMatchesCompleted != null)) {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.getMatchesCompleted(this, new getMatchesCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+        
+        /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("", RequestNamespace="http://jrpg.easj/", ResponseNamespace="http://jrpg.easj/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("return", Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string verifyLogin([System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)] string username, [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)] string password) {
-            object[] results = this.Invoke("verifyLogin", new object[] {
+        public string login([System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)] string username, [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)] string password) {
+            object[] results = this.Invoke("login", new object[] {
                         username,
                         password});
             return ((string)(results[0]));
         }
         
         /// <remarks/>
-        public void verifyLoginAsync(string username, string password) {
-            this.verifyLoginAsync(username, password, null);
+        public void loginAsync(string username, string password) {
+            this.loginAsync(username, password, null);
         }
         
         /// <remarks/>
-        public void verifyLoginAsync(string username, string password, object userState) {
-            if ((this.verifyLoginOperationCompleted == null)) {
-                this.verifyLoginOperationCompleted = new System.Threading.SendOrPostCallback(this.OnverifyLoginOperationCompleted);
+        public void loginAsync(string username, string password, object userState) {
+            if ((this.loginOperationCompleted == null)) {
+                this.loginOperationCompleted = new System.Threading.SendOrPostCallback(this.OnloginOperationCompleted);
             }
-            this.InvokeAsync("verifyLogin", new object[] {
+            this.InvokeAsync("login", new object[] {
                         username,
-                        password}, this.verifyLoginOperationCompleted, userState);
+                        password}, this.loginOperationCompleted, userState);
         }
         
-        private void OnverifyLoginOperationCompleted(object arg) {
-            if ((this.verifyLoginCompleted != null)) {
+        private void OnloginOperationCompleted(object arg) {
+            if ((this.loginCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
-                this.verifyLoginCompleted(this, new verifyLoginCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+                this.loginCompleted(this, new loginCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
         
@@ -239,28 +313,60 @@ namespace StalkrAdminTool.dk.iensenfirippu.jrpg {
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("", RequestNamespace="http://jrpg.easj/", ResponseNamespace="http://jrpg.easj/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("return", Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string deleteUser([System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)] string username, [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)] string password, [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)] string id) {
-            object[] results = this.Invoke("deleteUser", new object[] {
+        public string adminSaveUser([System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)] string username, [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)] string password, [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)] string user) {
+            object[] results = this.Invoke("adminSaveUser", new object[] {
                         username,
                         password,
-                        id});
+                        user});
             return ((string)(results[0]));
         }
         
         /// <remarks/>
-        public void deleteUserAsync(string username, string password, string id) {
-            this.deleteUserAsync(username, password, id, null);
+        public void adminSaveUserAsync(string username, string password, string user) {
+            this.adminSaveUserAsync(username, password, user, null);
         }
         
         /// <remarks/>
-        public void deleteUserAsync(string username, string password, string id, object userState) {
+        public void adminSaveUserAsync(string username, string password, string user, object userState) {
+            if ((this.adminSaveUserOperationCompleted == null)) {
+                this.adminSaveUserOperationCompleted = new System.Threading.SendOrPostCallback(this.OnadminSaveUserOperationCompleted);
+            }
+            this.InvokeAsync("adminSaveUser", new object[] {
+                        username,
+                        password,
+                        user}, this.adminSaveUserOperationCompleted, userState);
+        }
+        
+        private void OnadminSaveUserOperationCompleted(object arg) {
+            if ((this.adminSaveUserCompleted != null)) {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.adminSaveUserCompleted(this, new adminSaveUserCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+        
+        /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("", RequestNamespace="http://jrpg.easj/", ResponseNamespace="http://jrpg.easj/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [return: System.Xml.Serialization.XmlElementAttribute("return", Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string deleteUser([System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)] string username, [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)] string password) {
+            object[] results = this.Invoke("deleteUser", new object[] {
+                        username,
+                        password});
+            return ((string)(results[0]));
+        }
+        
+        /// <remarks/>
+        public void deleteUserAsync(string username, string password) {
+            this.deleteUserAsync(username, password, null);
+        }
+        
+        /// <remarks/>
+        public void deleteUserAsync(string username, string password, object userState) {
             if ((this.deleteUserOperationCompleted == null)) {
                 this.deleteUserOperationCompleted = new System.Threading.SendOrPostCallback(this.OndeleteUserOperationCompleted);
             }
             this.InvokeAsync("deleteUser", new object[] {
                         username,
-                        password,
-                        id}, this.deleteUserOperationCompleted, userState);
+                        password}, this.deleteUserOperationCompleted, userState);
         }
         
         private void OndeleteUserOperationCompleted(object arg) {
@@ -272,67 +378,33 @@ namespace StalkrAdminTool.dk.iensenfirippu.jrpg {
         
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("", RequestNamespace="http://jrpg.easj/", ResponseNamespace="http://jrpg.easj/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-        [return: System.Xml.Serialization.XmlElementAttribute("return", Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=true)]
-        public string[] getMatches([System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)] string username, [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)] string password, [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)] string id) {
-            object[] results = this.Invoke("getMatches", new object[] {
-                        username,
-                        password,
-                        id});
-            return ((string[])(results[0]));
-        }
-        
-        /// <remarks/>
-        public void getMatchesAsync(string username, string password, string id) {
-            this.getMatchesAsync(username, password, id, null);
-        }
-        
-        /// <remarks/>
-        public void getMatchesAsync(string username, string password, string id, object userState) {
-            if ((this.getMatchesOperationCompleted == null)) {
-                this.getMatchesOperationCompleted = new System.Threading.SendOrPostCallback(this.OngetMatchesOperationCompleted);
-            }
-            this.InvokeAsync("getMatches", new object[] {
-                        username,
-                        password,
-                        id}, this.getMatchesOperationCompleted, userState);
-        }
-        
-        private void OngetMatchesOperationCompleted(object arg) {
-            if ((this.getMatchesCompleted != null)) {
-                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
-                this.getMatchesCompleted(this, new getMatchesCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
-            }
-        }
-        
-        /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("", RequestNamespace="http://jrpg.easj/", ResponseNamespace="http://jrpg.easj/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("return", Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string loginAdmin([System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)] string username, [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)] string password) {
-            object[] results = this.Invoke("loginAdmin", new object[] {
+        public string adminLogin([System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)] string username, [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)] string password) {
+            object[] results = this.Invoke("adminLogin", new object[] {
                         username,
                         password});
             return ((string)(results[0]));
         }
         
         /// <remarks/>
-        public void loginAdminAsync(string username, string password) {
-            this.loginAdminAsync(username, password, null);
+        public void adminLoginAsync(string username, string password) {
+            this.adminLoginAsync(username, password, null);
         }
         
         /// <remarks/>
-        public void loginAdminAsync(string username, string password, object userState) {
-            if ((this.loginAdminOperationCompleted == null)) {
-                this.loginAdminOperationCompleted = new System.Threading.SendOrPostCallback(this.OnloginAdminOperationCompleted);
+        public void adminLoginAsync(string username, string password, object userState) {
+            if ((this.adminLoginOperationCompleted == null)) {
+                this.adminLoginOperationCompleted = new System.Threading.SendOrPostCallback(this.OnadminLoginOperationCompleted);
             }
-            this.InvokeAsync("loginAdmin", new object[] {
+            this.InvokeAsync("adminLogin", new object[] {
                         username,
-                        password}, this.loginAdminOperationCompleted, userState);
+                        password}, this.adminLoginOperationCompleted, userState);
         }
         
-        private void OnloginAdminOperationCompleted(object arg) {
-            if ((this.loginAdminCompleted != null)) {
+        private void OnadminLoginOperationCompleted(object arg) {
+            if ((this.adminLoginCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
-                this.loginAdminCompleted(this, new loginAdminCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+                this.adminLoginCompleted(this, new adminLoginCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
         
@@ -357,26 +429,26 @@ namespace StalkrAdminTool.dk.iensenfirippu.jrpg {
     
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.17929")]
-    public delegate void getUsersCompletedEventHandler(object sender, getUsersCompletedEventArgs e);
+    public delegate void adminDeleteUserCompletedEventHandler(object sender, adminDeleteUserCompletedEventArgs e);
     
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.17929")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    public partial class getUsersCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+    public partial class adminDeleteUserCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
         
         private object[] results;
         
-        internal getUsersCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+        internal adminDeleteUserCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
         
         /// <remarks/>
-        public string[] Result {
+        public string Result {
             get {
                 this.RaiseExceptionIfNecessary();
-                return ((string[])(this.results[0]));
+                return ((string)(this.results[0]));
             }
         }
     }
@@ -409,17 +481,69 @@ namespace StalkrAdminTool.dk.iensenfirippu.jrpg {
     
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.17929")]
-    public delegate void verifyLoginCompletedEventHandler(object sender, verifyLoginCompletedEventArgs e);
+    public delegate void adminGetUsersCompletedEventHandler(object sender, adminGetUsersCompletedEventArgs e);
     
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.17929")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    public partial class verifyLoginCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+    public partial class adminGetUsersCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
         
         private object[] results;
         
-        internal verifyLoginCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+        internal adminGetUsersCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+                base(exception, cancelled, userState) {
+            this.results = results;
+        }
+        
+        /// <remarks/>
+        public string[] Result {
+            get {
+                this.RaiseExceptionIfNecessary();
+                return ((string[])(this.results[0]));
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.17929")]
+    public delegate void getMatchesCompletedEventHandler(object sender, getMatchesCompletedEventArgs e);
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.17929")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    public partial class getMatchesCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+        
+        private object[] results;
+        
+        internal getMatchesCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+                base(exception, cancelled, userState) {
+            this.results = results;
+        }
+        
+        /// <remarks/>
+        public string[] Result {
+            get {
+                this.RaiseExceptionIfNecessary();
+                return ((string[])(this.results[0]));
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.17929")]
+    public delegate void loginCompletedEventHandler(object sender, loginCompletedEventArgs e);
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.17929")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    public partial class loginCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+        
+        private object[] results;
+        
+        internal loginCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
@@ -461,6 +585,32 @@ namespace StalkrAdminTool.dk.iensenfirippu.jrpg {
     
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.17929")]
+    public delegate void adminSaveUserCompletedEventHandler(object sender, adminSaveUserCompletedEventArgs e);
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.17929")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    public partial class adminSaveUserCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+        
+        private object[] results;
+        
+        internal adminSaveUserCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+                base(exception, cancelled, userState) {
+            this.results = results;
+        }
+        
+        /// <remarks/>
+        public string Result {
+            get {
+                this.RaiseExceptionIfNecessary();
+                return ((string)(this.results[0]));
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.17929")]
     public delegate void deleteUserCompletedEventHandler(object sender, deleteUserCompletedEventArgs e);
     
     /// <remarks/>
@@ -487,43 +637,17 @@ namespace StalkrAdminTool.dk.iensenfirippu.jrpg {
     
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.17929")]
-    public delegate void getMatchesCompletedEventHandler(object sender, getMatchesCompletedEventArgs e);
+    public delegate void adminLoginCompletedEventHandler(object sender, adminLoginCompletedEventArgs e);
     
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.17929")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    public partial class getMatchesCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+    public partial class adminLoginCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
         
         private object[] results;
         
-        internal getMatchesCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-                base(exception, cancelled, userState) {
-            this.results = results;
-        }
-        
-        /// <remarks/>
-        public string[] Result {
-            get {
-                this.RaiseExceptionIfNecessary();
-                return ((string[])(this.results[0]));
-            }
-        }
-    }
-    
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.17929")]
-    public delegate void loginAdminCompletedEventHandler(object sender, loginAdminCompletedEventArgs e);
-    
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.17929")]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    public partial class loginAdminCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
-        private object[] results;
-        
-        internal loginAdminCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+        internal adminLoginCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }

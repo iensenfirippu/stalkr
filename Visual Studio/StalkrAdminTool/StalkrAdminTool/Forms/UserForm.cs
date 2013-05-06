@@ -216,7 +216,6 @@ namespace StalkrAdminTool
 				}
 				else
 				{
-					System.Console.Beep(10000, 1000);
 					System.Console.Out.WriteLine(response);
 				}
 			}

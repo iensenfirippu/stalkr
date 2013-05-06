@@ -47,7 +47,7 @@ namespace StalkrAdminTool
 		{
 			List<User> list = new List<User>();
 
-			string[] strings = _ws.getUsers(_username, _password, exclude.ToString());
+			string[] strings = _ws.adminGetUsers(_username, _password, exclude.ToString());
 			foreach (string s in strings)
 			{
 				list.Add(Tools.UserFromString(s));
@@ -61,7 +61,7 @@ namespace StalkrAdminTool
 			string result = "";
 			if (_permission[3] == '1' && _permission[4] == '1')
 			{
-				result = _ws.saveUser(_username, _password, Tools.UserToString(user, false));
+				result = _ws.adminSaveUser(_username, _password, Tools.UserToString(user, false));
 			}
 			return result;
 		}
@@ -71,7 +71,7 @@ namespace StalkrAdminTool
 			string result = "";
 			if (_permission[5] == '1')
 			{
-				result = _ws.deleteUser(_username, _password, userid.ToString());
+				result = _ws.adminDeleteUser(_username, _password, userid.ToString());
 			}
 			return result;
 		}
@@ -80,7 +80,7 @@ namespace StalkrAdminTool
 		{
 			_username = username;
 			_password = password;
-			_permission = _ws.loginAdmin(_username, _password);
+			_permission = _ws.adminLogin(_username, _password);
 		}
 
 		// Properties

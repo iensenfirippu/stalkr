@@ -5,11 +5,11 @@
       <xsd:import schemaLocation="http://jrpg.iensenfirippu.dk:8080/Stalkr/WS?xsd=1" namespace="http://jrpg.easj/" />
     </xsd:schema>
   </types>
-  <message name="getUsers">
-    <part name="parameters" element="tns:getUsers" />
+  <message name="adminDeleteUser">
+    <part name="parameters" element="tns:adminDeleteUser" />
   </message>
-  <message name="getUsersResponse">
-    <part name="parameters" element="tns:getUsersResponse" />
+  <message name="adminDeleteUserResponse">
+    <part name="parameters" element="tns:adminDeleteUserResponse" />
   </message>
   <message name="getUser">
     <part name="parameters" element="tns:getUser" />
@@ -17,23 +17,11 @@
   <message name="getUserResponse">
     <part name="parameters" element="tns:getUserResponse" />
   </message>
-  <message name="verifyLogin">
-    <part name="parameters" element="tns:verifyLogin" />
+  <message name="adminGetUsers">
+    <part name="parameters" element="tns:adminGetUsers" />
   </message>
-  <message name="verifyLoginResponse">
-    <part name="parameters" element="tns:verifyLoginResponse" />
-  </message>
-  <message name="saveUser">
-    <part name="parameters" element="tns:saveUser" />
-  </message>
-  <message name="saveUserResponse">
-    <part name="parameters" element="tns:saveUserResponse" />
-  </message>
-  <message name="deleteUser">
-    <part name="parameters" element="tns:deleteUser" />
-  </message>
-  <message name="deleteUserResponse">
-    <part name="parameters" element="tns:deleteUserResponse" />
+  <message name="adminGetUsersResponse">
+    <part name="parameters" element="tns:adminGetUsersResponse" />
   </message>
   <message name="getMatches">
     <part name="parameters" element="tns:getMatches" />
@@ -41,45 +29,77 @@
   <message name="getMatchesResponse">
     <part name="parameters" element="tns:getMatchesResponse" />
   </message>
-  <message name="loginAdmin">
-    <part name="parameters" element="tns:loginAdmin" />
+  <message name="login">
+    <part name="parameters" element="tns:login" />
   </message>
-  <message name="loginAdminResponse">
-    <part name="parameters" element="tns:loginAdminResponse" />
+  <message name="loginResponse">
+    <part name="parameters" element="tns:loginResponse" />
+  </message>
+  <message name="saveUser">
+    <part name="parameters" element="tns:saveUser" />
+  </message>
+  <message name="saveUserResponse">
+    <part name="parameters" element="tns:saveUserResponse" />
+  </message>
+  <message name="adminSaveUser">
+    <part name="parameters" element="tns:adminSaveUser" />
+  </message>
+  <message name="adminSaveUserResponse">
+    <part name="parameters" element="tns:adminSaveUserResponse" />
+  </message>
+  <message name="deleteUser">
+    <part name="parameters" element="tns:deleteUser" />
+  </message>
+  <message name="deleteUserResponse">
+    <part name="parameters" element="tns:deleteUserResponse" />
+  </message>
+  <message name="adminLogin">
+    <part name="parameters" element="tns:adminLogin" />
+  </message>
+  <message name="adminLoginResponse">
+    <part name="parameters" element="tns:adminLoginResponse" />
   </message>
   <portType name="Stalkr_WebService">
-    <operation name="getUsers">
-      <input wsam:Action="http://jrpg.easj/Stalkr_WebService/getUsersRequest" message="tns:getUsers" />
-      <output wsam:Action="http://jrpg.easj/Stalkr_WebService/getUsersResponse" message="tns:getUsersResponse" />
+    <operation name="adminDeleteUser">
+      <input wsam:Action="http://jrpg.easj/Stalkr_WebService/adminDeleteUserRequest" message="tns:adminDeleteUser" />
+      <output wsam:Action="http://jrpg.easj/Stalkr_WebService/adminDeleteUserResponse" message="tns:adminDeleteUserResponse" />
     </operation>
     <operation name="getUser">
       <input wsam:Action="http://jrpg.easj/Stalkr_WebService/getUserRequest" message="tns:getUser" />
       <output wsam:Action="http://jrpg.easj/Stalkr_WebService/getUserResponse" message="tns:getUserResponse" />
     </operation>
-    <operation name="verifyLogin">
-      <input wsam:Action="http://jrpg.easj/Stalkr_WebService/verifyLoginRequest" message="tns:verifyLogin" />
-      <output wsam:Action="http://jrpg.easj/Stalkr_WebService/verifyLoginResponse" message="tns:verifyLoginResponse" />
-    </operation>
-    <operation name="saveUser">
-      <input wsam:Action="http://jrpg.easj/Stalkr_WebService/saveUserRequest" message="tns:saveUser" />
-      <output wsam:Action="http://jrpg.easj/Stalkr_WebService/saveUserResponse" message="tns:saveUserResponse" />
-    </operation>
-    <operation name="deleteUser">
-      <input wsam:Action="http://jrpg.easj/Stalkr_WebService/deleteUserRequest" message="tns:deleteUser" />
-      <output wsam:Action="http://jrpg.easj/Stalkr_WebService/deleteUserResponse" message="tns:deleteUserResponse" />
+    <operation name="adminGetUsers">
+      <input wsam:Action="http://jrpg.easj/Stalkr_WebService/adminGetUsersRequest" message="tns:adminGetUsers" />
+      <output wsam:Action="http://jrpg.easj/Stalkr_WebService/adminGetUsersResponse" message="tns:adminGetUsersResponse" />
     </operation>
     <operation name="getMatches">
       <input wsam:Action="http://jrpg.easj/Stalkr_WebService/getMatchesRequest" message="tns:getMatches" />
       <output wsam:Action="http://jrpg.easj/Stalkr_WebService/getMatchesResponse" message="tns:getMatchesResponse" />
     </operation>
-    <operation name="loginAdmin">
-      <input wsam:Action="http://jrpg.easj/Stalkr_WebService/loginAdminRequest" message="tns:loginAdmin" />
-      <output wsam:Action="http://jrpg.easj/Stalkr_WebService/loginAdminResponse" message="tns:loginAdminResponse" />
+    <operation name="login">
+      <input wsam:Action="http://jrpg.easj/Stalkr_WebService/loginRequest" message="tns:login" />
+      <output wsam:Action="http://jrpg.easj/Stalkr_WebService/loginResponse" message="tns:loginResponse" />
+    </operation>
+    <operation name="saveUser">
+      <input wsam:Action="http://jrpg.easj/Stalkr_WebService/saveUserRequest" message="tns:saveUser" />
+      <output wsam:Action="http://jrpg.easj/Stalkr_WebService/saveUserResponse" message="tns:saveUserResponse" />
+    </operation>
+    <operation name="adminSaveUser">
+      <input wsam:Action="http://jrpg.easj/Stalkr_WebService/adminSaveUserRequest" message="tns:adminSaveUser" />
+      <output wsam:Action="http://jrpg.easj/Stalkr_WebService/adminSaveUserResponse" message="tns:adminSaveUserResponse" />
+    </operation>
+    <operation name="deleteUser">
+      <input wsam:Action="http://jrpg.easj/Stalkr_WebService/deleteUserRequest" message="tns:deleteUser" />
+      <output wsam:Action="http://jrpg.easj/Stalkr_WebService/deleteUserResponse" message="tns:deleteUserResponse" />
+    </operation>
+    <operation name="adminLogin">
+      <input wsam:Action="http://jrpg.easj/Stalkr_WebService/adminLoginRequest" message="tns:adminLogin" />
+      <output wsam:Action="http://jrpg.easj/Stalkr_WebService/adminLoginResponse" message="tns:adminLoginResponse" />
     </operation>
   </portType>
   <binding name="Stalkr_WebServicePortBinding" type="tns:Stalkr_WebService">
     <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
-    <operation name="getUsers">
+    <operation name="adminDeleteUser">
       <soap:operation soapAction="" />
       <input>
         <soap:body use="literal" />
@@ -97,25 +117,7 @@
         <soap:body use="literal" />
       </output>
     </operation>
-    <operation name="verifyLogin">
-      <soap:operation soapAction="" />
-      <input>
-        <soap:body use="literal" />
-      </input>
-      <output>
-        <soap:body use="literal" />
-      </output>
-    </operation>
-    <operation name="saveUser">
-      <soap:operation soapAction="" />
-      <input>
-        <soap:body use="literal" />
-      </input>
-      <output>
-        <soap:body use="literal" />
-      </output>
-    </operation>
-    <operation name="deleteUser">
+    <operation name="adminGetUsers">
       <soap:operation soapAction="" />
       <input>
         <soap:body use="literal" />
@@ -133,7 +135,43 @@
         <soap:body use="literal" />
       </output>
     </operation>
-    <operation name="loginAdmin">
+    <operation name="login">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="saveUser">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="adminSaveUser">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="deleteUser">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="adminLogin">
       <soap:operation soapAction="" />
       <input>
         <soap:body use="literal" />

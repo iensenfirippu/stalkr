@@ -204,9 +204,19 @@ namespace StalkrAdminTool
 			aboutbox.ShowDialog();
 		}
 
+		// Event fired when the "Reload" option is pressed
 		private void reloadToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			LoadUsers(true);
+		}
+
+		// Event fired when the "Random" option is pressed
+		private void createRandomUserToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			RandomForm window = new RandomForm();
+			window.ShowDialog();
+
+			LoadUsers(false);
 		}
 
 		// Event fired when the "Exit" option is pressed
@@ -247,10 +257,5 @@ namespace StalkrAdminTool
 		}
 
 		#endregion
-
-		private void createRandomUserToolStripMenuItem_Click(object sender, EventArgs e)
-		{
-
-		}
 	}
 }

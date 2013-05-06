@@ -1,26 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:tns="http://jrpg.easj/" targetNamespace="http://jrpg.easj/" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="adminDeleteUser" type="tns:adminDeleteUser" />
+  <xs:element name="adminDeleteUserResponse" type="tns:adminDeleteUserResponse" />
+  <xs:element name="adminGetUsers" type="tns:adminGetUsers" />
+  <xs:element name="adminGetUsersResponse" type="tns:adminGetUsersResponse" />
+  <xs:element name="adminLogin" type="tns:adminLogin" />
+  <xs:element name="adminLoginResponse" type="tns:adminLoginResponse" />
+  <xs:element name="adminSaveUser" type="tns:adminSaveUser" />
+  <xs:element name="adminSaveUserResponse" type="tns:adminSaveUserResponse" />
   <xs:element name="deleteUser" type="tns:deleteUser" />
   <xs:element name="deleteUserResponse" type="tns:deleteUserResponse" />
   <xs:element name="getMatches" type="tns:getMatches" />
   <xs:element name="getMatchesResponse" type="tns:getMatchesResponse" />
   <xs:element name="getUser" type="tns:getUser" />
   <xs:element name="getUserResponse" type="tns:getUserResponse" />
-  <xs:element name="getUsers" type="tns:getUsers" />
-  <xs:element name="getUsersResponse" type="tns:getUsersResponse" />
-  <xs:element name="loginAdmin" type="tns:loginAdmin" />
-  <xs:element name="loginAdminResponse" type="tns:loginAdminResponse" />
+  <xs:element name="login" type="tns:login" />
+  <xs:element name="loginResponse" type="tns:loginResponse" />
   <xs:element name="saveUser" type="tns:saveUser" />
   <xs:element name="saveUserResponse" type="tns:saveUserResponse" />
-  <xs:element name="verifyLogin" type="tns:verifyLogin" />
-  <xs:element name="verifyLoginResponse" type="tns:verifyLoginResponse" />
-  <xs:complexType name="verifyLogin">
+  <xs:complexType name="adminSaveUser">
     <xs:sequence>
       <xs:element minOccurs="0" name="username" type="xs:string" />
       <xs:element minOccurs="0" name="password" type="xs:string" />
+      <xs:element minOccurs="0" name="user" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
-  <xs:complexType name="verifyLoginResponse">
+  <xs:complexType name="adminSaveUserResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="saveUser">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="username" type="xs:string" />
+      <xs:element minOccurs="0" name="password" type="xs:string" />
+      <xs:element minOccurs="0" name="user" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="saveUserResponse">
     <xs:sequence>
       <xs:element minOccurs="0" name="return" type="xs:string" />
     </xs:sequence>
@@ -37,26 +54,47 @@
       <xs:element minOccurs="0" name="return" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
-  <xs:complexType name="getUsers">
+  <xs:complexType name="login">
     <xs:sequence>
       <xs:element minOccurs="0" name="username" type="xs:string" />
       <xs:element minOccurs="0" name="password" type="xs:string" />
-      <xs:element minOccurs="0" name="id" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
-  <xs:complexType name="getUsersResponse">
+  <xs:complexType name="loginResponse">
     <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="return" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="return" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
   <xs:complexType name="getMatches">
     <xs:sequence>
+      <xs:element minOccurs="0" name="user" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="getMatchesResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="return" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="adminDeleteUser">
+    <xs:sequence>
       <xs:element minOccurs="0" name="username" type="xs:string" />
       <xs:element minOccurs="0" name="password" type="xs:string" />
       <xs:element minOccurs="0" name="id" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
-  <xs:complexType name="getMatchesResponse">
+  <xs:complexType name="adminDeleteUserResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="adminGetUsers">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="username" type="xs:string" />
+      <xs:element minOccurs="0" name="password" type="xs:string" />
+      <xs:element minOccurs="0" name="id" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="adminGetUsersResponse">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="return" nillable="true" type="xs:string" />
     </xs:sequence>
@@ -65,7 +103,6 @@
     <xs:sequence>
       <xs:element minOccurs="0" name="username" type="xs:string" />
       <xs:element minOccurs="0" name="password" type="xs:string" />
-      <xs:element minOccurs="0" name="id" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
   <xs:complexType name="deleteUserResponse">
@@ -73,25 +110,13 @@
       <xs:element minOccurs="0" name="return" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
-  <xs:complexType name="loginAdmin">
+  <xs:complexType name="adminLogin">
     <xs:sequence>
       <xs:element minOccurs="0" name="username" type="xs:string" />
       <xs:element minOccurs="0" name="password" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
-  <xs:complexType name="loginAdminResponse">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="return" type="xs:string" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="saveUser">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="username" type="xs:string" />
-      <xs:element minOccurs="0" name="password" type="xs:string" />
-      <xs:element minOccurs="0" name="user" type="xs:string" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="saveUserResponse">
+  <xs:complexType name="adminLoginResponse">
     <xs:sequence>
       <xs:element minOccurs="0" name="return" type="xs:string" />
     </xs:sequence>
