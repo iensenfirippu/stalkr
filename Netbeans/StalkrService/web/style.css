@@ -1,0 +1,28 @@
+root { 
+	display: block;
+}
+body {
+}
+h1 {
+	color: #ffffff;
+	font-size: 14px;
+}
+label {
+	display: inline-block;
+	width:125px;
+	text-align: right;
+	color: #ffffff;
+	font-size: 12px;
+}
+input {
+	width:250px;
+	border: 1px solid #000000;
+	background-color: #ffffff;
+	font-size: 12px;
+	margin-bottom: 1px;
+}
+input.submit {
+	background-color: #aaaaaa;
+	width: 100px;
+	font-weight: bold;
+}
