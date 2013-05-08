@@ -59,5 +59,7 @@
         <item >No</item>
         <item >Yes</item>
     </string-array>
+    <string name="profile_longitude">Longitude:</string>
+    <string name="profile_latitude">Latitude:</string>
 
 </resources>

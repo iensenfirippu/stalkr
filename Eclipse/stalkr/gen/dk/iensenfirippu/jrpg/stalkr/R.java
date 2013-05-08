@@ -32,7 +32,7 @@ public final class R {
     }
     public static final class id {
         public static final int LinearLayout1=0x7f090000;
-        public static final int action_settings=0x7f090034;
+        public static final int action_settings=0x7f09003a;
         public static final int btn_login=0x7f090005;
         public static final int btn_profile=0x7f090008;
         public static final int btn_search=0x7f090009;
@@ -57,6 +57,8 @@ public final class R {
         public static final int profile_lbl_firstname=0x7f09001a;
         public static final int profile_lbl_gender=0x7f090026;
         public static final int profile_lbl_lastname=0x7f09001d;
+        public static final int profile_lbl_latitude=0x7f090038;
+        public static final int profile_lbl_longitude=0x7f090035;
         public static final int profile_lbl_sexuality=0x7f090029;
         public static final int profile_lbl_smoking=0x7f09002f;
         public static final int profile_lbl_username=0x7f090014;
@@ -68,6 +70,8 @@ public final class R {
         public static final int profile_row_firstname=0x7f090019;
         public static final int profile_row_gender=0x7f090025;
         public static final int profile_row_lastname=0x7f09001c;
+        public static final int profile_row_latitude=0x7f090037;
+        public static final int profile_row_longitude=0x7f090034;
         public static final int profile_row_sexuality=0x7f090028;
         public static final int profile_row_smoking=0x7f09002e;
         public static final int profile_row_username=0x7f090013;
@@ -80,6 +84,8 @@ public final class R {
         public static final int profile_txt_email=0x7f090018;
         public static final int profile_txt_firstname=0x7f09001b;
         public static final int profile_txt_lastname=0x7f09001e;
+        public static final int profile_txt_latitude=0x7f090039;
+        public static final int profile_txt_longitude=0x7f090036;
         public static final int profile_txt_username=0x7f090015;
         public static final int quickContactBadge1=0x7f090011;
         public static final int txt_password=0x7f090004;
@@ -121,6 +127,8 @@ public final class R {
         public static final int profile_firstname=0x7f050014;
         public static final int profile_gender=0x7f050018;
         public static final int profile_lastname=0x7f050015;
+        public static final int profile_latitude=0x7f05001e;
+        public static final int profile_longitude=0x7f05001d;
         public static final int profile_sexuality=0x7f050019;
         public static final int profile_smoking=0x7f05001b;
         public static final int profile_username=0x7f050012;

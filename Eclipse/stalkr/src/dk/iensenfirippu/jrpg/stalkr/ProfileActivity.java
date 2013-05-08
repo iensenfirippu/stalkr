@@ -5,9 +5,15 @@ import stalkrlib.enums.*;
 import java.util.Calendar;
 import java.util.Date;
 
+import org.ksoap2.SoapEnvelope;
+import org.ksoap2.serialization.SoapObject;
+import org.ksoap2.serialization.SoapSerializationEnvelope;
+import org.ksoap2.transport.HttpTransportSE;
+
 import android.os.Bundle;
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.text.format.DateFormat;
 import android.view.Menu;
 import android.view.View;
@@ -16,6 +22,9 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.location.Location; 
+import android.location.LocationListener; 
+import android.location.LocationManager;
 
 public class ProfileActivity extends Activity
 {
@@ -25,12 +34,19 @@ public class ProfileActivity extends Activity
 	private Date _birthday;
 	private Button _birthdaybtn;
 	private EditText _agedisplay;
-
+	private static final String NAMESPACE = "http://jrpg.iensenfirippu.dk:8080/Stalkr/WS";
+	private static String URL = "http://jrpg.iensenfirippu.dk:8080/Stalkr/WS?WSDL"; 
+	private static final String METHOD_NAME1 = "saveUser";
+	private static final String SOAP_ACTION1 =  "http://jrpg.iensenfirippu.dk:8080/Stalkr/WS/saveUser";  
+	StalkrLocationListener locListener = new StalkrLocationListener();
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_profile);
+		
+		//_user = WebServiceAccess.getProfile(_user);
 
 		// Fake the user object
 		_user = Toolbelt.getTestUsers().get(0);
@@ -39,6 +55,10 @@ public class ProfileActivity extends Activity
 		
 		// Fills the spinners with the enum values
 		FillSpinners();
+		
+		// Location manager
+		LocationManager locManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+		locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locListener);
 		
 		// Fill in the values from the user object
 		FillValues();
@@ -88,6 +108,10 @@ public class ProfileActivity extends Activity
 	private void FillValues()
 	{
 		_birthday = _user.getBirthday();
+		double longitude = locListener.getLongitude();
+		double latitude = locListener.getLatitude();
+		String finalLongitude = new Double(longitude).toString();
+		String finalLatitude = new Double(latitude).toString();
 		
 		try
 		{
@@ -102,6 +126,8 @@ public class ProfileActivity extends Activity
 			((Spinner)	this.findViewById(R.id.profile_spn_area))		.setSelection(_user.getDescription().getArea().getList().get(0).ordinal());
 			((Spinner)	this.findViewById(R.id.profile_spn_smoking))	.setSelection(_user.getDescription().getSmoking().getList().get(0).ordinal());
 			((Spinner)	this.findViewById(R.id.profile_spn_drinking))	.setSelection(_user.getDescription().getDrinking().getList().get(0).ordinal());
+			((EditText) this.findViewById(R.id.profile_txt_longitude))	.setText(finalLongitude);
+			((EditText) this.findViewById(R.id.profile_txt_latitude))	.setText(finalLatitude);
 		}
 		catch (Exception e)
 		{
@@ -135,7 +161,24 @@ public class ProfileActivity extends Activity
 
 	public void Save_onClick(View view)
 	{
-		try
+		//WebServiceAccess.saveProfile(_user);
+		SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME1);
+		request.addProperty("saveProfile",_user.getUniqueID().toString());
+        SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+        envelope.setOutputSoapObject(request);
+        envelope.dotNet = true;
+        try 
+        {
+        	HttpTransportSE androidHttpTransport = new HttpTransportSE(URL);
+        	androidHttpTransport.call(SOAP_ACTION1, envelope);
+            SoapObject result = (SoapObject)envelope.bodyIn;
+            
+        } 
+        catch (Exception e) 
+        {
+            e.printStackTrace();
+        }
+		/*try
 		{
 			_user.setUsername(((EditText)this.findViewById(R.id.profile_txt_username)).getText().toString());
 			_user.setEmail(((EditText)this.findViewById(R.id.profile_txt_email)).getText().toString());
@@ -154,7 +197,7 @@ public class ProfileActivity extends Activity
 		catch (Exception e)
 		{
 			// Do something on fail
-		}
+		}*/
 	}
 
 	public void Reload_onClick(View view)

@@ -375,7 +375,7 @@ public class UserMapper
 		String admin = adminLogin(username, password);
 		String result = ERRINVA;
 		
-		if (admin.charAt(4) == '1')
+		if (admin.charAt(3) == '1' || admin.charAt(4) == '1')
 		{
 			if (Tools.ValidateUserString(userasstring) >= 0.2f)
 			{
