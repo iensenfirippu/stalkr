@@ -302,8 +302,54 @@
                         android:layout_weight="1" />
 
                 </TableRow>
+                
+                <TableRow
+                    android:id="@+id/profile_row_longitude"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" >
+                    
+                    <TextView
+                        android:id="@+id/profile_lbl_longitude"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="@string/profile_longitude" />
+                    
+                    <EditText
+                        android:id="@+id/profile_txt_longitude"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:enabled="false"
+                        android:ems="10"
+                        android:layout_weight="1"
+                        android:inputType="numberDecimal" />
+                    
+                </TableRow>
+                
+                <TableRow
+                    android:id="@+id/profile_row_latitude"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" >
+                    
+                    <TextView
+                        android:id="@+id/profile_lbl_latitude"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="@string/profile_latitude" />
+                    
+                    <EditText
+                        android:id="@+id/profile_txt_latitude"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:enabled="false"
+                        android:ems="10"
+                        android:layout_weight="1"
+                        android:inputType="numberDecimal" />
+                    
+              	</TableRow>
+              	
             </TableLayout>
-
         </LinearLayout>
     </ScrollView>
 
