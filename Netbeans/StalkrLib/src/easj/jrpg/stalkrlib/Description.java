@@ -93,7 +93,8 @@ public class Description
 	// Mutator methods
 	public void setTimeStamp(Date value) {_alteredfields.put("timestamp", true); _timestamp = value; }
 	public void setTitle(String value) { _alteredfields.put("title", true); _title = value; }
-	public void setAge(Range value) { _alteredfields.put("age", true); _age = value; }
+	public void setAge(int int1) { _alteredfields.put("age", true); _age.set(int1); }
+	public void setAge(int int1, int int2) { _alteredfields.put("age", true); _age.set(int1, int2); }
 	public void setGender(EnumList value) { _alteredfields.put("gender", true); _gender = value; }
 	public void setSexuality(EnumList value) { _alteredfields.put("sexuality", true); _sexuality = value; }
 	public void setArea(EnumList value) { _alteredfields.put("area", true); _area = value; }

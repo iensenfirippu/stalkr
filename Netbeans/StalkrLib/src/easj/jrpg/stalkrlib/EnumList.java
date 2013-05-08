@@ -56,6 +56,11 @@ public class EnumList<T extends Enum>
 		return list;
 	}
 	
+	public String[] getEnumConstantsAsStringArray()
+	{
+		return (String[])_t.getEnumConstants();
+	}
+	
 	public ArrayList<T> toList()
 	{
 		ArrayList<T> list = new ArrayList<T>();
@@ -87,5 +92,42 @@ public class EnumList<T extends Enum>
 			}
 		}
 		return list;
+	}
+	
+	/**
+	 * Gets the index of the first selected item
+	 * @return index of first item in list
+	 */
+	public int getSelectedIndex()
+	{
+		int result = -1;
+		int i = 0;
+		while (result < 0)
+		{
+			if (_chars[i] == '1')
+			{
+				result = i;
+			}
+			else
+			{
+				i++;
+			}
+		}
+		return result;
+	}
+	
+	/**
+	 * Sets the given index as the only selected item
+	 */
+	public void setSelectedIndex(int index)
+	{
+		if (index < _chars.length)
+		{
+			for (int i = 0; i < _chars.length; i++)
+			{
+				if (index == i) { _chars[i] = '1'; }
+				else { _chars[i] = '0'; }
+			}
+		}
 	}
 }
