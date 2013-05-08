@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="dk.iensenfirippu.jrpg.stalkr"
+    android:installLocation="preferExternal"
+    android:versionCode="1"
+    android:versionName="1.0" >
+    
+    <uses-sdk
+        android:minSdkVersion="9"
+        android:targetSdkVersion="17" />
+
+    <uses-permission android:name="android.permission.INTERNET" /> 
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name="dk.iensenfirippu.jrpg.stalkr.MainActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="dk.iensenfirippu.jrpg.stalkr.LoginActivity"
+            android:label="@string/login_activitytitle" >
+        </activity>
+        <activity
+            android:name="dk.iensenfirippu.jrpg.stalkr.ProfileActivity"
+            android:label="@string/title_activity_profile" >
+        </activity>
+        <activity 
+            android:name="dk.iensenfirippu.jrpg.stalkr.MultiSelect"
+            android:label="@string/title_activity_multi_select"
+            android:theme="@android:style/Theme.Dialog" >
+        </activity>
+    </application>
+
+</manifest>
