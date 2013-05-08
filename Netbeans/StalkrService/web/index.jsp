@@ -52,12 +52,12 @@
 		%>
 		<h1>Please fill out the form below</h1>
 		<form name="SignUp" action="index.jsp" method="get">
-			<label for="username">Username: </label> <input type="text" name="userName" value="<%=username%>" /> <%=valid_username%><br />
-			<label for="password">Password: </label> <input type="password" name="password" /> <%=valid_password%><br />
+			<label for="username">Username: </label> <input type="text" name="userName" value="sdvsd" /> <div class="valid">&nbsp;</div><br />
+			<label for="password">Password: </label> <input type="password" name="password" /> <div class="invalid">&nbsp;</div><br />
 			<label for="repeatPassword">Repeat Password: </label> <input type="password" name="repeatPassword" /><br />
-			<label for="email">E-Mail: </label> <input type="text" name="email" value="<%=email%>" /> <%=valid_email%><br />
-			<label for="firstName">First Name: </label> <input type="text" name="firstName" value="<%=firstname%>" /> <%=valid_firstname%><br />
-			<label for="lastName">Last Name: </label> <input type="text" name="lastName" value="<%=lastname%>" /> <%=valid_lastname%><br />
+			<label for="email">E-Mail: </label> <input type="text" name="email" value="sdv" /> <div class="invalid">&nbsp;</div><br />
+			<label for="firstName">First Name: </label> <input type="text" name="firstName" value="sdv" /> <div class="valid">&nbsp;</div><br />
+			<label for="lastName">Last Name: </label> <input type="text" name="lastName" value="dsvsd" /> <div class="valid">&nbsp;</div><br />
 			<label for="submit"> </label> <input type="submit" class="submit" name="submit" value="Sign Up" /><br />
 		</form>
 		<%
