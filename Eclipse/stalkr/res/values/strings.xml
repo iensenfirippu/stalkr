@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Stalkr</string>
+    <string name="ws_login_in_progress">Logging in…</string>
+    <string name="ws_login_failed">Couldn\'t log in</string>
+    <string name="ws_load_in_progress">Loading user data…</string>
+    <string name="ws_load_failed">Couldn\'t load user data</string>
+    <string name="ws_save_in_progress">Saving user data…</string>
+    <string name="ws_save_success">Successfully saved user data</string>
+    <string name="ws_save_failed">Couldn\'t save user data</string>
+    <string name="ws_connection_failed">Couldn\'t connect to the server</string>
+    <string name="action_settings">Settings</string>
+    <string name="button_save">Save</string>
+    <string name="button_reload">Reload</string>
+    <string name="button_edit">Edit</string>
+    <string name="button_add">Add</string>
+    <string name="button_new">New</string>
+    <string name="button_remove">Remove</string>
+    <string name="button_cancel">Cancel</string>
+    <string name="login_activitytitle">Please login</string>
+    <string name="login_username">Username:</string>
+    <string name="login_password">Password:</string>
+    <string name="login_login">Login</string>
+    <string name="main_welcome">Logged in as: %1$s</string>
+    <string name="main_status_first">Oh, this is your first time, isn\'t it? Well, welcome to the Stalkr dating service, we hope you will enjoy the service, please remember to tell us about any improvements you might think of.</string>
+    <string name="main_profile">Show my Profile</string>
+    <string name="main_search">Search</string>
+    <string name="title_activity_profile">ProfileActivity</string>
+    <string name="profile_username">Username:</string>
+    <string name="profile_email">Email:</string>
+    <string name="profile_firstname">Given name:</string>
+    <string name="profile_lastname">Surname:</string>
+    <string name="profile_birthday">Birthday:</string>
+    <string name="profile_age">Age:</string>
+    <string name="profile_gender">Gender:</string>
+    <string name="profile_sexuality">Sexuality:</string>
+    <string name="profile_area">Area:</string>
+    <string name="profile_smoking">Smoking:</string>
+    <string name="profile_drinking">Drinking:</string>
+    <string-array name="enum_gender">
+        <item >Other</item>
+        <item >Male</item>
+        <item >Female</item>
+        <item >Hermaphrodite</item>
+        <item >Transgender</item>
+    </string-array>
+    <string-array name="enum_sexuality">
+        <item >Asexual</item>
+        <item >Hetero</item>
+        <item >Homosexual</item>
+        <item >Bisexual</item>
+    </string-array>
+    <string-array name="enum_area">
+        <item >Unspecified</item>
+        <item >Jylland</item>
+        <item >Fyn</item>
+        <item >Sjælland</item>
+        <item >Bornholm</item>
+    </string-array>
+    <string-array name="enum_smoking">
+        <item >No</item>
+        <item >Yes</item>
+        <item >Occasionally</item>
+    </string-array>
+    <string-array name="enum_drinking">
+        <item >No</item>
+        <item >Yes</item>
+    </string-array>
+
+</resources>
