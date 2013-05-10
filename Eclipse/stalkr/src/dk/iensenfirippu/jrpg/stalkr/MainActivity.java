@@ -124,4 +124,10 @@ public class MainActivity extends Activity
     {
         Toast.makeText(this, messageId, Toast.LENGTH_LONG).show();
     }
+    
+    public void Preferences_onClick(View view)
+	{
+		Intent intent = new Intent(this, PreferencesActivity.class);
+		startActivityForResult(intent, 1);
+	}
 }

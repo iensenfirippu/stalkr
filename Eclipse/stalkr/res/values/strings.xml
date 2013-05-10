@@ -38,34 +38,50 @@
     <string name="profile_area">Area:</string>
     <string name="profile_smoking">Smoking:</string>
     <string name="profile_drinking">Drinking:</string>
+
     <string-array name="enum_gender">
-        <item >Other</item>
-        <item >Male</item>
-        <item >Female</item>
-        <item >Hermaphrodite</item>
-        <item >Transgender</item>
+        <item>Other</item>
+        <item>Male</item>
+        <item>Female</item>
+        <item>Hermaphrodite</item>
+        <item>Transgender</item>
     </string-array>
     <string-array name="enum_sexuality">
-        <item >Asexual</item>
-        <item >Hetero</item>
-        <item >Homosexual</item>
-        <item >Bisexual</item>
+        <item>Asexual</item>
+        <item>Hetero</item>
+        <item>Homosexual</item>
+        <item>Bisexual</item>
     </string-array>
     <string-array name="enum_area">
-        <item >Unspecified</item>
-        <item >Jylland</item>
-        <item >Fyn</item>
-        <item >Sjælland</item>
-        <item >Bornholm</item>
+        <item>Unspecified</item>
+        <item>Jylland</item>
+        <item>Fyn</item>
+        <item>Sjælland</item>
+        <item>Bornholm</item>
     </string-array>
     <string-array name="enum_smoking">
-        <item >No</item>
-        <item >Yes</item>
-        <item >Occasionally</item>
+        <item>No</item>
+        <item>Yes</item>
+        <item>Occasionally</item>
     </string-array>
     <string-array name="enum_drinking">
-        <item >No</item>
-        <item >Yes</item>
+        <item>No</item>
+        <item>Yes</item>
     </string-array>
+
+    <string name="profile_longitude">Longitude:</string>
+    <string name="profile_latitude">Latitude:</string>
+    <string name="preferences_smoking">Smoking:</string>
+    <string name="title_activity_multi_select">Multi Select</string>
+    <string name="click_to_confirm">Click to Confirm</string>
+    <string name="menu_settings">Menu Settings</string>
+    <string name="title_activity_preferences">Preferences</string>
+    <string name="main_preferences">Set Preferences</string>
+    <string name="preferences_min_age">Minimum Age:</string>
+    <string name="preferences_max_age">Maximum Age:</string>
+    <string name="preferences_gender">Gender:</string>
+    <string name="preferences_multi_btn">Tap to Set</string>
+    <string name="preferences_area">Area:</string>
+    <string name="preferences_drinking">Drinking:</string>
 
 </resources>

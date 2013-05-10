@@ -18,6 +18,7 @@ import dk.iensenfirippu.jrpg.wsclient.OnAsyncTaskCompleteListener;
 import android.os.Bundle;
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.text.format.DateFormat;
 import android.util.Log;
@@ -29,6 +30,8 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
+import android.location.LocationManager;
+
 
 public class ProfileActivity extends Activity
 {
@@ -43,6 +46,8 @@ public class ProfileActivity extends Activity
 	private String _username;
 	private String _password;
 	private User _user;
+
+	StalkrLocationListener locListener = new StalkrLocationListener();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -59,6 +64,9 @@ public class ProfileActivity extends Activity
 		
 		_birthdaybtn = ((Button)this.findViewById(R.id.profile_btn_birthday));
 		_agedisplay = ((EditText)this.findViewById(R.id.profile_txt_age));
+		
+		LocationManager locManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+		locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locListener);
 		
 		// Fills the spinners with the enum values
 		FillSpinners();
@@ -111,6 +119,10 @@ public class ProfileActivity extends Activity
 	private void FillValues()
 	{
 		_birthday = _user.getBirthday();
+		double longitude = locListener.getLongitude();
+		double latitude = locListener.getLatitude();
+		String finalLongitude = new Double(longitude).toString();
+		String finalLatitude = new Double(latitude).toString();
 		
 		try
 		{
@@ -125,6 +137,8 @@ public class ProfileActivity extends Activity
 			((Spinner)	this.findViewById(R.id.profile_spn_area))		.setSelection(_user.getDescription().getArea().getSelectedIndex());
 			((Spinner)	this.findViewById(R.id.profile_spn_smoking))	.setSelection(_user.getDescription().getSmoking().getSelectedIndex());
 			((Spinner)	this.findViewById(R.id.profile_spn_drinking))	.setSelection(_user.getDescription().getDrinking().getSelectedIndex());
+			((EditText) this.findViewById(R.id.profile_txt_longitude))	.setText(finalLongitude);
+			((EditText) this.findViewById(R.id.profile_txt_latitude))	.setText(finalLatitude);
 		}
 		catch (Exception e)
 		{

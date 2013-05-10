@@ -30,7 +30,14 @@
         android:layout_height="wrap_content"
         android:onClick="Profile_onClick"
         android:text="@string/main_profile" />
-
+    
+    <Button 
+        android:id="@+id/btn_preferences"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="Preferences_onClick"
+        android:text="@string/main_preferences"/>
+    
     <Button
         android:id="@+id/btn_search"
         android:layout_width="match_parent"
