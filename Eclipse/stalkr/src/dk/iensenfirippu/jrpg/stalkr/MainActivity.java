@@ -10,6 +10,7 @@ import dk.iensenfirippu.jrpg.wsclient.AsyncTaskManager;
 import dk.iensenfirippu.jrpg.wsclient.OnAsyncTaskCompleteListener;
 
 import android.os.Bundle;
+import android.provider.ContactsContract.Profile;
 import android.app.Activity;
 import android.content.Intent;
 import android.util.Log;
@@ -35,6 +36,11 @@ public class MainActivity extends Activity
 		setContentView(R.layout.activity_main);
 
         _taskManager = new AsyncTaskManager(this);
+        
+    	_username = "";
+    	_password = "";
+    	_id = "";
+    	_user = "";
 
 		Intent intent = new Intent(this, LoginActivity.class);
 		startActivityForResult(intent, 0);
@@ -71,6 +77,8 @@ public class MainActivity extends Activity
 				//	lbl_status.setText(this.getText(R.string.main_status_first));
 				//	lbl_status.setVisibility(View.VISIBLE);
 				//}
+
+				LoadUser();
 			}
 			else
 			{
@@ -78,56 +86,73 @@ public class MainActivity extends Activity
 			}
 		}
 	}
-
-	public void Profile_onClick(View view)
-	{
-	    GetUserTask task = new GetUserTask();
-	    _taskManager.executeTask(	task,
-	    							GetUserTask.createRequest(_username, _password, _id),
-	    							getString(R.string.ws_load_in_progress),
-						            new OnAsyncTaskCompleteListener<SimpleReturnStringBO>()
-						            {
-							            @Override
-							            public void onTaskCompleteSuccess(SimpleReturnStringBO result)
-							            {
-							            	if (Tools.ValidateUserString(result.getResponse()) >= 0.2f)
-							            	{
-							            		_user = result.getResponse();
-							            		startProfileActivity();
-							            	}
-							            	else
-							            	{
-							                    showToastMessage(R.string.ws_load_failed);
-							            	}
-							            }
-							
-							            @Override
-							            public void onTaskFailed(Exception cause)
-							            {
-							                Log.e(GetUserTask.TAG, cause.getMessage(), cause);
-							                showToastMessage(R.string.ws_connection_failed);
-							            }
-						            }
-	    );
-	}
 	
-	private void startProfileActivity()
+	private void LoadUser() 
 	{
-		Intent intent = new Intent(this, ProfileActivity.class);
-		intent.putExtra("username", _username);
-		intent.putExtra("password", _password);
-		intent.putExtra("user", _user);
-		startActivityForResult(intent, 1);
+		GetUserTask task = new GetUserTask();
+		_taskManager.executeTask(
+			task,
+			GetUserTask.createRequest(_username, _password, _id),
+			getString(R.string.ws_load_in_progress),
+			new OnAsyncTaskCompleteListener<SimpleReturnStringBO>()
+			{
+			    @Override
+			    public void onTaskCompleteSuccess(SimpleReturnStringBO result)
+			    {
+			    	if (Tools.ValidateUserString(result.getResponse()) >= 0.2f)
+			    	{
+			    		_user = result.getResponse();
+			    	}
+			    	else
+			    	{
+			            showToastMessage(R.string.ws_load_failed);
+			    	}
+			    }
+			
+			    @Override
+			    public void onTaskFailed(Exception cause)
+			    {
+			        Log.e(GetUserTask.TAG, cause.getMessage(), cause);
+			        showToastMessage(R.string.ws_connection_failed);
+			    }
+			}
+		);
 	}
 
     private void showToastMessage(int messageId)
     {
         Toast.makeText(this, messageId, Toast.LENGTH_LONG).show();
     }
+
+	public void Profile_onClick(View view)
+	{
+		if (_user != "")
+		{
+			Intent intent = new Intent(this, ProfileActivity.class);
+			intent.putExtra("username", _username);
+			intent.putExtra("password", _password);
+			intent.putExtra("user", _user);
+			startActivityForResult(intent, 1);
+		}
+		else
+		{
+			// warn user
+		}
+	}
     
     public void Preferences_onClick(View view)
 	{
-		Intent intent = new Intent(this, PreferencesActivity.class);
-		startActivityForResult(intent, 1);
+		if (_user != "")
+		{
+			Intent intent = new Intent(this, PreferencesActivity.class);
+			intent.putExtra("username", _username);
+			intent.putExtra("password", _password);
+			intent.putExtra("user", _user);
+			startActivityForResult(intent, 1);
+		}
+		else
+		{
+			// warn user
+		}
 	}
 }

@@ -24,7 +24,7 @@
             android:text="@string/button_cancel" />
 
         <Button
-            android:id="@+id/profile_btn_reload"
+            android:id="@+id/preference_btn_reload"
             style="?android:attr/buttonStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

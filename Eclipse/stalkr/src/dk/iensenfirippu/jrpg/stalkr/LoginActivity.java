@@ -27,6 +27,9 @@ public class LoginActivity extends Activity
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
+
+		((EditText)this.findViewById(R.id.txt_username)).setText("tester");
+		((EditText)this.findViewById(R.id.txt_password)).setText("1234");
 		
 		_intent = getIntent();
         _taskManager = new AsyncTaskManager(this);

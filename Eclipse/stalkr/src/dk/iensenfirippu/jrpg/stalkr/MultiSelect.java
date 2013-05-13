@@ -1,77 +1,91 @@
 package dk.iensenfirippu.jrpg.stalkr;
 
+import java.util.ArrayList;
+
 import android.os.Bundle;
 import android.app.Activity;
 import android.view.Menu;
+import android.view.Window;
 import android.content.Intent;
 import android.util.Log;
+import android.util.SparseBooleanArray;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.Button;
+import android.widget.ArrayAdapter;
 import android.widget.CheckedTextView;
 import android.widget.ListView;
 
-public class MultiSelect extends Activity {
+public class MultiSelect extends Activity
+{
+	private Intent _intent;
+	
+	private char[] _result;
+	private ListView _listview;
+	private ArrayAdapter<String> _adapter;
 
-	String result;
-	ListView list;
-	String[] itemList = new String[] {"OTHER", "MALE", "FEMALE", "HERMAPHRODITE", "TRANSGENDER"};
-	Button but;
-    ItemAdapter adapter;
-
-	protected void onCreate(Bundle savedInstanceState, Intent data) 
+	protected void onCreate(Bundle savedInstanceState) 
 	{
 		super.onCreate(savedInstanceState);
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_multi_select);
-		
-		itemList = data.getStringArrayExtra("Options");
 
-		list = (ListView)findViewById(R.id.preferences_list);
-		but = (Button)findViewById(R.id.confirm_btn);
+		_intent = getIntent(); // not data
 
-		list.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-		adapter = new ItemAdapter(this,itemList);
-		list.setAdapter(adapter);
+		_result = _intent.getStringExtra("binarystring").toCharArray();
+		String[] values = _intent.getStringArrayExtra("options");
 
-		list.setOnItemClickListener(new OnItemClickListener() 
+		_listview = (ListView)findViewById(R.id.multiselect_list);
+
+		_adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_multiple_choice, values);
+		_listview.setAdapter(_adapter);
+
+		/*SparseBooleanArray positions = _listview.getCheckedItemPositions();
+		Log.i("Multi", "pos size: " + positions.size());
+		for (int i = 0; i < positions.size(); i++)
 		{
+			View view = _listview.getAdapter().getView(i, null, null);
+			CheckedTextView cv = (CheckedTextView) view.findViewById(i);
+			if (_result[i] == '1')
+			{
+				cv.toggle();
+			}
+		}*/
 
+		_listview.setOnItemClickListener(new OnItemClickListener() 
+		{
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) 
 			{
-				CheckedTextView tv = (CheckedTextView)arg1;
-				adapter.toggle(tv);
+				CheckedTextView cv = (CheckedTextView)arg1;
+				cv.toggle();
+
+				if (cv.isChecked())	{ _result[_listview.getPositionForView(arg1)] = '1'; }
+				else				{ _result[_listview.getPositionForView(arg1)] = '0'; }
 			}
 
 		});
+	}
 
-		but.setOnClickListener(new OnClickListener() 
-		{
-			@Override
-			public void onClick(View v) 
-			{
-				Log.i("listview", ""+list.getChildCount());
-				for(int i = 0;i<list.getChildCount();i++)
-				{
-					View view = list.getChildAt(i);
-					CheckedTextView cv =(CheckedTextView)view.findViewById(R.id.preferences_checkList);
-					if(cv.isChecked())
-					{
-						Log.i("listview", cv.getText().toString());
-					}
-				}
-			}
-		});
+	public void Confirm_onClick(View v) 
+	{
+		_intent.putExtra("returnstring", _result.toString());
+		setResult(RESULT_OK, _intent);
+		finish();
 	}
-			
-		@Override
-		public boolean onCreateOptionsMenu(Menu menu) 
-		{
-			// Inflate the menu; this adds items to the action bar if it is present.
-			getMenuInflater().inflate(R.menu.activity_multi_select, menu);
-			return true;
-		}
+
+	public void Cancel_onClick(View v) 
+	{
+		setResult(RESULT_CANCELED, _intent);
+		finish();
 	}
+		
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) 
+	{
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.activity_multi_select, menu);
+		return true;
+	}
+}

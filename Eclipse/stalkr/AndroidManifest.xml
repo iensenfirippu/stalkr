@@ -37,7 +37,7 @@
         <activity
             android:name="dk.iensenfirippu.jrpg.stalkr.MultiSelect"
             android:label="@string/title_activity_multi_select"
-            android:theme="@android:style/Theme.Dialog" >
+			android:theme="@android:style/Theme.Dialog" >
         </activity>
         <activity
             android:name="dk.iensenfirippu.jrpg.stalkr.PreferencesActivity"

@@ -23,16 +23,16 @@
             android:onClick="Cancel_onClick"
             android:text="@string/button_cancel" />
 
-        <!-- <Button -->
-        <!-- android:id="@+id/preferences_btn_reload" -->
-        <!-- style="?android:attr/buttonStyleSmall" -->
-        <!-- android:layout_width="wrap_content" -->
-        <!-- android:layout_height="wrap_content" -->
-        <!-- android:layout_margin="0dp" -->
-        <!-- android:minHeight="32dip" -->
-        <!-- android:minWidth="32dip" -->
-        <!-- android:onClick="Reload_onClick" -->
-        <!-- android:text="@string/button_reload" /> -->
+        <Button
+            android:id="@+id/preference_btn_reload"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="0dp"
+            android:minHeight="32dip"
+            android:minWidth="32dip"
+            android:onClick="Reload_onClick"
+            android:text="@string/button_reload" />
 
         <Button
             android:id="@+id/preferences_btn_save"
@@ -121,6 +121,28 @@
                     android:onClick="Gender_onClick"
                     android:text="@string/preferences_multi_btn" />
             </TableRow>
+
+            <TableRow
+                android:id="@+id/preferences_row_sexuality"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" >
+
+                <TextView
+                    android:id="@+id/preferences_lbl_sexuality"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingRight="@dimen/activity_horizontal_margin"
+                    android:text="@string/preferences_sexuality"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <Button
+                    android:id="@+id/preferences_btn_sexuality"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:onClick="Sexuality_onClick"
+                    android:text="@string/preferences_multi_btn" />
+            </TableRow>
             
             <TableRow
                 android:id="@+id/preferences_row_area"
@@ -145,28 +167,6 @@
             </TableRow>
 
             <TableRow
-                android:id="@+id/preferences_row_drinking"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" >
-
-                <TextView
-                    android:id="@+id/preferences_lbl_drinking"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingRight="@dimen/activity_horizontal_margin"
-                    android:text="@string/preferences_drinking"
-                    android:textAppearance="?android:attr/textAppearanceMedium" />
-
-                <Button
-                    android:id="@+id/preferences_btn_drinking"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:onClick="Drinking_onClick"
-                    android:text="@string/preferences_multi_btn" />
-            </TableRow>
-            
-            <TableRow
                 android:id="@+id/preferences_row_smoking"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" >
@@ -185,6 +185,28 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:onClick="Smoking_onClick"
+                    android:text="@string/preferences_multi_btn" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/preferences_row_drinking"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" >
+
+                <TextView
+                    android:id="@+id/preferences_lbl_drinking"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingRight="@dimen/activity_horizontal_margin"
+                    android:text="@string/preferences_drinking"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <Button
+                    android:id="@+id/preferences_btn_drinking"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:onClick="Drinking_onClick"
                     android:text="@string/preferences_multi_btn" />
             </TableRow>
         </TableLayout>

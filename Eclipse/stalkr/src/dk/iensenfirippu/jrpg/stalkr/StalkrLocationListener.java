@@ -5,7 +5,7 @@ import android.location.Location;
 import android.os.Bundle;
 
 
-public class StalkrLocationListener implements LocationListener 
+public class StalkrLocationListener implements LocationListener
 { 
 	double longitude;
 	double latitude;
@@ -13,12 +13,12 @@ public class StalkrLocationListener implements LocationListener
 	@Override
 	public void onLocationChanged(Location loc) 
 	{
-		longitude = loc.getLongitude(); 
-		latitude = loc.getLatitude();		
+		longitude = loc.getLongitude();
+		latitude = loc.getLatitude();
 	}
 
 	@Override
-	public void onProviderDisabled(String arg0) 
+	public void onProviderDisabled(String arg0)
 	{
 		// TODO Auto-generated method stub
 		

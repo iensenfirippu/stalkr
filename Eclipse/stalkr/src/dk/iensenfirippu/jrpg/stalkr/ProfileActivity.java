@@ -37,6 +37,7 @@ public class ProfileActivity extends Activity
 {
 	private static final String BIRTHDATE_FORMAT = "yyyy MM/dd";
 
+	private Intent _intent;
     private AsyncTaskManager _taskManager;
     
 	private Date _birthday;
@@ -55,12 +56,12 @@ public class ProfileActivity extends Activity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_profile);
 
-		Intent intent = getIntent();
+		_intent = getIntent();
         _taskManager = new AsyncTaskManager(this);
 
-		_username = intent.getStringExtra("username");
-		_password = intent.getStringExtra("password");
-		_user = Tools.UserFromString(intent.getStringExtra("user"));
+		_username = _intent.getStringExtra("username");
+		_password = _intent.getStringExtra("password");
+		_user = Tools.UserFromString(_intent.getStringExtra("user"));
 		
 		_birthdaybtn = ((Button)this.findViewById(R.id.profile_btn_birthday));
 		_agedisplay = ((EditText)this.findViewById(R.id.profile_txt_age));
@@ -121,8 +122,6 @@ public class ProfileActivity extends Activity
 		_birthday = _user.getBirthday();
 		double longitude = locListener.getLongitude();
 		double latitude = locListener.getLatitude();
-		String finalLongitude = new Double(longitude).toString();
-		String finalLatitude = new Double(latitude).toString();
 		
 		try
 		{
@@ -137,8 +136,8 @@ public class ProfileActivity extends Activity
 			((Spinner)	this.findViewById(R.id.profile_spn_area))		.setSelection(_user.getDescription().getArea().getSelectedIndex());
 			((Spinner)	this.findViewById(R.id.profile_spn_smoking))	.setSelection(_user.getDescription().getSmoking().getSelectedIndex());
 			((Spinner)	this.findViewById(R.id.profile_spn_drinking))	.setSelection(_user.getDescription().getDrinking().getSelectedIndex());
-			((EditText) this.findViewById(R.id.profile_txt_longitude))	.setText(finalLongitude);
-			((EditText) this.findViewById(R.id.profile_txt_latitude))	.setText(finalLatitude);
+			((EditText) this.findViewById(R.id.profile_txt_latitude))	.setText(Double.toString(latitude));
+			((EditText) this.findViewById(R.id.profile_txt_longitude))	.setText(Double.toString(longitude));
 		}
 		catch (Exception e)
 		{
@@ -185,33 +184,38 @@ public class ProfileActivity extends Activity
 			_user.getDescription().setArea(((Spinner)this.findViewById(R.id.profile_spn_area)).getSelectedItemPosition());
 			_user.getDescription().setSmoking(((Spinner)this.findViewById(R.id.profile_spn_smoking)).getSelectedItemPosition());
 			_user.getDescription().setDrinking(((Spinner)this.findViewById(R.id.profile_spn_drinking)).getSelectedItemPosition());
+			_user.setLocation(new GeoLocation(
+				Float.parseFloat(((EditText)this.findViewById(R.id.profile_txt_latitude)).getText().toString()),
+				Float.parseFloat(((EditText)this.findViewById(R.id.profile_txt_longitude)).getText().toString())
+			));
 
 		    SaveUserTask task = new SaveUserTask();
-		    _taskManager.executeTask(	task,
-		    							SaveUserTask.createRequest(_username, _password, Tools.UserToString(_user, false)),
-		    							getString(R.string.ws_save_in_progress),
-							            new OnAsyncTaskCompleteListener<SimpleReturnStringBO>()
-							            {
-								            @Override
-								            public void onTaskCompleteSuccess(SimpleReturnStringBO result)
-								            {
-								            	if (result.getResponse().equals("E10"))
-								            	{
-								                    showToastMessage(R.string.ws_save_success);
-								            	}
-								            	else
-								            	{
-								                    showToastMessage(R.string.ws_save_failed);
-								            	}
-								            }
-								
-								            @Override
-								            public void onTaskFailed(Exception cause)
-								            {
-								                Log.e(GetUserTask.TAG, cause.getMessage(), cause);
-								                showToastMessage(R.string.ws_connection_failed);
-								            }
-							            }
+		    _taskManager.executeTask(
+		    	task,
+				SaveUserTask.createRequest(_username, _password, Tools.UserToString(_user, false)),
+				getString(R.string.ws_save_in_progress),
+				new OnAsyncTaskCompleteListener<SimpleReturnStringBO>()
+				{
+				    @Override
+				    public void onTaskCompleteSuccess(SimpleReturnStringBO result)
+				    {
+				    	if (result.getResponse().equals("E10"))
+				    	{
+				            showToastMessage(R.string.ws_save_success);
+				    	}
+				    	else
+				    	{
+				            showToastMessage(R.string.ws_save_failed);
+				    	}
+				    }
+				
+				    @Override
+				    public void onTaskFailed(Exception cause)
+				    {
+				        Log.e(GetUserTask.TAG, cause.getMessage(), cause);
+				        showToastMessage(R.string.ws_connection_failed);
+				    }
+				}
 		    );
 			//finish();
 		}
