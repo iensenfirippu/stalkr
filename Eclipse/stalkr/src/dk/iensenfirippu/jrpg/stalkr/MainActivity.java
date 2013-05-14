@@ -28,6 +28,7 @@ public class MainActivity extends Activity
 	private String _password;
 	private String _id;
 	private String _user;
+	private int _activity;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -41,6 +42,7 @@ public class MainActivity extends Activity
     	_password = "";
     	_id = "";
     	_user = "";
+    	_activity = 0;
 
 		Intent intent = new Intent(this, LoginActivity.class);
 		startActivityForResult(intent, 0);
@@ -77,8 +79,6 @@ public class MainActivity extends Activity
 				//	lbl_status.setText(this.getText(R.string.main_status_first));
 				//	lbl_status.setVisibility(View.VISIBLE);
 				//}
-
-				LoadUser();
 			}
 			else
 			{
@@ -102,6 +102,8 @@ public class MainActivity extends Activity
 			    	if (Tools.ValidateUserString(result.getResponse()) >= 0.2f)
 			    	{
 			    		_user = result.getResponse();
+			    		StartActivity();
+			    		_activity = 0;
 			    	}
 			    	else
 			    	{
@@ -126,33 +128,35 @@ public class MainActivity extends Activity
 
 	public void Profile_onClick(View view)
 	{
-		if (_user != "")
-		{
-			Intent intent = new Intent(this, ProfileActivity.class);
-			intent.putExtra("username", _username);
-			intent.putExtra("password", _password);
-			intent.putExtra("user", _user);
-			startActivityForResult(intent, 1);
-		}
-		else
-		{
-			// warn user
-		}
+		_activity = 1;
+		LoadUser();
 	}
     
     public void Preferences_onClick(View view)
 	{
-		if (_user != "")
+		_activity = 2;
+		LoadUser();
+	}
+    
+    public void StartActivity()
+    {
+    	Intent intent;
+		switch (_activity)
 		{
-			Intent intent = new Intent(this, PreferencesActivity.class);
+		case 1:
+			intent = new Intent(this, ProfileActivity.class);
 			intent.putExtra("username", _username);
 			intent.putExtra("password", _password);
 			intent.putExtra("user", _user);
 			startActivityForResult(intent, 1);
+			break;
+		case 2:
+			intent = new Intent(this, PreferencesActivity.class);
+			intent.putExtra("username", _username);
+			intent.putExtra("password", _password);
+			intent.putExtra("user", _user);
+			startActivityForResult(intent, 1);
+			break;
 		}
-		else
-		{
-			// warn user
-		}
-	}
+    }
 }

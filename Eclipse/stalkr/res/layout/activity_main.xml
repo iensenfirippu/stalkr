@@ -38,10 +38,10 @@
         android:onClick="Preferences_onClick"
         android:text="@string/main_preferences"/>
     
-    <Button
+    <!-- Button
         android:id="@+id/btn_search"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/main_search" />
+        android:text="@string/main_search" /-->
 
 </LinearLayout>

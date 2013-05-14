@@ -29,6 +29,7 @@ public class PreferencesActivity extends Activity
 	private String _username;
 	private String _password;
 	private User _user;
+	private boolean _saveall;
 	
 	private String _genderstring;
 	private String _sexualitystring;
@@ -48,10 +49,12 @@ public class PreferencesActivity extends Activity
 		_username = _intent.getStringExtra("username");
 		_password = _intent.getStringExtra("password");
 		_user = Tools.UserFromString(_intent.getStringExtra("user"));
+		_saveall = false;
 		
 		if (_user.getPreferences().size() == 0)
 		{
 			_user.getPreferences().add(new Description());
+			_saveall = true;
 		}
 		
 		// Fill in the values from the user object
@@ -130,18 +133,20 @@ public class PreferencesActivity extends Activity
 		{
 			_user.getPreferences().get(0).setAge(
 					Integer.parseInt(((EditText)this.findViewById(R.id.preferences_txt_min_age)).getText().toString()),
-					Integer.parseInt(((EditText)this.findViewById(R.id.preferences_txt_min_age)).getText().toString())
+					Integer.parseInt(((EditText)this.findViewById(R.id.preferences_txt_max_age)).getText().toString())
 			);
-			//_user.getPreferences().get(0).setGender(_genderstring);
-			//_user.getPreferences().get(0).setSexuality(_sexualitystring);
-			//_user.getPreferences().get(0).setArea(_areastring);
-			//_user.getPreferences().get(0).setSmoking(_smokingstring);
-			//_user.getPreferences().get(0).setDrinking(_drinkingstring);
+//			if (_genderstring != "")	{ _user.getPreferences().get(0).setGender(_genderstring); }
+//			if (_sexualitystring != "")	{ _user.getPreferences().get(0).setSexuality(_sexualitystring); }
+//			if (_areastring != "")		{ _user.getPreferences().get(0).setArea(_areastring); }
+//			if (_smokingstring != "")	{ _user.getPreferences().get(0).setSmoking(_smokingstring); }
+//			if (_drinkingstring != "")	{ _user.getPreferences().get(0).setDrinking(_drinkingstring); }
 
 		    SaveUserTask task = new SaveUserTask();
+		    Log.i("saveuser",	_user.getPreferences().get(0).getAge().getMin() + "~" +
+		    					_user.getPreferences().get(0).getAge().getMax() );
 		    _taskManager.executeTask(
 		    	task,
-				SaveUserTask.createRequest(_username, _password, Tools.UserToString(_user, false)),
+				SaveUserTask.createRequest(_username, _password, Tools.UserToString(_user, _saveall)),
 				getString(R.string.ws_save_in_progress),
 				new OnAsyncTaskCompleteListener<SimpleReturnStringBO>()
 				{

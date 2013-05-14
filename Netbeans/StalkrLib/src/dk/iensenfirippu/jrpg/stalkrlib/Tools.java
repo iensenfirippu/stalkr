@@ -156,8 +156,8 @@ public class Tools
 					{ sb.append(Long.toString(Tools.DTtoTS(d.getTimeStamp()))); }					sb.append("|");
 				if (full || p.isChangedTitle())		{ sb.append(d.getTitle()); }					sb.append("|");
 				if (full || p.isChangedAge()) {
-					sb.append(Integer.toString(d.getAge().getMin()))								  .append("|");
-					sb.append(Integer.toString(d.getAge().getMax()))								  .append("|");
+					sb.append(Integer.toString(p.getAge().getMin()))								  .append("|");
+					sb.append(Integer.toString(p.getAge().getMax()))								  .append("|");
 				} else { sb.append("||"); }
 				if (full || p.isChangedGender())	{ sb.append(d.getGender().toString()); }		sb.append("|");
 				if (full || p.isChangedSexuality())	{ sb.append(d.getSexuality().toString()); }		sb.append("|");
